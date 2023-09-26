@@ -1,0 +1,9 @@
+Week 1
+Group formed AUNTILTED. Selected Scrum Master as Dhruv. Created the Jira Site. We decided on doing project 7. We set up Jira. 
+We looked into the twitter API a bit and we have to pay at least $100USD for it in order to read tweets now using it (thanks Elon). N
+ot sure if we can continue with this project at the moment but we have selected Project 10 as an alternative if it isn’t possible. 
+Praying that we can do it still (without paying of course).
+
+Week 2
+Taking meeting minutes and now the scrum master for the team, Started work on proposal. I'm working on the figma design to work towards
+the storyboard component of the proposal.
