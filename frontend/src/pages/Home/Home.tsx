@@ -1,14 +1,13 @@
-import PageTemplate from "../../components/PageTemplate/PageTemplate"
-import DragAndDrop from "../../components/DragAndDrop"
+import PageTemplate from "components/PageTemplate/PageTemplate"
+import DragAndDrop from "components/DragAndDrop"
 
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Row from 'react-bootstrap/Row';
 
-import Sidebar from "../../components/DragAndDrop/Sidebar"
+import Sidebar from "../../components/Sidebar"
 import S from './style'
+
 import { useState } from "react";
 
 export default function Home() {
@@ -18,21 +17,27 @@ export default function Home() {
   const handleShow = () => setShow(true);
   return (
     <PageTemplate>
-        <S.Wrapper>
-            <Sidebar />
-            <S.Container>
-            <S.Header>
-                <Button onClick={handleShow}>+ Create pipeline</Button>
-            </S.Header>
+      <S.Wrapper>
+        <Sidebar />
+        <S.Container>
+          <S.Header>
+            <div style={{ display: 'flex', gap: '25px' }}>
+              <h3>Pipeline</h3>
+              <Button onClick={handleShow}>+ Create pipeline</Button>
+            </div>
+            <span>Create a pipeline</span>
+          </S.Header>
+          <S.Body>
             0 pipeline(s) selected
-            </S.Container>
-        </S.Wrapper>
-        <Modal show={show} onHide={handleClose}>
+          </S.Body>
+        </S.Container>
+      </S.Wrapper>
+      <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Create Pipeline</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <DragAndDrop />
+          <DragAndDrop />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
@@ -40,6 +45,6 @@ export default function Home() {
           </Button>
         </Modal.Footer>
       </Modal>
-    </PageTemplate>
+    </PageTemplate >
   )
 }

@@ -6,6 +6,12 @@ const Container = styled.div`
     width: 10%;
 `;
 
+const Logo = styled.img`
+    padding: 20px;
+    width: 100%;
+`;
+
 export default {
-    Container
+    Container,
+    Logo
 };

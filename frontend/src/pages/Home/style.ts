@@ -14,13 +14,27 @@ const Container = styled.div`
 `;
 
 const Header = styled.header`
+  display: flex;
+  flex-direction: column;
   background-color: #FFF;
   width: 100%;
   height: 100px;
+  padding: 25px;
+
+  span {
+    color: #aaa;
+  }
+`;
+
+const Body = styled.div`
+  padding: 25px;
+  font-size: 18px;
+  font-weight: 500;
 `;
 
 export default {
-    Container,
-    Wrapper,
-    Header
+  Body,
+  Container,
+  Wrapper,
+  Header
 }
