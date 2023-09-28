@@ -39,12 +39,13 @@ export default function DragAndDrop() {
       </S.Container>
       <aside>
         <h4>Files</h4>
+        <ul>{fileDisplay}</ul>
+        <h4>Rejected files</h4>
         {rejectedfiles &&
           rejectedfiles.map(file =>
-            file.errors.map(error => <li>{error.code} {error.message}</li>)
+            file.errors.map(error => <ul>{error.code} {error.message}</ul>)
           )
         }
-        <ul>{fileDisplay}</ul>
       </aside>
     </section>
   )
