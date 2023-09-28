@@ -1,18 +1,7 @@
 import { useCallback, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone"
-import styled from 'styled-components';
 
-const Container = styled.div`
-  display: flex;
-  flex: 1;
-  margin: auto 500px;
-  justify-content: center;
-  align-items: center;
-  border-style: dashed;
-  border-width: 2px;
-  padding: 20px;
-  border-radius: 5px;
-`
+import S from './style';
 
 export default function DragAndDrop() {
   const [files, setFiles] = useState<File[]>([]);
@@ -23,9 +12,7 @@ export default function DragAndDrop() {
       setFiles(previousFiles => [...previousFiles, ...acceptedFiles])
     }
 
-    console.log('here')
     if (fileRejections?.length) {
-      console.log('rejected')
       setRejectedFiles(previousFiles => [...previousFiles, ...fileRejections]);
     }
   }, []);
@@ -46,13 +33,17 @@ export default function DragAndDrop() {
 
   return (
     <section className="container">
-      <Container style={{ borderColor: isDragActive ? '#add8e6' : '#000' }} {...getRootProps()}>
+      <S.Container style={{ borderColor: isDragActive ? '#add8e6' : '#000' }} {...getRootProps()}>
         <input {...getInputProps()} />
         <p>Drag & Drop or browse</p>
-      </Container>
+      </S.Container>
       <aside>
         <h4>Files</h4>
-        {rejectedfiles && rejectedfiles.map(file => file.errors.map(error => <li>{error.code} {error.message}</li>))}
+        {rejectedfiles &&
+          rejectedfiles.map(file =>
+            file.errors.map(error => <li>{error.code} {error.message}</li>)
+          )
+        }
         <ul>{fileDisplay}</ul>
       </aside>
     </section>
