@@ -1,7 +1,6 @@
 FROM node:20-slim AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+
+RUN npm install -g pnpm 
 
 COPY . /client
 WORKDIR /client
@@ -12,5 +11,8 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-l
 FROM base
 COPY --from=prod-deps /client/node_modules /client/node_modules
 
+RUN pnpm install
+
 EXPOSE 3000
-ENTRYPOINT [ "pnpm", "run", "dev"]
+
+CMD ["pnpm", "run", "dev"]
