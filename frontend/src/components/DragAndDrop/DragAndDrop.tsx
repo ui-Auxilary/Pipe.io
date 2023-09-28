@@ -4,6 +4,7 @@ import { FileRejection, useDropzone } from "react-dropzone"
 import S from './style';
 
 export default function DragAndDrop() {
+  const [show, setShow] = useState();
   const [files, setFiles] = useState<File[]>([]);
   const [rejectedfiles, setRejectedFiles] = useState<FileRejection[]>([]);
 
@@ -32,21 +33,23 @@ export default function DragAndDrop() {
   ))
 
   return (
-    <section className="container">
-      <S.Container style={{ borderColor: isDragActive ? '#add8e6' : '#000' }} {...getRootProps()}>
-        <input {...getInputProps()} />
-        <p>Drag & Drop or browse</p>
-      </S.Container>
-      <aside>
-        <h4>Files</h4>
-        <ul>{fileDisplay}</ul>
-        <h4>Rejected files</h4>
-        {rejectedfiles &&
-          rejectedfiles.map(file =>
-            file.errors.map(error => <ul>{error.code} {error.message}</ul>)
-          )
-        }
-      </aside>
-    </section>
+    
+          <section className="container">
+            <S.Container style={{ borderColor: isDragActive ? '#add8e6' : '#000' }} {...getRootProps()}>
+              <input {...getInputProps()} />
+              <p>Drag & Drop or browse</p>
+            </S.Container>
+            <aside>
+              <h4>Files</h4>
+              <ul>{fileDisplay}</ul>
+              <h4>Rejected files</h4>
+              {rejectedfiles &&
+                rejectedfiles.map(file =>
+                  file.errors.map(error => <ul>{error.code} {error.message}</ul>)
+                )
+              }
+            </aside>
+          </section>
+        
   )
 }
