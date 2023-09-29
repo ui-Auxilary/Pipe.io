@@ -1,13 +1,22 @@
+<<<<<<< Updated upstream
 FROM node:20-slim AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
+=======
+FROM node:20-slim
+>>>>>>> Stashed changes
 
 COPY . /client
 WORKDIR /client
 
+<<<<<<< Updated upstream
 FROM base AS prod-deps
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+=======
+RUN npm install -g pnpm
+RUN pnpm install
+>>>>>>> Stashed changes
 
 FROM base
 COPY --from=prod-deps /client/node_modules /client/node_modules
