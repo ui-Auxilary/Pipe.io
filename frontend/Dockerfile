@@ -1,12 +1,13 @@
-FROM node:20-slim AS base
+FROM node:20-slim
 
-RUN npm install -g pnpm 
-
-COPY . /client
 WORKDIR /client
 
-RUN npm install pnpm
+COPY . /client
+
+RUN npm install -g pnpm
 RUN pnpm install
+
+COPY . .
 
 EXPOSE 3000
 

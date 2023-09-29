@@ -2,4 +2,7 @@ Week 1
 This week we formed groups and considered all the different projects to do. We decided on P7, but realised that to use the Twitter API and LiWC, we would have to pay. We are looking into contacting the client to clarify if we can use other datasets.
 
 Week 2
-Pending our communication with the client, we are upskilling for our project. In the event that P7 does not go ahead, we have chosen to go with P10. We have decided out competencies and allocated tasks. 
+Pending our communication with the client, we are upskilling for our project. In the event that P7 does not go ahead, we have chosen to go with P10. We have decided our competencies and allocated tasks. The client is unreachable so we have decided to go with P10. We confirmed task allocations and discussed our vision for the project.
+
+Week 3
+This week after we clarified project specifications and needs, I started writing user stories. I am contributing to Jira and the project proposal on LateX.

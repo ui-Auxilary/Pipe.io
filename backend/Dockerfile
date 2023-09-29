@@ -1,17 +1,13 @@
-FROM node:20-slim AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+FROM python:3.9-slim
 
-COPY . /app
-WORKDIR /app
+WORKDIR /backend
 
-FROM base AS prod-deps
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+COPY requirements.txt .
 
-FROM base
-COPY --from=prod-deps /app/node_modules /app/node_modules
-RUN pnpm install -g nodemon
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
 
 EXPOSE 8000
-ENTRYPOINT [ "nodemon", "server.mjs" ]
+
+ENTRYPOINT [ "python3", "-u", "runserver.py" ]
