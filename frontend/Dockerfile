@@ -1,16 +1,13 @@
-FROM node:20-slim AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+FROM node:20-slim
 
-COPY . /client
 WORKDIR /client
 
-FROM base AS prod-deps
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+COPY . /client
 
-FROM base
-COPY --from=prod-deps /client/node_modules /client/node_modules
+RUN npm install -g pnpm
+RUN pnpm install
+
+COPY . .
 
 EXPOSE 3000
 ENTRYPOINT [ "pnpm", "run", "dev"]
