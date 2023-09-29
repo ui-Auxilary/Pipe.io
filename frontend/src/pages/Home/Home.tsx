@@ -3,7 +3,6 @@ import DragAndDrop from "components/DragAndDrop"
 
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import Row from 'react-bootstrap/Row';
 
 import Sidebar from "../../components/Sidebar"
 import S from './style'
