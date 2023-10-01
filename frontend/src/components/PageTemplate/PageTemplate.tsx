@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
-import S from './style'
-import Helmet from 'react-helmet';
+import { ReactNode } from "react";
+import S from "./style";
+import Helmet from "react-helmet";
 
 export default function PageTemplate(props: { children: ReactNode }) {
   return (
@@ -11,5 +11,5 @@ export default function PageTemplate(props: { children: ReactNode }) {
       </Helmet>
       <div>{props.children}</div>
     </S.Container>
-  )
+  );
 }

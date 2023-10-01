@@ -1,3 +1,3 @@
-import DragAndDrop from './DragAndDrop';
+import DragAndDrop from "./DragAndDrop";
 
 export default DragAndDrop;

@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Wrapper = styled.div`
-  background-color: #EEE;
+  background-color: #eee;
   height: 100vh;
   width: 100%;
   display: flex;
@@ -16,7 +16,7 @@ const Container = styled.div`
 const Header = styled.header`
   display: flex;
   flex-direction: column;
-  background-color: #FFF;
+  background-color: #fff;
   width: 100%;
   height: 100px;
   padding: 25px;
@@ -36,5 +36,5 @@ export default {
   Body,
   Container,
   Wrapper,
-  Header
-}
+  Header,
+};

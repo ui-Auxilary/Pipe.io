@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
@@ -9,8 +9,8 @@ const Container = styled.div`
   border-width: 2px;
   padding: 20px;
   border-radius: 5px;
-`
+`;
 
 export default {
-    Container
-}
+  Container,
+};
