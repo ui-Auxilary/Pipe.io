@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 
-import File from "assets/upload_file.svg"
+import File from "assets/upload_file.svg";
 
-import S from "./style"
+import S from "./style";
 
 export default function Dropzone() {
   const [files, setFiles] = useState<File[]>([]);
@@ -34,8 +34,15 @@ export default function Dropzone() {
 
   const fileDisplay = files?.map((file) => (
     <S.FileBox key={window.crypto.randomUUID()}>
-      <S.FileIcon style={{ width: "12%", marginRight: "5px", marginTop: "-10px" }} src={File} />
-      <p><strong>{file.name}</strong><br /><span style={{ color: "#aaa" }}>{file.size} bytes</span></p>
+      <S.FileIcon
+        style={{ width: "12%", marginRight: "5px", marginTop: "-10px" }}
+        src={File}
+      />
+      <p>
+        <strong>{file.name}</strong>
+        <br />
+        <span style={{ color: "#aaa" }}>{file.size} bytes</span>
+      </p>
     </S.FileBox>
   ));
 
@@ -48,16 +55,26 @@ export default function Dropzone() {
         <input {...getInputProps()} />
         <S.Wrapper>
           <S.FileIcon src={File} />
-          <h6>Drag & Drop or <div style={{ cursor: "pointer", color: "#5f7cce", textAlign: "center" }}><strong>browse</strong></div></h6>
+          <h6>
+            Drag & Drop or{" "}
+            <div
+              style={{
+                cursor: "pointer",
+                color: "#5f7cce",
+                textAlign: "center",
+              }}
+            >
+              <strong>browse</strong>
+            </div>
+          </h6>
         </S.Wrapper>
       </S.Container>
       <aside>
+        {fileDisplay.length > 0 ? (
+          <S.ScrollableDiv>{fileDisplay}</S.ScrollableDiv>
+        ) : null}
 
-        {fileDisplay.length > 0 ? (<S.ScrollableDiv>
-          {fileDisplay}
-        </S.ScrollableDiv>) : null}
-
-        {/* <h4>Rejected files</h4>
+        <h4>Rejected files</h4>
         {rejectedfiles &&
           rejectedfiles.map((file) =>
             file.errors.map((error) => (
@@ -65,7 +82,7 @@ export default function Dropzone() {
                 {error.code} {error.message}
               </ul>
             )),
-          )} */}
+          )}
       </aside>
     </>
   );

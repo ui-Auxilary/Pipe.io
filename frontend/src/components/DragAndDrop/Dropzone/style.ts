@@ -20,7 +20,7 @@ const Wrapper = styled.div`
 const FileIcon = styled.img`
   width: 25%;
   display: block;
-  stroke: #8A8A8A;
+  stroke: #8a8a8a;
 `;
 
 const FileBox = styled.div`
@@ -40,13 +40,13 @@ const ScrollableDiv = styled.div`
 
   &::-webkit-scrollbar {
     width: 8px;
-    border: 1px solid #5A5A5A;
+    border: 1px solid #5a5a5a;
     border-radius: 20px;
   }
 
   &::-webkit-scrollbar-thumb {
     width: 5px;
-    background: #5A5A5A;
+    background: #5a5a5a;
     border-radius: 20px;
   }
 `;
@@ -56,5 +56,5 @@ export default {
   Wrapper,
   FileIcon,
   FileBox,
-  ScrollableDiv
+  ScrollableDiv,
 };

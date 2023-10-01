@@ -2,10 +2,10 @@ import Dropzone from "./Dropzone";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-import S from './style';
+import S from "./style";
 export interface Props {
-  show: boolean
-  handleClose: () => void
+  show: boolean;
+  handleClose: () => void;
 }
 
 export default function DragAndDrop({ show, handleClose }: Props) {
