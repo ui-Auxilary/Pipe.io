@@ -1,8 +1,8 @@
-import { JSXElementConstructor, ReactElement, ReactNode, ReactPortal } from "react";
-import S from './style'
-import Helmet from 'react-helmet';
+import { ReactNode } from "react";
+import S from "./style";
+import Helmet from "react-helmet";
 
-export default function PageTemplate(props: { children: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; }) {
+export default function PageTemplate(props: { children: ReactNode }) {
   return (
     <S.Container>
       <Helmet>
@@ -11,5 +11,5 @@ export default function PageTemplate(props: { children: string | number | boolea
       </Helmet>
       <div>{props.children}</div>
     </S.Container>
-  )
+  );
 }

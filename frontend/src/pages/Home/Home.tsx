@@ -1,12 +1,11 @@
-import PageTemplate from "components/PageTemplate/PageTemplate"
-import DragAndDrop from "components/DragAndDrop"
+import PageTemplate from "components/PageTemplate/PageTemplate";
+import DragAndDrop from "components/DragAndDrop";
 
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Row from 'react-bootstrap/Row';
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
-import Sidebar from "../../components/Sidebar"
-import S from './style'
+import Sidebar from "../../components/Sidebar";
+import S from "./style";
 
 import { useState } from "react";
 
@@ -21,15 +20,13 @@ export default function Home() {
         <Sidebar />
         <S.Container>
           <S.Header>
-            <div style={{ display: 'flex', gap: '25px' }}>
+            <div style={{ display: "flex", gap: "25px" }}>
               <h3>Pipeline</h3>
               <Button onClick={handleShow}>+ Create pipeline</Button>
             </div>
             <span>Create a pipeline</span>
           </S.Header>
-          <S.Body>
-            0 pipeline(s) selected
-          </S.Body>
+          <S.Body>0 pipeline(s) selected</S.Body>
         </S.Container>
       </S.Wrapper>
       <Modal show={show} onHide={handleClose}>
@@ -45,6 +42,6 @@ export default function Home() {
           </Button>
         </Modal.Footer>
       </Modal>
-    </PageTemplate >
-  )
+    </PageTemplate>
+  );
 }
