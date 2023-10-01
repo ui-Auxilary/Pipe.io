@@ -2,7 +2,6 @@ import PageTemplate from "components/PageTemplate/PageTemplate";
 import DragAndDrop from "components/DragAndDrop";
 
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 
 import Sidebar from "../../components/Sidebar";
 import S from "./style";
@@ -29,19 +28,7 @@ export default function Home() {
           <S.Body>0 pipeline(s) selected</S.Body>
         </S.Container>
       </S.Wrapper>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Create Pipeline</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <DragAndDrop />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Next
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <DragAndDrop show={show} handleClose={handleClose} />
     </PageTemplate>
   );
 }

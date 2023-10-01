@@ -1,63 +1,36 @@
-import { useCallback, useState } from "react";
-import { FileRejection, useDropzone } from "react-dropzone";
+import Dropzone from "./Dropzone";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
-import S from "./style";
+import S from './style';
+export interface Props {
+  show: boolean
+  handleClose: () => void
+}
 
-export default function DragAndDrop() {
-  const [files, setFiles] = useState<File[]>([]);
-  const [rejectedfiles, setRejectedFiles] = useState<FileRejection[]>([]);
-
-  const onDrop = useCallback(
-    (acceptedFiles: File[], fileRejections: FileRejection[]) => {
-      if (acceptedFiles?.length) {
-        setFiles((previousFiles) => [...previousFiles, ...acceptedFiles]);
-      }
-
-      if (fileRejections?.length) {
-        setRejectedFiles((previousFiles) => [
-          ...previousFiles,
-          ...fileRejections,
-        ]);
-      }
-    },
-    [],
-  );
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: {
-      "text/x-python": [".py"],
-    },
-    onDrop,
-  });
-
-  const fileDisplay = files?.map((file) => (
-    <li key={window.crypto.randomUUID()}>
-      {file.name} - {file.size} bytes
-    </li>
-  ));
-
+export default function DragAndDrop({ show, handleClose }: Props) {
   return (
-    <section className="container">
-      <S.Container
-        style={{ borderColor: isDragActive ? "#add8e6" : "#000" }}
-        {...getRootProps()}
-      >
-        <input {...getInputProps()} />
-        <p>Drag & Drop or browse</p>
-      </S.Container>
-      <aside>
-        <h4>Files</h4>
-        <ul>{fileDisplay}</ul>
-        <h4>Rejected files</h4>
-        {rejectedfiles &&
-          rejectedfiles.map((file) =>
-            file.errors.map((error) => (
-              <ul>
-                {error.code} {error.message}
-              </ul>
-            )),
-          )}
-      </aside>
-    </section>
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Create Pipeline</Modal.Title>
+      </Modal.Header>
+      <S.Wrapper>
+        <Modal.Body>
+          <S.Form>
+            <S.Label>Name</S.Label>
+            <S.Input type="text" name="name" />
+            <S.Label>Description</S.Label>
+            <S.Textarea />
+          </S.Form>
+          <S.Label>Data source</S.Label>
+          <Dropzone />
+        </Modal.Body>
+      </S.Wrapper>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>
+          Next
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }

@@ -27,7 +27,7 @@
     "src/",
     "vite.config.ts",
     "vitest.config.ts",
-    "src/global.d.ts"
+    "global.d.ts"
   ],
   "exclude": [
     "node_modules",
