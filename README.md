@@ -23,17 +23,3 @@
 |`pipes/edit`| PUT |**Parameters:** `{token, pipe_id, name, description}`<br><br>**Return type:** `{}`| **Input Error** when any of: <br> - length of name is less than 1 or more than 20 characters|
 |`pipes/upload_file`| PUT |**Parameters:** `{token, pipe_id, filename, file_type}`<br><br>**Return type:** `{}`| **Input Error** when any of: <br> - length of filename is less than 1 or more than 20 characters|
 
-### Interface Data Types
-| Variable Name | Type |
-| --- | --- |
-| `email` | `string` |
-| `password` | `string` |
-| `username` | `string` |
-| `token` | `string` |
-|` name` | `string` |
-| `description` | `string`|
-| contains suffix `id` | `integer` |
-| named exactly `Pipes` | <code>Object</code> containg keys <code>{name, description, user_id, microservices}</code>|
-
-
-
