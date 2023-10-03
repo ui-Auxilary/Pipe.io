@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from server.routers import pipes
-
+from src.misc.other import clear_data
 app = FastAPI()
 
 origins = [
@@ -28,4 +28,20 @@ app.include_router(pipes.router)
 
 @app.get("/")
 def read_root():
+    return {"Hello": "World"}
+
+@app.post("/auth/register")
+def register():
+    return {"Hello": "World"}
+
+@app.post("/auth/login")
+def login():
+    return {"Hello": "World"}
+
+@app.post("/auth/logout")
+def logout():
+    return {"Hello": "World"}
+
+@app.delete("/clear/data")
+def delete():
     return {"Hello": "World"}
