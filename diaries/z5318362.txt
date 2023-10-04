@@ -1,0 +1,5 @@
+week1, we make a 5-person group and decided to Project7. And our group name is "Untitled". We noticed that the Tiwtter api and Liwc dictionaries are not free. Then we tried to swich to a new project.
+
+week2, we had twice meeting. First meeting we decided to do Project10 because yahoo finance api is free. Second meeting we made a draft about the delegation. we had a client meeting on friday.
+
+week3, we started doing the proposal. I did something in background and write some user stories. I did some visualization story board.
