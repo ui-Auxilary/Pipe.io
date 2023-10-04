@@ -1,9 +1,8 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from server.routers import pipes
+from server.routers import pipes, users
 from src.misc.other import clear_data
-from src.auth.auth import auth_register
 
 
 class InputError(Exception):
@@ -43,26 +42,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(pipes.router)
+app.include_router(users.router)
 
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
-
-
-@app.post("/auth/register")
-def register():
-    data = fastapi.Request.json()
-    return auth_register(data["email"], data["username"], data["password"], data["name_first"], data["name_last"])
-
-
-@app.post("/auth/login")
-def login():
-    return {"Hello": "World"}
-
-
-@app.post("/auth/logout")
-def logout():
     return {"Hello": "World"}
 
 

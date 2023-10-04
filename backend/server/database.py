@@ -15,3 +15,4 @@ except Exception as e:
 
 db = client["Main"]
 pipes_collection = db["Pipes"]
+users_collection = db["Users"]
