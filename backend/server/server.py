@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from server.routers import pipes
 from src.misc.other import clear_data
+from src.auth.auth import auth_register
+
 app = FastAPI()
 
 origins = [
@@ -32,7 +34,10 @@ def read_root():
 
 @app.post("/auth/register")
 def register():
-    return {"Hello": "World"}
+    data = fastapi.Request.json()
+    return auth_register(data["email"], data["username"], data["password"], data["name_first"], data["name_last"])
+
+
 
 @app.post("/auth/login")
 def login():
