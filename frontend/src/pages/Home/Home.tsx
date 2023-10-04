@@ -7,6 +7,7 @@ import Sidebar from "../../components/Sidebar";
 import S from "./style";
 
 import { useState } from "react";
+import PipeList from "components/PipeList/PipeList";
 
 export default function Home() {
   const [show, setShow] = useState(false);
@@ -25,7 +26,9 @@ export default function Home() {
             </div>
             <span>Create a pipeline</span>
           </S.Header>
-          <S.Body>0 pipeline(s) selected</S.Body>
+          <S.Body>0 pipeline(s) selected
+            <PipeList />
+          </S.Body>
         </S.Container>
       </S.Wrapper>
       <DragAndDrop show={show} handleClose={handleClose} />
