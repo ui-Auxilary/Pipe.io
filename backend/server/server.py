@@ -1,8 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from server.routers import pipes, users
-from src.misc.other import clear_data
+from server.routers import pipes, users, testing
 
 
 class InputError(Exception):
@@ -43,6 +42,7 @@ app.add_middleware(
 )
 app.include_router(pipes.router)
 app.include_router(users.router)
+app.include_router(testing.router)
 
 
 @app.get("/")
@@ -50,6 +50,3 @@ def read_root():
     return {"Hello": "World"}
 
 
-@app.delete("/clear/data")
-def delete():
-    return {"Hello": "World"}
