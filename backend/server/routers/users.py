@@ -100,7 +100,7 @@ async def logout_user(Authorization: str = Header(...)):
         InputError: Invalid token
 
     Returns:
-        `{}`: Whether or not the user was successfully logged out
+        `{}`: Empty dictionary if successful
     """
     try:
         token = Authorization.split(" ")[1]
