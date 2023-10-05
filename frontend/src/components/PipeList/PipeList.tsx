@@ -1,5 +1,8 @@
 import Pipe from "components/Pipe"
+import axios from 'axios';
+
 import S from './style'
+import { useEffect, useState } from "react";
 export interface Microservice {
     microserviceId: string
     content: string
@@ -15,10 +18,19 @@ export interface Pipe {
 }
 
 export default function PipeList() {
+    const [pipes, setPipes] = useState([]);
+
+    useEffect(() => {
+        axios.get('http://localhost:8000/list_pipes')
+            .then(res => setPipes(res.data))
+            .catch(err => console.log(err))
+    }, [])
+
     return (
         <S.Container>
-            <Pipe />
-            <Pipe />
+            {pipes.map(({ id, name }, index) => (
+                <Pipe key={id} id={`00${index + 1} `} name={name} />
+            ))}
         </S.Container>
     )
 }

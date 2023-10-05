@@ -1,16 +1,13 @@
 import styled from 'styled-components';
 
 const Edit = styled.img`
-    width: 2%;
+    width: 100%;
     cursor: pointer;
-
-    &:hover {
-        stroke: #fff;
-    }
 `;
 
 const Left = styled.div`
-
+    display: flex;
+    gap: 15px;
 `
 
 const Pipe = styled.li`
