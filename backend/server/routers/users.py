@@ -47,7 +47,8 @@ async def create_user(email: str = Form(...), username: str = Form(...), passwor
         raise HTTPException(status_code=400, detail="Password is too short")
    
     hashed_password = hashlib.sha256(password.encode()).hexdigest()
-    user = Users(email=email, username=username, password=hashed_password, profile_img_url="", pipes=[], tokens=[])
+    default_img_url = "localhost:8000/static/default.png"
+    user = Users(email=email, username=username, password=hashed_password, profile_img_url=default_img_url, pipes=[], tokens=[])
     users_collection.insert_one(dict(user))
     user_id = users_collection.find_one({"email": email})["_id"]
     payload = {"user_id": str(user_id), 'session': time()}
