@@ -5,14 +5,16 @@ import Modal from "react-bootstrap/Modal";
 import Form from "components/Form";
 
 import S from "./style";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+
+import FormProvider, { multiFormContext, useFormData } from "components/Form/FormProvider";
+import { ModalFooter } from "react-bootstrap";
 export interface Props {
   show: boolean;
   handleClose: () => void;
 }
 
 export default function DragAndDrop({ show, handleClose }: Props) {
-  const [index, setIndex] = useState(0)
   const questionsList = [
     {
       section: 1,
@@ -58,46 +60,41 @@ export default function DragAndDrop({ show, handleClose }: Props) {
     setFormAnswers({ ...formAnswers, [step]: answerObj })
   }
 
+  const { userData, currentStep, submitData, setStep } = useFormData();
 
+  useEffect(() => {
+    console.log('Updated!', userData)
+  }, [userData])
 
-  const onSubmit = () => {
-    setSubmitted(true)
-    console.log('FORM', formAnswers)
-    setFormAnswers({})
-    console.log('FORM2', formAnswers)
-  }
+  useEffect(() => {
+    console.log('Updated step!', currentStep)
+  }, [currentStep])
 
   const onNext = () => {
-    if (index < 1) {
-      setIndex(prevIndex => prevIndex + 1)
+    if (currentStep < totalPagesCount) {
+      setStep(prevIndex => prevIndex + 1)
     }
   }
 
+  const onHandleClose = () => {
+    handleClose()
+    setTimeout(() => setStep(1), 500)
+  }
+
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={onHandleClose}>
       <Modal.Header closeButton>
         <Modal.Title>Create Pipeline</Modal.Title>
       </Modal.Header>
       <S.Wrapper>
         <Modal.Body>
-          <Form questions={questionsList} step={index} onSubmit={submitted} onFormUpdate={onFormUpdate} pageAnswers={formAnswers} />
-          {/* <S.Form>
-            <S.Label>Name</S.Label>
-            <S.Input type="text" name="name" />
-            <S.Label>Description</S.Label>
-            <S.Textarea />
-          </S.Form>
-          <S.Label>Data source</S.Label>
-          <Dropzone /> */}
+          <Form questions={questionsList} step={currentStep - 1} onSubmit={submitted} onFormUpdate={onFormUpdate} pageAnswers={formAnswers} />
         </Modal.Body>
       </S.Wrapper>
-      <Modal.Footer>
-        {index == 0 ? (<Button variant="secondary" onClick={onSubmit}>
-          Submit
-        </Button>) : <Button variant="secondary" onClick={onNext}>
-          Next
-        </Button>}
-      </Modal.Footer>
+      <ModalFooter>
+        {currentStep == totalPagesCount ? (<Button onClick={submitData} variant="secondary">Submit</Button>) : (<Button onClick={onNext}>Next</Button>)}
+
+      </ModalFooter>
     </Modal>
   );
 }

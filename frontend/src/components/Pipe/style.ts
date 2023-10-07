@@ -5,18 +5,23 @@ const Edit = styled.img`
     cursor: pointer;
 `;
 
+const View = styled.img``;
+
 const Left = styled.div`
     display: flex;
     gap: 15px;
+`
+const Label = styled.div`
+    display: flex;
 `
 
 const Pipe = styled.li`
     background: #fff;
     display: flex;
     justify-content: space-between;
-    width: 80%;
+    width: 75%;
     height: 150px;
-    margin: 25px;
+    margin: 10px;
     padding: 25px;
     border-radius: 10px;
 `;
@@ -32,7 +37,9 @@ const Button = styled.button`
 
 export default {
     Button,
+    Label,
     Edit,
+    View,
     Left,
     Pipe
 }

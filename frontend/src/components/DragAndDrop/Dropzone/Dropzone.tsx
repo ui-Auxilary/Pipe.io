@@ -1,9 +1,11 @@
 import { useCallback, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
+import FileSaver from "file-saver";
 
 import File from "assets/upload_file.svg";
 
 import S from "./style";
+import axios from "axios";
 
 export default function Dropzone() {
   const [files, setFiles] = useState<File[]>([]);
@@ -13,6 +15,7 @@ export default function Dropzone() {
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
       if (acceptedFiles?.length) {
         setFiles((previousFiles) => [...previousFiles, ...acceptedFiles]);
+
       }
 
       if (fileRejections?.length) {
@@ -31,9 +34,24 @@ export default function Dropzone() {
     },
     onDrop,
   });
+  let content: any = "";
+  const fileDisplay = files?.map((file) => {
+    var reader = new FileReader();
+    reader.readAsBinaryString(file)
+    reader.onload = (e) => {
 
-  const fileDisplay = files?.map((file) => (
-    <S.FileBox key={window.crypto.randomUUID()}>
+
+      var base64data = reader.result;
+      // console.log('BASED', base64data)
+      content = base64data
+
+      if (content) {
+        axios.post('http://localhost:8000/upload', { 'file': content })
+      }
+    };
+
+
+    return (<S.FileBox key={window.crypto.randomUUID()}>
       <S.FileIcon
         style={{ width: "12%", marginRight: "5px", marginTop: "-10px" }}
         src={File}
@@ -43,8 +61,8 @@ export default function Dropzone() {
         <br />
         <span style={{ color: "#aaa" }}>{file.size} bytes</span>
       </p>
-    </S.FileBox>
-  ));
+    </S.FileBox>)
+  });
 
   return (
     <>

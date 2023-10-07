@@ -1,5 +1,6 @@
-from fastapi import APIRouter
-from server.models.pipes import Pipes
+from typing import Annotated
+from fastapi import APIRouter, UploadFile, File
+from server.models.pipes import Pipes, Test
 from server.database import pipes_collection
 from server.schemas.schemas import list_serial
 
@@ -32,3 +33,14 @@ async def edit_pipe(id: str, pipe: Pipes):
 async def delete_pipe(id: str):
     pipes_collection.find_one_and_delete(
         {"_id": ObjectId(id)})
+
+
+@router.delete("/pipes/clearall")
+async def clear_all():
+    pipes_collection.drop()
+
+
+@router.post("/upload")
+async def upload(file: Test):
+    with open('micro.py', 'w') as f:
+        f.write(file.file)

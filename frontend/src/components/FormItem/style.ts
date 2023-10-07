@@ -31,9 +31,24 @@ const Textarea = styled.textarea`
   resize: none;
 `
 
+const Button = styled.button`
+  width: 20%;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  font-weight: 400;
+  background-color: #6c757d;
+  color: #fff;
+`
+const Wrapper = styled.div`
+  width: 100%;
+  text-align: right;
+`;
 export default {
-    Form,
-    Input,
-    Label,
-    Textarea
+  Button,
+  Form,
+  Input,
+  Label,
+  Textarea,
+  Wrapper
 }

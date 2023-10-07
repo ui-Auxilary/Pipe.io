@@ -1,5 +1,7 @@
 import FormItem from "components/FormItem"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
+
+import { useFormData } from "./FormProvider"
 
 export interface Item {
     label: string
@@ -8,6 +10,8 @@ export interface Item {
 }
 
 export default function Form({ questions, step, onFormUpdate, pageAnswers, onSubmit }) {
+    const { setStep, currentStep } = useFormData();
+
     const [answers, setAnswers] = useState({ index: step })
 
     const updateAnswers = (value, category) => {
@@ -27,8 +31,12 @@ export default function Form({ questions, step, onFormUpdate, pageAnswers, onSub
 
 
     return (
-        questions[step].items.map((item: Item, index) => (
-            <FormItem key={item.label} item={item} onChange={updateAnswers} answers={pageAnswers[step] ? pageAnswers[step][item.value] : null} />
-        ))
+        <>
+            {
+                questions && questions[step].items.map((item: Item, index) => (
+                    <FormItem key={item.label} item={item} onChange={updateAnswers} answers={pageAnswers[step] ? pageAnswers[step][item.value] : null} />
+                ))
+            }
+        </>
     )
 }
