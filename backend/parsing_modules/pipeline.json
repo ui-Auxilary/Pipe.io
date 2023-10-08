@@ -1,0 +1,27 @@
+{
+    "pipeline": {
+        "name": "flkjaflKJDLKFJD",
+        "microservices": [
+            {
+                "file": "output",
+                "name": "add_one",
+                "parameters": [
+                    7
+                ]
+            },
+            {
+                "file": "output",
+                "name": "add_x",
+                "parameters": [
+                    15,
+                    7
+                ]
+            },
+            {
+                "file": "output",
+                "name": "print_hello_world",
+                "parameters": []
+            }
+        ]
+    }
+}
