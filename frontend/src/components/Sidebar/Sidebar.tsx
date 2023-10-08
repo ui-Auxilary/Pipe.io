@@ -28,7 +28,7 @@ export default function Sidebar() {
 
 
 function handleLogOut() {
-  fetch(`http://localhost:8000/users/logout`, {
+  fetch(`http://localhost:8000/users/get_user`, {
     method: "POST",
     headers: {
       "Content-type": "application/x-www-form-urlencoded",
@@ -37,8 +37,9 @@ function handleLogOut() {
   })
     .then((res) => {
       if (res.status === 200) {
-        window.location.href = "/login";
-        sessionStorage.removeItem("token");
+        // window.location.href = "/login";
+        // sessionStorage.removeItem("token");
+        console.log(res)
       }
     })
     .catch((error) => {

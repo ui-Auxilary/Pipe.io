@@ -39,6 +39,6 @@ async def delete_pipe(id: str):
         {"_id": ObjectId(id)})
 
 
-@router.delete("/pipes/clearall")
+@router.delete("pipes/clear_all")
 async def clear_all():
     pipes_collection.drop()

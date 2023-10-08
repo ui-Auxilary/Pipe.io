@@ -40,15 +40,13 @@ export default function FormProvider({ children }: any) {
     const submitData = () => {
         setUserData(prev => Object.assign(prev, userData))
         console.log('SUBMITTED', userData)
-        let data = {}
 
-        const config = {
+        console.log(sessionStorage.getItem("token"))
+        axios.post('http://localhost:8000/users/get_user', {}, {
             headers: {
-                "Content-type": "application/x-www-form-urlencoded",
-                "Authorization": "Bearer " + sessionStorage.getItem("token"),
+                "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
             }
-        };
-        axios.post('http://localhost:8000/users/get_user', data, config).then((res) => console.log('Token', res))
+        }).then((res) => console.log('Token', res))
 
         axios.post('http://localhost:8000/pipes/create', userData)
     }
