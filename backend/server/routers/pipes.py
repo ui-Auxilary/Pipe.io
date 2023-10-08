@@ -8,7 +8,7 @@ from fastapi import APIRouter, UploadFile, File
 from server.models.pipes import Pipes
 from server.models.microservices import MicroserviceContent
 from server.database import pipes_collection
-from server.schemas.schemas import list_serial
+from server.schemas.schemas import list_pipes_serial
 from parsing_modules.microservice_extractor import extract_microservice
 
 # Used for fetching Mongo objectID
@@ -21,7 +21,7 @@ router = APIRouter()
 
 @router.get("/list_pipes")
 async def get_pipes():
-    pipes = list_serial(pipes_collection.find())
+    pipes = list_pipes_serial(pipes_collection.find())
     return pipes
 
 
@@ -47,18 +47,4 @@ async def clear_all():
     pipes_collection.drop()
 
 
-@router.post("/upload")
-async def upload(file: MicroserviceContent):
-    filepath = f"data/{file.filename}"
-    os.makedirs(os.path.dirname(filepath), exist_ok=True)
-
-    # Need to test with empty/invalid files error handling
-    with open(filepath, 'w+') as f:
-        f.write(file.content)
-
-    res_json = json.loads(extract_microservice(file.filename.split('.')[0]))
-
-    if (res_json):
-        res_json.update({'code': file.content})
-
-    return res_json
+    

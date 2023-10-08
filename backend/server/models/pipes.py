@@ -7,3 +7,5 @@ class Pipes(BaseModel):
     name: str
     description: str
     status: Optional[str] = Field(None)
+    user_id: str
+    microservices: list
