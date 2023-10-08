@@ -42,7 +42,7 @@ async def delete_microservice(name: str):
         {"name": name})
 
 
-@router.delete("/microservices/clearall")
+@router.delete("/clear/microservices")
 async def clear_all_microservices():
     microservices_collection.drop()
 
@@ -56,9 +56,4 @@ async def upload_microservice(file: MicroserviceContent):
     with open(filepath, 'w+') as f:
         f.write(file.content)
 
-    res_json = json.loads(extract_microservice(file.filename.split('.')[0]))
-
-    if (res_json):
-        res_json.update({'code': file.content})
-
-    return res_json
+    return extract_microservice(file.filename.split('.')[0])
