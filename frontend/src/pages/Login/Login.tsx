@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Button, Card } from "react-bootstrap";
 import Logo from "assets/logo.svg";
 
 import s from "./style";
+import { useAppData } from "helper/AppProvider";
 
 
 
 export default function Login() {
-
   const [values, setValues] = useState({
     email: '',
     username: '',
@@ -60,9 +60,8 @@ export default function Login() {
           'Content-type': 'application/x-www-form-urlencoded',
         },
         body: data.toString(),
-      }).then(function (response) {
-        console.log('RESPONSE', response)
-        return response.json()
+      }).then((res) => {
+        return res.json()
       }).then(function (response) {
         // If there is an error, set the error message
         if (response.detail) {

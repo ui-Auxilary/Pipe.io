@@ -1,6 +1,15 @@
-import { createContext, useContext, useState } from "react"
+import React, { createContext, useContext, useState } from "react"
 
-export const AppProviderContext = createContext({});
+export interface UserType {
+    user: string
+    setUser: React.Dispatch<React.SetStateAction<string>>
+}
+
+export const AppProviderContext = createContext<UserType>({
+    user: "",
+    setUser: () => { }
+});
+
 
 export function useAppData() {
     return useContext(AppProviderContext);

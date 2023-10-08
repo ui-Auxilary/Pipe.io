@@ -1,11 +1,12 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
-import FileSaver from "file-saver";
 
 import File from "assets/upload_file.svg";
 
 import S from "./style";
 import axios from "axios";
+import { useFormData } from "components/Form/FormProvider";
+
 
 export default function Dropzone({ filetype }) {
   const [files, setFiles] = useState<File[]>([]);
@@ -28,7 +29,6 @@ export default function Dropzone({ filetype }) {
     [],
   );
 
-  console.log('PARSED', filetype)
   let acceptedMime = {}
 
   acceptedMime = (filetype === "python") ? {
@@ -37,25 +37,14 @@ export default function Dropzone({ filetype }) {
     "text/csv": [".csv"]
   }
 
-  console.log(acceptedMime)
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: acceptedMime,
     onDrop,
   });
 
+  const { setMicroserviceData, microserviceData } = useFormData()
+
   const fileDisplay = files?.map((file) => {
-    if (filetype == "python") {
-      var reader = new FileReader();
-      reader.readAsBinaryString(file)
-      reader.onload = () => {
-        var base64data = reader.result;
-
-        if (base64data) {
-          axios.post('http://localhost:8000/upload', { 'filename': file.name, 'content': base64data }).then((res) => console.log('RES', (res.data)))
-        }
-      };
-    }
-
     return (<S.FileBox key={window.crypto.randomUUID()}>
       <S.FileIcon
         style={{ width: "12%", marginRight: "5px", marginTop: "-10px" }}
@@ -68,6 +57,28 @@ export default function Dropzone({ filetype }) {
       </p>
     </S.FileBox>)
   });
+
+  useEffect(() => {
+    return () => {
+      if (files && filetype == "python") {
+        files?.map((file) => {
+          console.log('FILE', file.name)
+          if (filetype == "python") {
+            var reader = new FileReader();
+            reader.readAsBinaryString(file)
+            reader.onload = () => {
+              let base64data = reader.result;
+
+              if (base64data) {
+                axios.post('http://localhost:8000/upload', { 'filename': file.name, 'content': base64data }).then((res) => setMicroserviceData(JSON.parse(res.data)))
+              }
+            };
+          }
+
+        })
+      }
+    }
+  }, [files])
 
   return (
     <>
@@ -97,7 +108,6 @@ export default function Dropzone({ filetype }) {
           <S.ScrollableDiv>{fileDisplay}</S.ScrollableDiv>
         ) : null}
 
-        <h4>Rejected files</h4>
         {rejectedfiles &&
           rejectedfiles.map((file) =>
             file.errors.map((error) => (

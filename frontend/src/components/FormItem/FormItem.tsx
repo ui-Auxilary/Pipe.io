@@ -4,6 +4,7 @@ import Dropzone from 'components/DragAndDrop/Dropzone';
 import { multiFormContext, updateFormData, useFormData } from 'components/Form/FormProvider';
 import { Modal, ModalFooter } from 'react-bootstrap';
 import MicroserviceList from 'components/MicroserviceList';
+import ViewMicroservice from 'components/MicroserviceList/ViewMicroservice';
 
 export interface Item {
   label: string
@@ -13,12 +14,10 @@ export interface Item {
 
 export interface Props {
   item: Item
-  onChange: (value: any, category: any) => void
-  answers: any
 }
 
 // Update based on question list to render specific ocmponent
-export default function FormItem({ item, onChange, answers }: Props) {
+export default function FormItem({ item }: Props) {
   const { setUserData, userData, submitData, currentStep } = useFormData();
 
   switch (item.type) {
@@ -38,9 +37,13 @@ export default function FormItem({ item, onChange, answers }: Props) {
           <Dropzone filetype={item.value} />
         </>
       );
-    case 'microservices':
+    case 'list_microservices':
       return (
         <MicroserviceList />
+      );
+    case 'view_microservices':
+      return (
+        <ViewMicroservice />
       );
   }
 

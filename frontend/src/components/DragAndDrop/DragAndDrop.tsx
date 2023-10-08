@@ -11,6 +11,7 @@ import "./DragAndDrop.css"
 
 import FormProvider, { multiFormContext, useFormData } from "components/Form/FormProvider";
 import { ModalFooter } from "react-bootstrap";
+
 export interface Props {
   show: boolean;
   handleClose: () => void;
@@ -42,7 +43,7 @@ export default function DragAndDrop({ show, handleClose }: Props) {
       section: 2,
       items: [
         {
-          type: 'microservices',
+          type: 'list_microservices',
         },
       ]
     },
@@ -55,11 +56,20 @@ export default function DragAndDrop({ show, handleClose }: Props) {
           value: 'python'
         }
       ]
-    }
+    },
+    {
+      section: 4,
+      items: [
+        {
+          type: 'view_microservices',
+        },
+      ]
+    },
   ]
   const totalPagesCount = questionsList.length
   const [formAnswers, setFormAnswers] = useState({})
   const [submitted, setSubmitted] = useState(false);
+
   const onFormUpdate = (step, answerObj) => {
     console.log('Form update', step, answerObj)
     setFormAnswers({ ...formAnswers, [step]: answerObj })
@@ -93,7 +103,7 @@ export default function DragAndDrop({ show, handleClose }: Props) {
       </Modal.Header>
       <S.Wrapper>
         <Modal.Body>
-          <Form questions={questionsList} step={currentStep - 1} onSubmit={submitted} onFormUpdate={onFormUpdate} pageAnswers={formAnswers} />
+          <Form questions={questionsList} step={currentStep - 1} onFormUpdate={onFormUpdate} pageAnswers={formAnswers} />
         </Modal.Body>
       </S.Wrapper>
       <ModalFooter>

@@ -19,7 +19,7 @@ const Microservice = styled.li`
     background: #fff;
     display: flex;
     justify-content: space-between;
-    height: 100px;
+    height: 120px;
     margin: 10px;
     padding: 25px;
     padding-right: 0;

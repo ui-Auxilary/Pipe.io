@@ -6,9 +6,11 @@ import Button from "react-bootstrap/Button";
 import Sidebar from "../../components/Sidebar";
 import S from "./style";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PipeList from "components/PipeList/PipeList";
 import FormProvider from "components/Form/FormProvider";
+import { useAppData } from "helper/AppProvider";
+import getUser from "helper/functions";
 
 export default function Home() {
   const [show, setShow] = useState(false);
@@ -20,6 +22,12 @@ export default function Home() {
     window.location.href = "/login";
   }
 
+  const { user, setUser } = useAppData()
+
+  useEffect(() => {
+    getUser().then(({ user }) => setUser(user.id))
+
+  }, [])
 
   return (
     <PageTemplate>
