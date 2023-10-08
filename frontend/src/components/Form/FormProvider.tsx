@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { createContext, useContext, useState } from "react"
 import File from '../../test.py'
+import getUser from "helper/functions";
 interface UserData {
     [index: string]: string;
 }
@@ -42,11 +43,8 @@ export default function FormProvider({ children }: any) {
         console.log('SUBMITTED', userData)
 
         console.log(sessionStorage.getItem("token"))
-        axios.post('http://localhost:8000/users/get_user', {}, {
-            headers: {
-                "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
-            }
-        }).then((res) => console.log('Token', res))
+
+        console.log('getting', getUser().then(res => console.log(res.data)))
 
         axios.post('http://localhost:8000/pipes/create', userData)
     }

@@ -1,5 +1,6 @@
 import os
 from fastapi import APIRouter, Form, HTTPException, Header
+from fastapi.security import HTTPBearer
 from server.models.users import Users
 from server.database import users_collection
 from time import time
@@ -134,7 +135,7 @@ async def get_user(Authorization: str = Header(...)):
         InputError: Invalid token
 
     Returns:
-        `{user: User}`: Empty dictionary if successful
+        {user: User}: Empty dictionary if successful
     """
 
     try:
@@ -144,6 +145,15 @@ async def get_user(Authorization: str = Header(...)):
         userid = ObjectId(decoded["user_id"])
         user = users_collection.find_one({"_id": userid})
 
-        return {user}
+        ret_user = {
+            "id": user["_id"].__str__(),
+            "email": user["email"],
+            "username": user["username"],
+            "profile_img_url": user["profile_img_url"],
+            "pipes": user["pipes"]
+        }
+
+        return {"user": ret_user}
+
     except:
         raise HTTPException(status_code=401, detail="Invalid token")

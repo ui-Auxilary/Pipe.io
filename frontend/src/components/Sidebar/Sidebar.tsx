@@ -37,9 +37,8 @@ function handleLogOut() {
   })
     .then((res) => {
       if (res.status === 200) {
-        // window.location.href = "/login";
-        // sessionStorage.removeItem("token");
-        console.log(res)
+        window.location.href = "/login";
+        sessionStorage.removeItem("token");
       }
     })
     .catch((error) => {

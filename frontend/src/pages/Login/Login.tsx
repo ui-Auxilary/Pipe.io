@@ -61,6 +61,7 @@ export default function Login() {
         },
         body: data.toString(),
       }).then(function (response) {
+        console.log('RESPONSE', response)
         return response.json()
       }).then(function (response) {
         // If there is an error, set the error message
