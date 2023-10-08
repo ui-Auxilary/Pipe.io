@@ -2,12 +2,15 @@ import PageTemplate from "components/PageTemplate/PageTemplate";
 import DragAndDrop from "components/DragAndDrop";
 
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 
 import Sidebar from "../../components/Sidebar";
 import S from "./style";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import PipeList from "components/PipeList/PipeList";
+import FormProvider from "components/Form/FormProvider";
+import { useAppData } from "helper/AppProvider";
+import getUser from "helper/functions";
 
 export default function Home() {
   const [show, setShow] = useState(false);
@@ -19,6 +22,12 @@ export default function Home() {
     window.location.href = "/login";
   }
 
+  const { user, setUser } = useAppData()
+
+  useEffect(() => {
+    getUser().then(({ user }) => setUser(user.id))
+
+  }, [])
 
   return (
     <PageTemplate>
@@ -32,22 +41,14 @@ export default function Home() {
             </div>
             <span>Create a pipeline</span>
           </S.Header>
-          <S.Body>0 pipeline(s) selected</S.Body>
+          <S.Body>0 pipeline(s) selected
+            <PipeList />
+          </S.Body>
         </S.Container>
       </S.Wrapper>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Create Pipeline</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <DragAndDrop />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Next
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <FormProvider>
+        <DragAndDrop show={show} handleClose={handleClose} />
+      </FormProvider>
     </PageTemplate>
   );
 }

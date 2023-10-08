@@ -1,0 +1,8 @@
+.form-modal {
+    min-width: fit-content;
+}
+
+.modal-height {
+    min-height: 700px;
+    height: 100%;
+}

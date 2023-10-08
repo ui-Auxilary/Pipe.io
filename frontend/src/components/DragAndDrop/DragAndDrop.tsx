@@ -1,63 +1,115 @@
-import { useCallback, useState } from "react";
-import { FileRejection, useDropzone } from "react-dropzone";
+import Dropzone from "./Dropzone";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+
+import Form from "components/Form";
 
 import S from "./style";
+import { useContext, useEffect, useState } from "react";
 
-export default function DragAndDrop() {
-  const [files, setFiles] = useState<File[]>([]);
-  const [rejectedfiles, setRejectedFiles] = useState<FileRejection[]>([]);
+import "./DragAndDrop.css"
 
-  const onDrop = useCallback(
-    (acceptedFiles: File[], fileRejections: FileRejection[]) => {
-      if (acceptedFiles?.length) {
-        setFiles((previousFiles) => [...previousFiles, ...acceptedFiles]);
-      }
+import FormProvider, { multiFormContext, useFormData } from "components/Form/FormProvider";
+import { ModalFooter } from "react-bootstrap";
 
-      if (fileRejections?.length) {
-        setRejectedFiles((previousFiles) => [
-          ...previousFiles,
-          ...fileRejections,
-        ]);
-      }
+export interface Props {
+  show: boolean;
+  handleClose: () => void;
+}
+
+export default function DragAndDrop({ show, handleClose }: Props) {
+  const questionsList = [
+    {
+      section: 1,
+      items: [
+        {
+          label: 'Name',
+          type: 'text',
+          value: 'name'
+        },
+        {
+          label: 'Description',
+          type: 'text',
+          value: 'description'
+        },
+        {
+          label: 'Data source',
+          type: 'dropzone',
+          value: 'csv'
+        }
+      ]
     },
-    [],
-  );
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: {
-      "text/x-python": [".py"],
+    {
+      section: 2,
+      items: [
+        {
+          type: 'list_microservices',
+        },
+      ]
     },
-    onDrop,
-  });
+    {
+      section: 3,
+      items: [
+        {
+          label: 'Upload microservice file(s)',
+          type: 'dropzone',
+          value: 'python'
+        }
+      ]
+    },
+    {
+      section: 4,
+      items: [
+        {
+          type: 'view_microservices',
+        },
+      ]
+    },
+  ]
+  const totalPagesCount = questionsList.length
+  const [formAnswers, setFormAnswers] = useState({})
+  const [submitted, setSubmitted] = useState(false);
 
-  const fileDisplay = files?.map((file) => (
-    <li key={window.crypto.randomUUID()}>
-      {file.name} - {file.size} bytes
-    </li>
-  ));
+  const onFormUpdate = (step, answerObj) => {
+    console.log('Form update', step, answerObj)
+    setFormAnswers({ ...formAnswers, [step]: answerObj })
+  }
+
+  const { userData, currentStep, submitData, setStep } = useFormData();
+
+  useEffect(() => {
+    console.log('Updated!', userData)
+  }, [userData])
+
+  useEffect(() => {
+    console.log('Updated step!', currentStep)
+  }, [currentStep])
+
+  const onNext = () => {
+    if (currentStep < totalPagesCount) {
+      setStep(prevIndex => prevIndex + 1)
+    }
+  }
+
+  const onHandleClose = () => {
+    handleClose()
+    setTimeout(() => setStep(1), 500)
+  }
 
   return (
-    <section className="container">
-      <S.Container
-        style={{ borderColor: isDragActive ? "#add8e6" : "#000" }}
-        {...getRootProps()}
-      >
-        <input {...getInputProps()} />
-        <p>Drag & Drop or browse</p>
-      </S.Container>
-      <aside>
-        <h4>Files</h4>
-        <ul>{fileDisplay}</ul>
-        <h4>Rejected files</h4>
-        {rejectedfiles &&
-          rejectedfiles.map((file) =>
-            file.errors.map((error) => (
-              <ul>
-                {error.code} {error.message}
-              </ul>
-            )),
-          )}
-      </aside>
-    </section>
+    <Modal dialogClassName="form-modal" contentClassName="modal-height" show={show} onHide={onHandleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Create Pipeline</Modal.Title>
+      </Modal.Header>
+      <S.Wrapper>
+        <Modal.Body>
+          <Form questions={questionsList} step={currentStep - 1} onFormUpdate={onFormUpdate} pageAnswers={formAnswers} />
+        </Modal.Body>
+      </S.Wrapper>
+      <ModalFooter>
+        {currentStep == totalPagesCount ? (<Button onClick={submitData} variant="secondary">Submit</Button>) : (<Button onClick={onNext}>Next</Button>)}
+
+      </ModalFooter>
+    </Modal>
   );
 }

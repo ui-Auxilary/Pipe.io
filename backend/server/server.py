@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from server.routers import pipes, users, testing
+from server.routers import pipes, users, testing, microservices
 
 
 class InputError(Exception):
@@ -43,6 +43,7 @@ app.add_middleware(
 app.include_router(pipes.router)
 app.include_router(users.router)
 app.include_router(testing.router)
+app.include_router(microservices.router)
 
 
 @app.get("/")
