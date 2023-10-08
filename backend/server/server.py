@@ -1,8 +1,25 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from server.routers import pipes
+from fastapi.responses import JSONResponse
+from server.routers import pipes, users, testing
+
+
+class InputError(Exception):
+    def __init__(self, code: int, message: str):
+        self.code = 400
+        self.message = 'No message specified'
+
 
 app = FastAPI()
+
+
+@app.exception_handler(InputError)
+async def unicorn_exception_handler(request: Request, exc: InputError):
+    return JSONResponse(
+        status_code=400,
+        content={
+            "message": f"Oops! {exc.message} did something. There goes a rainbow..."},
+    )
 
 origins = [
     "172.21.0.1:37848",
@@ -24,8 +41,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(pipes.router)
+app.include_router(users.router)
+app.include_router(testing.router)
 
 
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
+

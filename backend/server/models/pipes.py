@@ -7,7 +7,3 @@ class Pipes(BaseModel):
     name: str
     description: str
     status: Optional[str] = Field(None)
-
-
-class Test(BaseModel):
-    file: str

@@ -1,8 +1,14 @@
+import os
+import importlib.util
+import sys
+
 from typing import Annotated
 from fastapi import APIRouter, UploadFile, File
-from server.models.pipes import Pipes, Test
+from server.models.pipes import Pipes
+from server.models.microservices import MicroserviceContent
 from server.database import pipes_collection
 from server.schemas.schemas import list_serial
+from parsing_modules.microservice_extractor import extract_microservice
 
 # Used for fetching Mongo objectID
 from bson import ObjectId
@@ -41,6 +47,12 @@ async def clear_all():
 
 
 @router.post("/upload")
-async def upload(file: Test):
-    with open('micro.py', 'w') as f:
-        f.write(file.file)
+async def upload(file: MicroserviceContent):
+    print("SYS", sys.path)
+    filepath = f"data/{file.filename}"
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+
+    with open(filepath, 'w+') as f:
+        f.write(file.content)
+
+    return extract_microservice(file.filename.split('.')[0])

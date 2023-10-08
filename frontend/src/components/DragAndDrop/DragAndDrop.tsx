@@ -32,7 +32,7 @@ export default function DragAndDrop({ show, handleClose }: Props) {
         {
           label: 'Data source',
           type: 'dropzone',
-          value: 'name'
+          value: 'csv'
         }
       ]
     },
@@ -40,15 +40,18 @@ export default function DragAndDrop({ show, handleClose }: Props) {
       section: 2,
       items: [
         {
-          label: 'asdsad',
-          type: 'text',
-          value: 'name'
+          type: 'microservices',
         },
+      ]
+    },
+    {
+      section: 3,
+      items: [
         {
-          label: 'assadsad',
-          type: 'text',
-          value: 'description'
-        },
+          label: 'Upload microservice file(s)',
+          type: 'dropzone',
+          value: 'python'
+        }
       ]
     }
   ]

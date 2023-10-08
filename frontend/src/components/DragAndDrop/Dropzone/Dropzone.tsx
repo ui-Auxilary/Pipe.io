@@ -7,7 +7,7 @@ import File from "assets/upload_file.svg";
 import S from "./style";
 import axios from "axios";
 
-export default function Dropzone() {
+export default function Dropzone({ filetype }) {
   const [files, setFiles] = useState<File[]>([]);
   const [rejectedfiles, setRejectedFiles] = useState<FileRejection[]>([]);
 
@@ -28,28 +28,33 @@ export default function Dropzone() {
     [],
   );
 
+  console.log('PARSED', filetype)
+  let acceptedMime = {}
+
+  acceptedMime = (filetype === "python") ? {
+    "text/x-python": [".py"]
+  } : {
+    "text/csv": [".csv"]
+  }
+
+  console.log(acceptedMime)
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: {
-      "text/x-python": [".py"],
-    },
+    accept: acceptedMime,
     onDrop,
   });
-  let content: any = "";
+
   const fileDisplay = files?.map((file) => {
-    var reader = new FileReader();
-    reader.readAsBinaryString(file)
-    reader.onload = (e) => {
+    if (filetype == "python") {
+      var reader = new FileReader();
+      reader.readAsBinaryString(file)
+      reader.onload = () => {
+        var base64data = reader.result;
 
-
-      var base64data = reader.result;
-      // console.log('BASED', base64data)
-      content = base64data
-
-      if (content) {
-        axios.post('http://localhost:8000/upload', { 'file': content })
-      }
-    };
-
+        if (base64data) {
+          axios.post('http://localhost:8000/upload', { 'filename': file.name, 'content': base64data }).then((res) => console.log('RES', (res.data)))
+        }
+      };
+    }
 
     return (<S.FileBox key={window.crypto.randomUUID()}>
       <S.FileIcon

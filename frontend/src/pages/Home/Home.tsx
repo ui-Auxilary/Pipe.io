@@ -8,12 +8,19 @@ import S from "./style";
 
 import { useState } from "react";
 import PipeList from "components/PipeList/PipeList";
+import FormProvider from "components/Form/FormProvider";
 
 export default function Home() {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  if (sessionStorage.getItem("token") === null) {
+    // window.location.href = "/login";
+  }
+
+
   return (
     <PageTemplate>
       <S.Wrapper>
@@ -31,7 +38,9 @@ export default function Home() {
           </S.Body>
         </S.Container>
       </S.Wrapper>
-      <DragAndDrop show={show} handleClose={handleClose} />
+      <FormProvider>
+        <DragAndDrop show={show} handleClose={handleClose} />
+      </FormProvider>
     </PageTemplate>
   );
 }

@@ -3,6 +3,7 @@ import S from './style';
 import Dropzone from 'components/DragAndDrop/Dropzone';
 import { multiFormContext, updateFormData, useFormData } from 'components/Form/FormProvider';
 import { Modal, ModalFooter } from 'react-bootstrap';
+import MicroserviceList from 'components/MicroserviceList';
 
 export interface Item {
   label: string
@@ -30,11 +31,16 @@ export default function FormItem({ item, onChange, answers }: Props) {
       );
 
     case 'dropzone':
+
       return (
         <>
           <S.Label>{item.label}</S.Label>
-          <Dropzone />
+          <Dropzone filetype={item.value} />
         </>
+      );
+    case 'microservices':
+      return (
+        <MicroserviceList />
       );
   }
 

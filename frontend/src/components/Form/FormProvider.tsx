@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { createContext, useContext, useState } from "react"
 import File from '../../test.py'
-interface TestArray {
+interface UserData {
     [index: string]: string;
 }
 
@@ -33,7 +33,7 @@ export function useFormData() {
 
 export default function FormProvider({ children }: any) {
     const [currentStep, setStep] = useState<number>(1);
-    const [userData, setUserData] = useState<TestArray>({})
+    const [userData, setUserData] = useState<UserData>({})
     const [finalData, setFinalData] = useState<Record<string, any>>([]);
 
 
