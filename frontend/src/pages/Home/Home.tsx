@@ -17,7 +17,7 @@ export default function Home() {
   const handleShow = () => setShow(true);
 
   if (sessionStorage.getItem("token") === null) {
-    // window.location.href = "/login";
+    window.location.href = "/login";
   }
 
 

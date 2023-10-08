@@ -70,7 +70,7 @@ export default function Login() {
           // If there is no error, set the token and redirect to home
         } else {
           sessionStorage.setItem('token', response.token)
-          // window.location.href = '/'
+          window.location.href = '/'
         }
       }).catch(function (error) {
         console.log(error)

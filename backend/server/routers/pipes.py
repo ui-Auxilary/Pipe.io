@@ -1,7 +1,4 @@
-import json
 import os
-import importlib.util
-import sys
 
 from typing import Annotated
 from fastapi import APIRouter, UploadFile, File
@@ -45,6 +42,3 @@ async def delete_pipe(id: str):
 @router.delete("/pipes/clearall")
 async def clear_all():
     pipes_collection.drop()
-
-
-    

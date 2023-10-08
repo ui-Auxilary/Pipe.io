@@ -30,6 +30,7 @@ def extract_microservice(python_file=None) -> str:
         for microservice in microservice_names:
             microservice_function = getattr(imported_module, microservice)
             microservice_signature = inspect.signature(microservice_function)
+            microservice_code = inspect.getsource(microservice_function)
 
             params = []
             for param in microservice_signature.parameters.values():
@@ -42,7 +43,8 @@ def extract_microservice(python_file=None) -> str:
             microservice_json['microservices'].append({
                 'name': microservice,
                 'doc': doc,
-                'parameters': params
+                'parameters': params,
+                'code': microservice_code
             })
 
         return json.dumps(microservice_json, indent=4)

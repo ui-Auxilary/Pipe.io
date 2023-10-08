@@ -120,3 +120,30 @@ async def logout_user(Authorization: str = Header(...)):
         return {}
     except:
         raise HTTPException(status_code=401, detail="Invalid token")
+
+
+@router.post("/users/get_user")
+async def get_user(Authorization: str = Header(...)):
+    """
+    Given a user's token, return the authorised user's information.
+
+    Args:
+        token (str): User's token
+
+    Raises:
+        InputError: Invalid token
+
+    Returns:
+        `{user: User}`: Empty dictionary if successful
+    """
+
+    try:
+        token = Authorization.split(" ")[1]
+        decoded = jwt.decode(token, os.getenv(
+            "JWT_SECRET"), algorithms=["HS256"])
+        userid = ObjectId(decoded["user_id"])
+        user = users_collection.find_one({"_id": userid})
+
+        return {user}
+    except:
+        raise HTTPException(status_code=401, detail="Invalid token")
