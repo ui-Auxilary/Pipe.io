@@ -19,24 +19,24 @@ router = APIRouter()
 # pipes_list GET
 
 
-@router.get("/list_microservices")
+@router.get("/microservice/list")
 async def get_microservices():
     microservices = list_microservices_serial(microservices_collection.find())
     return microservices
 
 
-@router.post("/add_microservice")
+@router.post("/microservice/add")
 async def add_microservice(microservice: Microservice):
     microservices_collection.insert_one(dict(microservice))
 
 
-@router.put("/{id}")
-async def edit_microservice(id: str, microservice: Microservice):
+@router.put("/microservice/{name}")
+async def edit_microservice(name: str, microservice: Microservice):
     microservices_collection.find_one_and_update(
-        {"name": microservice["name"]}, {"$set": dict(microservice)})
+        {"name": name}, {"$set": dict(microservice)})
 
 
-@router.delete("/{name}")
+@router.delete("/microservice/{name}")
 async def delete_microservice(name: str):
     microservices_collection.find_one_and_delete(
         {"name": name})

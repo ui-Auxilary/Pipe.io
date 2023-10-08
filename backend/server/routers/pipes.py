@@ -19,24 +19,24 @@ router = APIRouter()
 # pipes_list GET
 
 
-@router.get("/list_pipes")
+@router.get("/pipes/list")
 async def get_pipes():
     pipes = list_pipes_serial(pipes_collection.find())
     return pipes
 
 
-@router.post("/create")
+@router.post("/pipes/create")
 async def create_pipe(pipe: Pipes):
     pipes_collection.insert_one(dict(pipe))
 
 
-@router.put("/{id}")
+@router.put("/pipes/{id}")
 async def edit_pipe(id: str, pipe: Pipes):
     pipes_collection.find_one_and_update(
         {"_id": ObjectId(id)}, {"$set": dict(pipe)})
 
 
-@router.delete("/{id}")
+@router.delete("/pipes/{id}")
 async def delete_pipe(id: str):
     pipes_collection.find_one_and_delete(
         {"_id": ObjectId(id)})

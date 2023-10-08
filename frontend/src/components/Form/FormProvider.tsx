@@ -40,7 +40,7 @@ export default function FormProvider({ children }: any) {
     const submitData = () => {
         setUserData(prev => Object.assign(prev, userData))
         console.log('SUBMITTED', userData)
-        axios.post('http://localhost:8000/create', userData)
+        axios.post('http://localhost:8000/pipes/create', userData)
     }
 
     return (

@@ -21,7 +21,7 @@ export default function PipeList() {
     const [pipes, setPipes] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/list_pipes')
+        axios.get('http://localhost:8000/pipes/list')
             .then(res => setPipes(res.data))
             .catch(err => console.log(err))
     }, [])
