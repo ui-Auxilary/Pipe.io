@@ -12,3 +12,7 @@ Worked on a prototype for the Storyboard in Figma, and diagram for Software arch
 Week 3
 Set up a docker environment for the project, as well as the Frontend (React) and backend stack (FastAPI, python). Wrote some documentation for the API 
 calls required for the frontend, and began development of the frontend UI according to our prior Figma design.
+
+Week 4
+Created models for pipes and microservices. Set up working CRUD routes for them and hooked the backend to the frontend. On the frontend created a dynamic
+multi-step form with upload_file functionality which is sent to the backend and parsed. Rendered the backend pipes on the frontend in a dynamic list.
