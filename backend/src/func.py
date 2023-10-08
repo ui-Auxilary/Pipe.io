@@ -1,5 +1,5 @@
 import pandas as pd
-from pymongo import MongoClient
+import os
 import datetime
 import yfinance as yf
 
@@ -8,16 +8,17 @@ def import_csv(input_file_path: str = 'default.csv'):
     Imports data from a csv as a pandas dataframe
 
     Parameters:
-    - input_file_path (str): the path for the inputted csv. Defauly is 'default.csv'
+    - input_file_path (str): the path for the inputted csv. Default is 'default.csv'
 
     Returns
     - pd.DataFrame: A dataframe from the csv file
     """
     df = pd.read_csv(input_file_path)
 
-    df.to_csv('/data/stock.csv')
-
+    df.to_csv('data/stock.csv')
     return df
+
+import_csv("data/stock.csv")
 
 def import_yahoo(ticker: str = 'msft', 
                                 start_date: str = (datetime.datetime.now() - datetime.timedelta(days=365)).strftime("%Y-%m-%d"),
@@ -35,10 +36,10 @@ def import_yahoo(ticker: str = 'msft',
     """
 
     ticker = yf.Ticker(ticker)
-    df = ticker.history(start=start_date, end=end_date, index_as_date = True, interval="1d")
+    df = ticker.history(start=start_date, end=end_date, interval="1d")
     df['Datetime'] = df.index
     
     # Save the dataframe to our storage location
-    df.to_csv('/data/stock.csv')
+    df.to_csv('data/stock.csv')
 
     return df
