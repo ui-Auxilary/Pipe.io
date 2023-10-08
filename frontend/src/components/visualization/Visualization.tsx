@@ -1,6 +1,7 @@
+import axios from 'axios';
 import S from "./style";
 import { Button } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 import Logo from "assets/logo.svg";
@@ -8,10 +9,25 @@ import Logo from "assets/logo.svg";
 
 import { BarChart } from '@mui/x-charts/BarChart';
 
-import React from 'react';
+export default function ChartComponent() {
+  const [stock, setStock] = useState({});
+  function get_stock_data() {
+    fetch(`http://localhost:8000/get_stock_data/aapl`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
+  useEffect(() => {
+    axios.post("http://localhost:8000/get_stock_data/aapl").then((res: {}) => setStock(res))
+  }, [stock])
 
-const ChartComponent = () => {
+  get_stock_data()
+  console.log(stock)
   return (
     <BarChart
       xAxis={[
@@ -31,16 +47,3 @@ const ChartComponent = () => {
     />
   );
 };
-
-export default ChartComponent;
-
-function get_stock_data() {
-  fetch(`http://localhost:8000/get_stock_data/aapl`)
-   .then((res) => res.json())
-   .then((data) => {
-      console.log(data);
-    })
-   .catch((error) => {
-      console.log(error);
-    });
-}

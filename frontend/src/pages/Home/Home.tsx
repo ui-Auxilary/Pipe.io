@@ -8,6 +8,7 @@ import Sidebar from "../../components/Sidebar";
 import S from "./style";
 
 import { useState } from "react";
+import ChartComponent from "components/visualization/Visualization";
 
 export default function Home() {
   const [show, setShow] = useState(false);
@@ -16,7 +17,7 @@ export default function Home() {
   const handleShow = () => setShow(true);
 
   if (sessionStorage.getItem("token") === null) {
-    window.location.href = "/login";
+    // window.location.href = "/login";
   }
 
 
@@ -32,7 +33,10 @@ export default function Home() {
             </div>
             <span>Create a pipeline</span>
           </S.Header>
-          <S.Body>0 pipeline(s) selected</S.Body>
+          <S.Body>0 pipeline(s) selected
+
+            <ChartComponent />
+          </S.Body>
         </S.Container>
       </S.Wrapper>
       <Modal show={show} onHide={handleClose}>
