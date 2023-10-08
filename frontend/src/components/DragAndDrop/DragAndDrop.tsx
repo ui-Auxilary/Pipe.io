@@ -7,6 +7,8 @@ import Form from "components/Form";
 import S from "./style";
 import { useContext, useEffect, useState } from "react";
 
+import "./DragAndDrop.css"
+
 import FormProvider, { multiFormContext, useFormData } from "components/Form/FormProvider";
 import { ModalFooter } from "react-bootstrap";
 export interface Props {
@@ -85,7 +87,7 @@ export default function DragAndDrop({ show, handleClose }: Props) {
   }
 
   return (
-    <Modal show={show} onHide={onHandleClose}>
+    <Modal dialogClassName="form-modal" contentClassName="modal-height" show={show} onHide={onHandleClose}>
       <Modal.Header closeButton>
         <Modal.Title>Create Pipeline</Modal.Title>
       </Modal.Header>

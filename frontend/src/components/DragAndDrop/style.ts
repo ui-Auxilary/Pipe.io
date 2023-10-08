@@ -47,6 +47,7 @@ const Textarea = styled.textarea`
 `;
 const Wrapper = styled.div`
   padding: 0 25px;
+  flex: 1;
 `;
 
 export default {

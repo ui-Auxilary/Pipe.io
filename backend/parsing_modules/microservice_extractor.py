@@ -9,12 +9,12 @@ sys.path.append("./data")
 print(sys.path)
 
 
-def extract_microservice(python_file=None):
+def extract_microservice(python_file=None) -> str:
     if (python_file):
         print("FILE", python_file)
         # load the module
         imported_module = importlib.import_module(python_file)
-        print('passed')
+
         # create a json object to store the microservice information
         microservice_json = {}
         microservice_json['microservices'] = []
@@ -46,3 +46,4 @@ def extract_microservice(python_file=None):
             })
 
         return json.dumps(microservice_json, indent=4)
+    return ""

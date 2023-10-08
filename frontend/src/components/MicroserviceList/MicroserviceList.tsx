@@ -1,3 +1,4 @@
+import Microservice from 'components/Microservice';
 import S from './styles'
 
 import { useFormData } from 'components/Form/FormProvider'
@@ -13,6 +14,7 @@ export default function MicroserviceList() {
             </S.Header>
             <S.Container>
                 <span style={{ color: "#907F7F", fontWeight: 500 }}>0 microservice(s) available</span>
+                <Microservice />
             </S.Container>
         </S.Wrapper>
     )

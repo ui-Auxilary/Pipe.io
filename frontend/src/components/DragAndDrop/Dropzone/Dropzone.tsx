@@ -92,7 +92,7 @@ export default function Dropzone({ filetype }) {
           </h6>
         </S.Wrapper>
       </S.Container>
-      <aside>
+      <aside style={{ width: "500px" }}>
         {fileDisplay.length > 0 ? (
           <S.ScrollableDiv>{fileDisplay}</S.ScrollableDiv>
         ) : null}

@@ -1,3 +1,4 @@
+import json
 import os
 import importlib.util
 import sys
@@ -48,11 +49,16 @@ async def clear_all():
 
 @router.post("/upload")
 async def upload(file: MicroserviceContent):
-    print("SYS", sys.path)
     filepath = f"data/{file.filename}"
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
+    # Need to test with empty/invalid files error handling
     with open(filepath, 'w+') as f:
         f.write(file.content)
 
-    return extract_microservice(file.filename.split('.')[0])
+    res_json = json.loads(extract_microservice(file.filename.split('.')[0]))
+
+    if (res_json):
+        res_json.update({'code': file.content})
+
+    return res_json
