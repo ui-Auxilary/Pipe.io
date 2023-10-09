@@ -46,7 +46,8 @@ def extract_microservice(python_file=None) -> str:
             'name': microservice,
             'doc': doc,
             'parameters': params,
-            'code': microservice_code
+            'code': microservice_code,
+            'parent_file': python_file
         })
 
     # save the file under microservices directory
