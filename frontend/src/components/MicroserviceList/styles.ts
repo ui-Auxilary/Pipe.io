@@ -22,7 +22,7 @@ const Button = styled.button`
   border: none;
   font-size: 15px;
   height: 35px;
-  padding: 5px;
+  padding: 5px 10px;
   transition: all 0.2s;
 
   &:hover {

@@ -6,10 +6,13 @@ import { useState } from 'react';
 import { Modal } from 'react-bootstrap';
 
 export default function Microservice({ code, name, doc, param }) {
-  const [show, setShow] = useState(false);
+  const [showEdit, setEdit] = useState(false);
+  const [showCode, setCode] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleEditClose = () => setEdit(false);
+  const handleEditShow = () => setEdit(true);
+  const handleCodeClose = () => setCode(false);
+  const handleCodeShow = () => setCode(true);
 
   const items = param && param.map((el) => (
     { label: el, "type": "text" }
@@ -36,16 +39,27 @@ export default function Microservice({ code, name, doc, param }) {
           </div>
         </S.Left>
         <div>
-          <div><S.Button style={{ display: "flex", gap: "10px", justifyContent: "center", alignItems: "center" }}>Code <S.View src={view}></S.View></S.Button></div>
-          <div><S.Button onClick={handleShow} style={{ display: "flex", gap: "10px", justifyContent: "center", alignItems: "center" }}>Edit <S.View src={view}></S.View></S.Button></div>
+          <div><S.Button onClick={handleCodeShow} style={{ display: "flex", gap: "10px", justifyContent: "center", alignItems: "center" }}>Code <S.View src={view}></S.View></S.Button></div>
+          <div><S.Button onClick={handleEditShow} style={{ display: "flex", gap: "10px", justifyContent: "center", alignItems: "center" }}>Edit <S.View src={view}></S.View></S.Button></div>
         </div>
       </S.Microservice>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={showEdit} onHide={handleEditClose}>
         <Modal.Header closeButton>
           <Modal.Title>Edit</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form questions={questionsList} step={0} />
+        </Modal.Body>
+        <Modal.Footer>
+          <S.Button>Save</S.Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={showCode} onHide={handleCodeClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Code</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <code>{code.split('\n').map((line) => <p>{line}</p>)}</code>
         </Modal.Body>
       </Modal>
     </>

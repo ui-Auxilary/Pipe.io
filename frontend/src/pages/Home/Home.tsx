@@ -18,9 +18,9 @@ export default function Home() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  if (sessionStorage.getItem("token") === null) {
-    window.location.href = "/login";
-  }
+  // if (sessionStorage.getItem("token") === null) {
+  //   window.location.href = "/login";
+  // }
 
   const { user, setUser } = useAppData()
 
