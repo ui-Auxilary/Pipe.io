@@ -7,7 +7,7 @@ import Microservice from 'components/Microservice';
 export default function ViewMicroservice() {
     const [microservice, setMicroservices] = useState({});
     const { microserviceData, setMicroserviceData } = useFormData()
-    const { microservices, parent_file } = microserviceData
+    const { microservices } = microserviceData
 
     let len = 0;
     if (microservices) {
@@ -17,7 +17,7 @@ export default function ViewMicroservice() {
 
     useEffect(() => {
         if (microservices) {
-            microservices.map(({ code, doc, name, parameters }) => {
+            microservices.map(({ code, doc, name, parameters, parent_file }) => {
                 console.log(code, doc)
                 console.log("hie")
                 axios.post('http://localhost:8000/microservice/add', { "name": name, "parameters": parameters, "parent_file": parent_file, "code": code, "docstring": doc })
@@ -32,7 +32,7 @@ export default function ViewMicroservice() {
             <h5>Edit microservices</h5>
             <S.Container>
                 <span style={{ color: "#907F7F", fontWeight: 500 }}>Found {len} microservice(s)</span>
-                {microservices && microservices.map(({ code, doc, name, parameters }) => {
+                {microservices && microservices.map(({ code, doc, name, parameters, parent_file }) => {
 
                     return <Microservice code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file} />
                 })}

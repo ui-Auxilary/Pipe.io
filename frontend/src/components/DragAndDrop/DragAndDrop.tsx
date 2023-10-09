@@ -89,13 +89,6 @@ export default function DragAndDrop({ show, handleClose }: Props) {
 
 
   const onNext = () => {
-    // // when submitting microservice py file
-    // if (currentStep === 3) {
-    //   microservices.map(({ name, parameters, code, docstring }) => {
-    //     console.log(name)
-    //     axios.post('http://localhost:8000/microservice/add', {"name": name, "parameters": parameters, "parent_file": parent_file, "code": code, "docstring": docstring})
-    //   })
-    // }
 
     if (currentStep < totalPagesCount) {
       setStep(prevIndex => prevIndex + 1)
