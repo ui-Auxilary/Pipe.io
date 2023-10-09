@@ -1,12 +1,13 @@
 import { useFormData } from 'components/Form/FormProvider'
 import S from './styles'
+import axios from "axios";
 import { useState } from 'react'
 import Microservice from 'components/Microservice';
 
 export default function ViewMicroservice() {
     const [microservice, setMicroservices] = useState({});
-    const { microserviceData } = useFormData()
-    const { microservices } = microserviceData
+    const { microserviceData, setMicroserviceData} = useFormData()
+    const { microservices, parent_file } = microserviceData
 
     let len = 0;
     if (microservices) {
@@ -20,7 +21,9 @@ export default function ViewMicroservice() {
                 <span style={{ color: "#907F7F", fontWeight: 500 }}>Found {len} microservice(s)</span>
                 {microservices && microservices.map(({ code, doc, name, parameters }) => {
                     console.log(code, doc)
-                    return <Microservice code={code} doc={doc} name={name} param={parameters} />
+                    console.log("hie")
+                    axios.post('http://localhost:8000/microservice/add', {"name": name, "parameters": parameters, "parent_file": parent_file, "code": code, "docstring": doc})
+                    return <Microservice code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file}/>
                 }
                 )}
             </S.Container>

@@ -1,7 +1,7 @@
 import Dropzone from "./Dropzone";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-
+import axios from "axios";
 import Form from "components/Form";
 
 import S from "./style";
@@ -11,6 +11,7 @@ import "./DragAndDrop.css"
 
 import FormProvider, { multiFormContext, useFormData } from "components/Form/FormProvider";
 import { ModalFooter } from "react-bootstrap";
+import Microservice from "components/Microservice";
 
 export interface Props {
   show: boolean;
@@ -75,7 +76,8 @@ export default function DragAndDrop({ show, handleClose }: Props) {
     setFormAnswers({ ...formAnswers, [step]: answerObj })
   }
 
-  const { userData, currentStep, submitData, setStep } = useFormData();
+  const { userData, currentStep, submitData, setStep, microserviceData} = useFormData();
+  const { microservices, parent_file } = microserviceData
 
   useEffect(() => {
     console.log('Updated!', userData)
@@ -85,7 +87,16 @@ export default function DragAndDrop({ show, handleClose }: Props) {
     console.log('Updated step!', currentStep)
   }, [currentStep])
 
+
   const onNext = () => {
+    // // when submitting microservice py file
+    // if (currentStep === 3) {
+    //   microservices.map(({ name, parameters, code, docstring }) => {
+    //     console.log(name)
+    //     axios.post('http://localhost:8000/microservice/add', {"name": name, "parameters": parameters, "parent_file": parent_file, "code": code, "docstring": docstring})
+    //   })
+    // }
+
     if (currentStep < totalPagesCount) {
       setStep(prevIndex => prevIndex + 1)
     }
