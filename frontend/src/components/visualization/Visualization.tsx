@@ -2,6 +2,7 @@ import axios from 'axios';
 import S from "./style";
 import { Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
+import { format } from "date-fns";
 
 
 import Logo from "assets/logo.svg";
@@ -9,41 +10,49 @@ import Logo from "assets/logo.svg";
 
 import { BarChart } from '@mui/x-charts/BarChart';
 
-export default function ChartComponent() {
-  const [stock, setStock] = useState({});
-  function get_stock_data() {
-    fetch(`http://localhost:8000/get_stock_data/aapl`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+export default function ChartComponent(props: any) {
+  const stockName = props.stockName;
+
+  const [stock, setStock] = useState({
+    "Date": ["2023-09-07T00:00:00-04:00"],
+    "Open": [0],
+    "High": [0],
+    "Low": [0],
+    "Close": [0],
+    "Volume": [0],
+    "Dividends": [0],
+    '"Stock Splits"': [0]
+  });
+
 
   useEffect(() => {
-    axios.post("http://localhost:8000/get_stock_data/aapl").then((res: {}) => setStock(res))
-  }, [stock])
+    axios.get(`http://localhost:8000/get_stock_data/${stockName}`).then((res) => setStock(res.data));
+  }, [])
 
-  get_stock_data()
+  const formatDate = (date: string) => {
+    return format(new Date(date), "dd-MM-yyyy");
+  }
+
   console.log(stock)
   return (
     <BarChart
       xAxis={[
         {
-          id: 'barCategories',
-          data: ['bar A', 'bar B', 'bar C'],
+          id: 'Date',
+          data: stock.Date,
           scaleType: 'band',
+          valueFormatter: formatDate,
+          label: 'Date',
         },
       ]}
       series={[
         {
-          data: [2, 5, 3],
+          data: stock.Close,
+          label: 'Closing Price $',
         },
       ]}
-      width={500}
-      height={300}
+      width={1600}
+      height={600}
     />
   );
 };
