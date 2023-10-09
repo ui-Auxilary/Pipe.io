@@ -56,4 +56,6 @@ async def upload_microservice(file: MicroserviceContent):
     with open(filepath, 'w+') as f:
         f.write(file.content)
 
-    return extract_microservice(file.filename.split('.')[0])
+    res_json = extract_microservice(file.filename.split('.')[0])
+
+    return res_json
