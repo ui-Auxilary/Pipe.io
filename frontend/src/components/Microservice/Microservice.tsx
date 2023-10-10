@@ -6,7 +6,8 @@ import { useState } from 'react';
 
 import { Modal } from 'react-bootstrap';
 
-export default function Microservice({ code, name, docstring, param, parent_file }) {
+export default function Microservice({ id, code, name, docstring, param, parent_file }) {
+  console.log('INSIDE', id)
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);
 
