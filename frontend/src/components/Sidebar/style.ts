@@ -6,8 +6,30 @@ const Container = styled.div`
   color: #fff;
   width: 10%;
   display: flex;
+  flex-direction: column;
+`;
+
+const FeatureBlock = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const Feature = styled.div`
+  width: 100%;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Pipelines = styled.img`
+  padding: 5px;
+  width: 40%;
   align-items: flex-start;
-  height: 100vh;
   flex-direction: column;
   justify-content: space-between;
 `;
@@ -41,7 +63,10 @@ const ButtonContainer = styled.div`
 
 
 export default {
+  Feature,
+  FeatureBlock,
   Container,
+  Pipelines,
   Logo,
   UserContainer,
   UserImg,

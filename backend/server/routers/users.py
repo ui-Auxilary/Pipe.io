@@ -1,5 +1,6 @@
 import os
 from fastapi import APIRouter, Form, HTTPException, Header
+from fastapi.security import HTTPBearer
 from server.models.users import Users
 from server.database import users_collection
 from time import time
@@ -10,7 +11,6 @@ import hashlib
 from bson import ObjectId
 
 router = APIRouter()
-
 
 
 @router.post("/users/create")
@@ -45,16 +45,19 @@ async def create_user(email: str = Form(...), username: str = Form(...), passwor
         raise HTTPException(status_code=400, detail="Username already in use")
     if len(password) < 6:
         raise HTTPException(status_code=400, detail="Password is too short")
-   
+
     hashed_password = hashlib.sha256(password.encode()).hexdigest()
     default_img_url = "localhost:8000/static/default.png"
-    user = Users(email=email, username=username, password=hashed_password, profile_img_url=default_img_url, pipes=[], tokens=[])
+    user = Users(email=email, username=username, password=hashed_password,
+                 profile_img_url=default_img_url, pipes=[], tokens=[])
     users_collection.insert_one(dict(user))
     user_id = users_collection.find_one({"email": email})["_id"]
     payload = {"user_id": str(user_id), 'session': time()}
     token = jwt.encode(payload, os.getenv("JWT_SECRET"), algorithm="HS256")
-    users_collection.update_one({"email": email}, {"$set": {"tokens": [token]}})
+    users_collection.update_one(
+        {"email": email}, {"$set": {"tokens": [token]}})
     return {"token": token, "auth_user_id": user_id.__str__()}
+
 
 @router.post("/users/login")
 async def login_user(email: str = Form(...), password: str = Form(...)):
@@ -77,9 +80,11 @@ async def login_user(email: str = Form(...), password: str = Form(...)):
     """
     user = users_collection.find_one({"email": email})
     if user is None:
-        raise HTTPException(status_code=400, detail="Invalid email or password")
+        raise HTTPException(
+            status_code=400, detail="Invalid email or password")
     if user["password"] != hashlib.sha256(password.encode()).hexdigest():
-        raise HTTPException(status_code=400, detail="Invalid email or password")
+        raise HTTPException(
+            status_code=400, detail="Invalid email or password")
     payload = {"user_id": str(user["_id"]), 'session': time()}
     token = jwt.encode(payload, os.getenv("JWT_SECRET"), algorithm="HS256")
     tokens = user["tokens"]
@@ -105,13 +110,50 @@ async def logout_user(Authorization: str = Header(...)):
     """
     try:
         token = Authorization.split(" ")[1]
-        decoded = jwt.decode(token, os.getenv("JWT_SECRET"), algorithms=["HS256"])
+        decoded = jwt.decode(token, os.getenv(
+            "JWT_SECRET"), algorithms=["HS256"])
         userid = ObjectId(decoded["user_id"])
         user = users_collection.find_one({"_id": userid})
         tokens = user["tokens"]
         tokens.remove(token)
-        users_collection.update_one({"_id": userid}, {"$set": {"tokens": tokens}})
+        users_collection.update_one(
+            {"_id": userid}, {"$set": {"tokens": tokens}})
         return {}
     except:
         raise HTTPException(status_code=401, detail="Invalid token")
-    
+
+
+@router.post("/users/get_user")
+async def get_user(Authorization: str = Header(...)):
+    """
+    Given a user's token, return the authorised user's information.
+
+    Args:
+        token (str): User's token
+
+    Raises:
+        InputError: Invalid token
+
+    Returns:
+        {user: User}: Empty dictionary if successful
+    """
+
+    try:
+        token = Authorization.split(" ")[1]
+        decoded = jwt.decode(token, os.getenv(
+            "JWT_SECRET"), algorithms=["HS256"])
+        userid = ObjectId(decoded["user_id"])
+        user = users_collection.find_one({"_id": userid})
+
+        ret_user = {
+            "id": user["_id"].__str__(),
+            "email": user["email"],
+            "username": user["username"],
+            "profile_img_url": user["profile_img_url"],
+            "pipes": user["pipes"]
+        }
+
+        return {"user": ret_user}
+
+    except:
+        raise HTTPException(status_code=401, detail="Invalid token")
