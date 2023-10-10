@@ -10,7 +10,11 @@ export interface Item {
   label: string
   type: string
   value: string
+  id: string
 }
+
+
+
 
 export interface Props {
   item: Item
@@ -18,7 +22,8 @@ export interface Props {
 
 // Update based on question list to render specific ocmponent
 export default function FormItem({ item }: Props) {
-  const { setUserData, userData, submitData, currentStep } = useFormData();
+  const { setUserData, userData, submitData, currentStep, setMicroserviceParam, microserviceParam } = useFormData();
+
 
   switch (item.type) {
     case 'text':
@@ -44,6 +49,14 @@ export default function FormItem({ item }: Props) {
     case 'view_microservices':
       return (
         <ViewMicroservice />
+      );
+    case 'edit_param':
+      return (
+        <>
+          <S.Label>{item.label}</S.Label>
+          <S.Input value={userData[item.label.toLocaleLowerCase()]} onChange={(e) => setUserData({ ...userData, [item.id]: { [item.label.toLocaleLowerCase()]: e.target.value } })} />
+
+        </>
       );
   }
 
