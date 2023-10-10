@@ -1,11 +1,14 @@
 import S from './styles'
 import view from 'assets/view.svg'
 import Form from 'components/Form';
+import { useFormData } from 'components/Form/FormProvider';
 import { useState } from 'react';
+import axios, { Axios } from 'axios';
 
 import { Modal } from 'react-bootstrap';
 
-export default function Microservice({ code, name, docstring, param, parent_file }) {
+export default function Microservice({ id, code, name, docstring, param, parent_file }) {
+  console.log('INSIDE', id)
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);
 
@@ -14,11 +17,17 @@ export default function Microservice({ code, name, docstring, param, parent_file
   const handleCodeClose = () => setCode(false);
   const handleCodeShow = () => setCode(true);
 
-  const items = param && param.map((el) => (
-    { label: el, "type": "text" }
+
+  // const paramArray = Object.keys(param).map((el) => (
+  //   { label: el, "type": "edit_param" , id: name}
+  // ))
+  const items = param && Object.keys(param).map((el) => (
+    { label: el, "type": "edit_param" , id: name}
   ))
 
-  console.log('ITEMS', items)
+
+
+  // console.log('ITEMS', param, name)
 
   const questionsList = [
     {
@@ -26,6 +35,32 @@ export default function Microservice({ code, name, docstring, param, parent_file
       items: items
     }
   ]
+
+  const { userData, microserviceParam } = useFormData();
+  console.log('MICROSERVIEC DATA', microserviceParam);
+
+
+
+
+
+  const handleSave = () => {
+    const data = {
+      parent_file: parent_file,
+      name: name,
+      code : code,
+      parameters: microserviceParam[name],
+      docstring: docstring,
+    }
+    console.log('DATA', data)
+    console.log('id', id)
+    axios.put(`http://localhost:8000/microservice/${id}`, data).then((res) => {
+      console.log(res)
+    }).catch((err) => {
+      console.log(err)
+    })
+    handleEditClose()
+  }
+
   return (
     <>
       <S.Microservice>
@@ -53,7 +88,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
           <Form questions={questionsList} step={0} />
         </Modal.Body>
         <Modal.Footer>
-          <S.Button>Save</S.Button>
+          <S.Button onClick={()=> handleSave()}>Save</S.Button>
         </Modal.Footer>
       </Modal>
 

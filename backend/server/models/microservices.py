@@ -8,7 +8,7 @@ class MicroserviceContent(BaseModel):
 
 class Microservice(BaseModel):
     name: str
-    parameters: list
+    parameters: dict
     parent_file: str
     code: str
     docstring: Optional[str] = Field(None)

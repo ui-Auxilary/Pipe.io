@@ -1,4 +1,3 @@
-import json
 import os
 import importlib.util
 import sys
@@ -12,7 +11,7 @@ from server.schemas.schemas import list_microservices_serial
 from parsing_modules.microservice_extractor import extract_microservice
 
 # Used for fetching Mongo objectID
-from bson import ObjectId
+from bson import ObjectId, json_util
 
 router = APIRouter()
 
@@ -27,19 +26,21 @@ async def get_microservices():
 
 @router.post("/microservice/add")
 async def add_microservice(microservice: Microservice):
-    microservices_collection.insert_one(dict(microservice))
+    _id = microservices_collection.insert_one(dict(microservice))
+    print("id", _id.inserted_id)
+    return json_util.dumps({"id" : _id.inserted_id}, indent=4)
 
 
-@router.put("/microservice/{name}")
-async def edit_microservice(name: str, microservice: Microservice):
+@router.put("/microservice/{id}")
+async def edit_microservice(id: str, microservice: Microservice):
     microservices_collection.find_one_and_update(
-        {"name": name}, {"$set": dict(microservice)})
+        {"_id": ObjectId(id)}, {"$set": dict(microservice)})
 
 
-@router.delete("/microservice/{name}")
+@router.delete("/microservice/{id}")
 async def delete_microservice(name: str):
     microservices_collection.find_one_and_delete(
-        {"name": name})
+        {"_id": ObjectId(id)})
 
 
 @router.delete("/clear/microservices")

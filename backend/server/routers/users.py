@@ -8,7 +8,7 @@ import re
 import jwt
 import hashlib
 
-from bson import ObjectId
+from bson import ObjectId, json_util
 
 router = APIRouter()
 
@@ -123,7 +123,7 @@ async def logout_user(Authorization: str = Header(...)):
         raise HTTPException(status_code=401, detail="Invalid token")
 
 
-@router.post("/users/get_user")
+@router.get("/users/get_user")
 async def get_user(Authorization: str = Header(...)):
     """
     Given a user's token, return the authorised user's information.
@@ -146,14 +146,16 @@ async def get_user(Authorization: str = Header(...)):
         user = users_collection.find_one({"_id": userid})
 
         ret_user = {
-            "id": user["_id"].__str__(),
+            "id": decoded["user_id"].__str__(),
             "email": user["email"],
             "username": user["username"],
             "profile_img_url": user["profile_img_url"],
             "pipes": user["pipes"]
         }
 
-        return {"user": ret_user}
+        ret_user_json = json_util.dumps(ret_user, indent=4)
+
+        return {"user": ret_user_json}
 
     except:
         raise HTTPException(status_code=401, detail="Invalid token")

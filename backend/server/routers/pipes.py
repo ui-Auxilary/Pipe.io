@@ -1,12 +1,13 @@
 import os
 
 from typing import Annotated
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, Header, HTTPException
 from server.models.pipes import Pipes
 from server.models.microservices import MicroserviceContent
-from server.database import pipes_collection
+from server.database import pipes_collection, users_collection
 from server.schemas.schemas import list_pipes_serial
 from parsing_modules.microservice_extractor import extract_microservice
+import jwt
 import json
 
 # Used for fetching Mongo objectID
@@ -18,14 +19,36 @@ router = APIRouter()
 
 
 @router.get("/pipes/list")
-async def get_pipes():
-    pipes = list_pipes_serial(pipes_collection.find())
-    return pipes
+async def get_pipes(Authorization: str = Header(...)):
+    try:
+        token = Authorization.split(" ")[1]
+        decoded = jwt.decode(token, os.getenv(
+            "JWT_SECRET"), algorithms=["HS256"])
+        userid = ObjectId(decoded["user_id"])
+        user = users_collection.find_one({"_id": userid})
+        pipes = list_pipes_serial(pipes_collection.find({"_id": {"$in": user["pipes"]}}))
+        return pipes
+    except:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
 
 
 @router.post("/pipes/create")
-async def create_pipe(pipe: Pipes):
-    pipes_collection.insert_one(dict(pipe))
+async def create_pipe(pipe: Pipes, Authorization: str = Header(...)):
+
+    token = Authorization.split(" ")[1]
+    decoded = jwt.decode(token, os.getenv(
+        "JWT_SECRET"), algorithms=["HS256"])
+    if decoded["user_id"] is None:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    userid = ObjectId(decoded["user_id"])
+    user = users_collection.find_one({"_id": userid})
+    if user is None:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
+    _id = pipes_collection.insert_one(dict(pipe))
     condensed_microservices = []
     for microservice in pipe.microservices:
         # for idx, param in enumerate(microservice["parameters"]):
@@ -45,6 +68,12 @@ async def create_pipe(pipe: Pipes):
     json_object = json.dumps(return_dict, indent=4)
     with open("pipeline.json", "w") as outfile:
         outfile.write(json_object)
+    
+    user_pipes = user["pipes"]
+    user_pipes.append(_id.inserted_id)
+    users_collection.update_one({"_id": userid}, {"$set": {"pipes": user_pipes}})
+    
+    
 
 
 @router.put("/pipes/{id}")

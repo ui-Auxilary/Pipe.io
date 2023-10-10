@@ -28,7 +28,7 @@ export default function Sidebar() {
 
 
 function handleLogOut() {
-  fetch(`http://localhost:8000/users/get_user`, {
+  fetch(`http://localhost:8000/users/logout`, {
     method: "POST",
     headers: {
       "Content-type": "application/x-www-form-urlencoded",
