@@ -5,9 +5,10 @@ import view from 'assets/view.svg'
 export interface Props {
   id: string
   name: string
+  description?: string
 }
 
-export default function Pipe({ id, name }: Props) {
+export default function Pipe({ id, name, description }: Props) {
   return (
     <S.Pipe>
       <S.Left>
@@ -17,7 +18,7 @@ export default function Pipe({ id, name }: Props) {
             <h4 style={{ flex: 1 }}>{name}</h4>
             <span style={{ color: "#B6A4A4" }}>#{id}</span>
           </S.Label>
-          <span style={{ fontSize: "15px" }}>Process financial data</span>
+          <span style={{ fontSize: "15px" }}>{description}</span>
         </div>
       </S.Left>
       <div>
