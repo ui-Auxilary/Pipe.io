@@ -7,12 +7,8 @@ import axios, { Axios } from 'axios';
 
 import { Modal } from 'react-bootstrap';
 
-<<<<<<< HEAD
 export default function Microservice({ id, code, name, docstring, param, parent_file }) {
   console.log('INSIDE', id)
-=======
-export default function Microservice({ code, name, docstring, param, parent_file }) {
->>>>>>> 6d8847578a3ca270413fe9d6028d09570d05344c
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);
 
