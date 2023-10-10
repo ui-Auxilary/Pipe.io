@@ -7,10 +7,7 @@ from server.models.microservices import MicroserviceContent
 from server.database import pipes_collection, users_collection
 from server.schemas.schemas import list_pipes_serial
 from parsing_modules.microservice_extractor import extract_microservice
-<<<<<<< HEAD
 import jwt
-=======
->>>>>>> 6d8847578a3ca270413fe9d6028d09570d05344c
 import json
 
 # Used for fetching Mongo objectID
