@@ -7,19 +7,17 @@ def print_hello_world():
 
     print("Hello world")
 
-
-def add_two(number: int):
-    """Adds two to a number
+def add_one(number):
+    """Adds one to a number
 
     Args:
-        number (int): number to add two to
+        number (int): number to add one to
 
     Returns:
-        int: original input number plus two
+        int: original input number plus one
     """
 
-    return number + 2
-
+    return number + 1
 
 def add_x(number, x):
     """Adds x to a number
@@ -33,7 +31,6 @@ def add_x(number, x):
     """
 
     return number + x
-
 
 def print_numpy_array(list_ints):
     """Prints a numpy array

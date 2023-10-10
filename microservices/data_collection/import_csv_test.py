@@ -1,5 +1,5 @@
 import pytest
-from func import import_csv, import_yahoo
+from microservices.data_collection.collection import import_csv, import_yahoo
 from pymongo import MongoClient
 
 
