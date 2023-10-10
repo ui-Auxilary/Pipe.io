@@ -27,7 +27,7 @@ export default function Microservice({ id, code, name, docstring, param, parent_
 
 
 
-  console.log('ITEMS', param, name)
+  // console.log('ITEMS', param, name)
 
   const questionsList = [
     {
@@ -37,7 +37,7 @@ export default function Microservice({ id, code, name, docstring, param, parent_
   ]
 
   const { userData, microserviceParam } = useFormData();
-  // console.log('MICROSERVIEC DATA', microserviceParam.add_x);
+  console.log('MICROSERVIEC DATA', microserviceParam);
 
 
 
@@ -52,12 +52,13 @@ export default function Microservice({ id, code, name, docstring, param, parent_
       docstring: docstring,
     }
     console.log('DATA', data)
-
-    axios.put(`http://localhost:8000/microservice/${name}`, data).then((res) => {
+    console.log('id', id)
+    axios.put(`http://localhost:8000/microservice/${id}`, data).then((res) => {
       console.log(res)
     }).catch((err) => {
       console.log(err)
     })
+    handleEditClose()
   }
 
   return (
