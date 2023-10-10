@@ -1,6 +1,7 @@
 import S from './styles'
 import view from 'assets/view.svg'
 import Form from 'components/Form';
+import { useFormData } from 'components/Form/FormProvider';
 import { useState } from 'react';
 
 import { Modal } from 'react-bootstrap';
@@ -15,7 +16,7 @@ export default function Microservice({ code, name, doc, param }) {
   const handleCodeShow = () => setCode(true);
 
   const items = param && param.map((el) => (
-    { label: el, "type": "text" }
+    { label: el, "type": "edit_param" , id: "penis"}
   ))
 
   console.log('ITEMS', items)
@@ -26,6 +27,11 @@ export default function Microservice({ code, name, doc, param }) {
       items: items
     }
   ]
+
+  const { microserviceParam, microserviceData } = useFormData();
+  // console.log(microserviceData);
+
+
   return (
     <>
       <S.Microservice>
