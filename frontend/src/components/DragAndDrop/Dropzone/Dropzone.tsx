@@ -70,7 +70,7 @@ export default function Dropzone({ filetype }) {
               let base64data = reader.result;
 
               if (base64data) {
-                axios.post('http://localhost:8000/upload', { 'filename': file.name, 'content': base64data }).then((res) => setMicroserviceData(JSON.parse(res.data)))
+                axios.post('http://localhost:8000/upload', { 'filename': file.name, 'content': base64data }).then((res) => setMicroserviceData(Object.assign(JSON.parse(res.data))))
               }
             };
           }

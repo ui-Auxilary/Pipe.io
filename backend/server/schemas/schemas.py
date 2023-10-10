@@ -17,7 +17,6 @@ def serialise_microservice(microservice_obj) -> dict:
     return {
         "name": str(microservice_obj["name"]),
         "parameters": microservice_obj["parameters"],
-        "parent_pipes": list(microservice_obj["parent_pipes"]),
         "parent_file": str(microservice_obj["parent_file"]),
         "code": str(microservice_obj["code"]),
         "docstring": str(microservice_obj["docstring"]),

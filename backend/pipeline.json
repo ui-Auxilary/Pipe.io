@@ -1,0 +1,20 @@
+{
+    "pipeline": "dhruv's pipeline",
+    "microservices": [
+        {
+            "file": "example",
+            "name": "addone",
+            "parameters": [
+                "firstinputnodefault",
+                "secondinputwithdefault=69"
+            ]
+        },
+        {
+            "file": "example",
+            "name": "addtwo",
+            "parameters": [
+                "second2withdefault=44"
+            ]
+        }
+    ]
+}

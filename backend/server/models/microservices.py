@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from typing import Optional
+from pydantic import BaseModel, Field
 
 
 class MicroserviceContent(BaseModel):
@@ -8,7 +9,6 @@ class MicroserviceContent(BaseModel):
 class Microservice(BaseModel):
     name: str
     parameters: list
-    parent_pipes: list
     parent_file: str
     code: str
-    docstring: str
+    docstring: Optional[str] = Field(None)

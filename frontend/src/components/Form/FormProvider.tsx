@@ -49,10 +49,10 @@ export default function FormProvider({ children }: any) {
 
   const { user } = useAppData()
 
-  const submitData = () => {
-      axios.post('http://localhost:8000/pipes/create', Object.assign({ user_id: user }, userData))
-      setUserData({})
-  }
+    const submitData = () => {
+        axios.post('http://localhost:8000/pipes/create', Object.assign({ user_id: user , microservices: microserviceData.microservices}, userData))
+        setUserData({})
+    }
 
   return (
       <multiFormContext.Provider value={{ currentStep, setStep, userData, setUserData, microserviceData, setMicroserviceData, submitData, microserviceParam, setMicroserviceParam }}>

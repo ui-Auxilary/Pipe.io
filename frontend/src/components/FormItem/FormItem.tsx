@@ -20,7 +20,7 @@ export interface Props {
   item: Item
 }
 
-// Update based on question list to render specific ocmponent
+// Update based on question list to render specific component
 export default function FormItem({ item }: Props) {
   const { setUserData, userData, submitData, currentStep, setMicroserviceParam, microserviceParam } = useFormData();
 
