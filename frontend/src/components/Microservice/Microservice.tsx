@@ -97,7 +97,7 @@ export default function Microservice({ id, code, name, docstring, param, parent_
           <Modal.Title>Code</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* <code>{code.split('\n').map((line) => <p>{line}</p>)}</code> */}
+          {<code>{code.split('\n').map((line) => <p>{line}</p>)}</code>}
         </Modal.Body>
       </Modal>
     </>

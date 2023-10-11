@@ -4,6 +4,7 @@ import re
 import json
 
 import sys
+import pprint
 
 sys.path.append("./data")
 print(sys.path)
@@ -15,7 +16,7 @@ def extract_microservice(python_file=None) -> str:
 
     print("FILE", python_file)
     # load the module
-    imported_module = importlib.import_module(python_file)
+    imported_module = importlib.import_module(python_file.replace(".py", ""))
 
     # create a json object to store the microservice information
     microservice_json = {}
@@ -49,8 +50,5 @@ def extract_microservice(python_file=None) -> str:
             'code': microservice_code,
             'parent_file': python_file
         })
-
-    # save the file under microservices directory
-    # with open(f'./data/microservices/{python_file}', 'w') as f:
 
     return json.dumps(microservice_json, indent=4)

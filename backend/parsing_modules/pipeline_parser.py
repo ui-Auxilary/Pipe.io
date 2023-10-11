@@ -3,21 +3,25 @@ import json
 import os
 
 def execute_pipeline(pipeline_json):
+    # change to the correct directory
+    os.chdir('parsing_modules')
+
     pipeline_output = {
         'pipeline': {
-            'name': pipeline_json['pipeline']['name'],
+            'name': pipeline_json['pipeline'],
             'success': True,
             'microservices': [
             ]
         }
     }
-
-    os.mkdir(f'pipeline_{pipeline_json["pipeline"]["name"]}')
-    DATA_DIRECTORY = f'pipeline_{pipeline_json["pipeline"]["name"]}'
-    MICROSERVICES_DIRECTORY = 'microservices'
+    print(f"Directory is {os.getcwd()}")
+    print(f'is has {os.listdir()}')
+    os.mkdir(f'pipeline_{pipeline_json["pipeline"]}')
+    DATA_DIRECTORY = f'parsing_modules/pipeline_{pipeline_json["pipeline"]}'
+    MICROSERVICES_DIRECTORY = '../data'
 
     try:
-        for microservice in pipeline_json['pipeline']['microservices']:
+        for microservice in pipeline_json['microservices']:
             # load the microservice needed
             os.chdir(MICROSERVICES_DIRECTORY)
             python_file = microservice['file']
@@ -28,24 +32,29 @@ def execute_pipeline(pipeline_json):
             os.chdir(DATA_DIRECTORY)
             microservice_name = microservice['name']
             microservice_parameters = microservice['parameters']
+            # parameters are in the form of variable: value, convert them into a list of variable=eval(value)
+            microservice_parameters = {key:eval(value) for key, value in microservice_parameters.items()}
             microservice_function = getattr(imported_module, microservice_name)
 
-            microservice_output = microservice_function(*microservice_parameters)
+            microservice_output = microservice_function(**microservice_parameters)
             pipeline_output['pipeline']['microservices'].append({
                 'name': microservice_name,
                 'output': microservice_output
             })
             os.chdir('..')
-    except:
+    except Exception as e:
+        print(e)
         pipeline_output['pipeline']['success'] = False
         pipeline_output['pipeline']['error'] = 'Microservce failed to execute.'
 
         # errors can only occur in the microservices directory
         os.chdir('..')
-
+    
     # delete the data directory
-    os.rmdir('DATA_DIRECTORY')
+    os.listdir()
+    os.chdir('..')
+    os.rmdir(DATA_DIRECTORY)
 
     # save json
-    with open('pipeline_output.json', 'w') as outfile:
-        json.dump(pipeline_output, outfile, indent=4)
+    print(f'Final directory is: {os.getcwd()} with {os.listdir()}')
+    return json.dumps(pipeline_output, indent=4)
