@@ -27,8 +27,8 @@ async def get_microservices():
 @router.post("/microservice/add")
 async def add_microservice(microservice: Microservice):
     _id = microservices_collection.insert_one(dict(microservice))
-    print("id", _id.inserted_id)
-    return json_util.dumps({"id" : _id.inserted_id}, indent=4)
+    print("id", _id.inserted_id, _id.inserted_id.__str__())
+    return json_util.dumps({"id": _id.inserted_id.__str__()}, indent=4)
 
 
 @router.put("/microservice/{id}")
