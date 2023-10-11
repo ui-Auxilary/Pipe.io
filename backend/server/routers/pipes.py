@@ -3,7 +3,6 @@ import os
 from typing import Annotated
 from fastapi import APIRouter, UploadFile, File, Header, HTTPException
 from server.models.pipes import Pipes
-from server.models.microservices import MicroserviceContent
 from server.database import pipes_collection, users_collection
 from server.schemas.schemas import list_pipes_serial
 from parsing_modules.microservice_extractor import extract_microservice

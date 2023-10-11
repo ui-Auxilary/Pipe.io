@@ -2,9 +2,10 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 
-class MicroserviceContent(BaseModel):
+class FileContent(BaseModel):
     filename: str
     content: str
+
 
 class Microservice(BaseModel):
     name: str

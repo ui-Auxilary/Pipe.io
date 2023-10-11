@@ -70,7 +70,6 @@ export default function Microservice({ id, code, name, docstring, param, parent_
               <h5 style={{ flex: 1 }}>{name}</h5>
               <span style={{ color: "#B6A4A4" }}>#001</span>
             </S.Label>
-            <span style={{ fontSize: "15px" }}>Process financial data</span>
           </div>
         </S.Left>
         <div>
@@ -97,7 +96,7 @@ export default function Microservice({ id, code, name, docstring, param, parent_
           <Modal.Title>Code</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* <code>{code.split('\n').map((line) => <p>{line}</p>)}</code> */}
+          <code>{code.split('\n').map((line) => <p>{line}</p>)}</code>
         </Modal.Body>
       </Modal>
     </>
