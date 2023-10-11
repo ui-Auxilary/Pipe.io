@@ -5,7 +5,7 @@ import sys
 from typing import Annotated
 from fastapi import APIRouter, UploadFile, File
 from server.models.microservices import Microservice
-from server.models.microservices import MicroserviceContent
+from server.models.microservices import FileContent
 from server.database import microservices_collection
 from server.schemas.schemas import list_microservices_serial
 from parsing_modules.microservice_extractor import extract_microservice
@@ -49,7 +49,7 @@ async def clear_all_microservices():
 
 
 @router.post("/upload")
-async def upload_microservice(file: MicroserviceContent):
+async def upload_microservice(file: FileContent):
     filepath = f"data/{file.filename}"
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
@@ -60,3 +60,13 @@ async def upload_microservice(file: MicroserviceContent):
     res_json = extract_microservice(file.filename.split('.')[0])
 
     return res_json
+
+
+@router.post("/upload_csv")
+async def upload_CSV(file: FileContent):
+    filepath = f"data/{file.filename}"
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+
+    # Need to test with empty/invalid files error handling
+    with open(filepath, 'w+') as f:
+        f.write(file.content)
