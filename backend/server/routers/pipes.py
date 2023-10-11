@@ -6,6 +6,7 @@ from server.models.pipes import Pipes
 from server.database import pipes_collection, users_collection
 from server.schemas.schemas import list_pipes_serial
 from parsing_modules.microservice_extractor import extract_microservice
+from parsing_modules.pipeline_parser import execute_pipeline
 import jwt
 import json
 
@@ -71,6 +72,11 @@ async def create_pipe(pipe: Pipes, Authorization: str = Header(...)):
     user_pipes.append(_id.inserted_id)
     users_collection.update_one(
         {"_id": userid}, {"$set": {"pipes": user_pipes}})
+    
+    print(f'Input is ----------------------\n{return_dict}')
+    pipe_output = execute_pipeline(return_dict)
+    print(f'Output is ----------------------\n{pipe_output}')
+    return pipe_output
 
 
 @router.put("/pipes/{id}")
