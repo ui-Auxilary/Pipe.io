@@ -10,7 +10,8 @@ import Logo from "assets/logo.svg";
 
 import { BarChart } from '@mui/x-charts/BarChart';
 
-export default function ChartComponent({stockName}) {
+export default function ChartComponent(props: any) {
+  const stockName = props.stockName;
 
   const [stock, setStock] = useState({
     "Date": ["2023-09-07T00:00:00-04:00"],
