@@ -76,7 +76,7 @@ export default function DragAndDrop({ show, handleClose }: Props) {
     setFormAnswers({ ...formAnswers, [step]: answerObj })
   }
 
-  const { userData, currentStep, submitData, setStep, microserviceData} = useFormData();
+  const { userData, currentStep, submitData, setStep, microserviceData } = useFormData();
   const { microservices, parent_file } = microserviceData
 
   useEffect(() => {
@@ -89,7 +89,6 @@ export default function DragAndDrop({ show, handleClose }: Props) {
 
 
   const onNext = () => {
-
     if (currentStep < totalPagesCount) {
       setStep(prevIndex => prevIndex + 1)
     }
@@ -111,7 +110,7 @@ export default function DragAndDrop({ show, handleClose }: Props) {
         </Modal.Body>
       </S.Wrapper>
       <ModalFooter>
-        {currentStep == totalPagesCount ? (<Button onClick={submitData} variant="secondary">Submit</Button>) : (<Button onClick={onNext}>Next</Button>)}
+        {currentStep == totalPagesCount ? (<Button onClick={() => submitData(onHandleClose)} variant="secondary">Submit</Button>) : (<Button onClick={onNext}>Next</Button>)}
 
       </ModalFooter>
     </Modal>

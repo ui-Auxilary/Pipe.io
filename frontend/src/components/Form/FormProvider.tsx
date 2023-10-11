@@ -38,7 +38,7 @@ export const multiFormContext = createContext<FormContextType>({
 
 
 export function useFormData() {
-    return useContext(multiFormContext);
+  return useContext(multiFormContext);
 }
 
 export default function FormProvider({ children }: any) {
@@ -49,20 +49,21 @@ export default function FormProvider({ children }: any) {
 
   const { user } = useAppData()
 
-    const submitData = () => {
-        const data = {user}
-        console.log(data)
-        axios.post('http://localhost:8000/pipes/create', Object.assign({ user_id: user , microservices: microserviceData.microservices}, userData), {
-          headers: {
-            "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
-          }
-        })
-        setUserData({})
-    }
+  const submitData = (handleClose) => {
+    const data = { user }
+    console.log(data)
+    axios.post('http://localhost:8000/pipes/create', Object.assign({ user_id: user, microservices: microserviceData.microservices }, userData), {
+      headers: {
+        "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+      }
+    })
+    handleClose()
+    setUserData({})
+  }
 
   return (
-      <multiFormContext.Provider value={{ currentStep, setStep, userData, setUserData, microserviceData, setMicroserviceData, submitData, microserviceParam, setMicroserviceParam }}>
-          {children}
-      </multiFormContext.Provider>
+    <multiFormContext.Provider value={{ currentStep, setStep, userData, setUserData, microserviceData, setMicroserviceData, submitData, microserviceParam, setMicroserviceParam }}>
+      {children}
+    </multiFormContext.Provider>
   )
 }

@@ -26,12 +26,11 @@ async def get_pipes(Authorization: str = Header(...)):
             "JWT_SECRET"), algorithms=["HS256"])
         userid = ObjectId(decoded["user_id"])
         user = users_collection.find_one({"_id": userid})
-        pipes = list_pipes_serial(pipes_collection.find({"_id": {"$in": user["pipes"]}}))
+        pipes = list_pipes_serial(pipes_collection.find(
+            {"_id": {"$in": user["pipes"]}}))
         return pipes
     except:
         raise HTTPException(status_code=401, detail="Invalid token")
-
-
 
 
 @router.post("/pipes/create")
@@ -47,9 +46,9 @@ async def create_pipe(pipe: Pipes, Authorization: str = Header(...)):
     if user is None:
         raise HTTPException(status_code=401, detail="Invalid token")
 
-
     _id = pipes_collection.insert_one(dict(pipe))
     condensed_microservices = []
+    print('Micro pipe', pipe.microservices)
     for microservice in pipe.microservices:
         # for idx, param in enumerate(microservice["parameters"]):
         #     microservice["parameters"][idx] = param.split("=")[-1]
@@ -68,12 +67,11 @@ async def create_pipe(pipe: Pipes, Authorization: str = Header(...)):
     json_object = json.dumps(return_dict, indent=4)
     with open("pipeline.json", "w") as outfile:
         outfile.write(json_object)
-    
+
     user_pipes = user["pipes"]
     user_pipes.append(_id.inserted_id)
-    users_collection.update_one({"_id": userid}, {"$set": {"pipes": user_pipes}})
-    
-    
+    users_collection.update_one(
+        {"_id": userid}, {"$set": {"pipes": user_pipes}})
 
 
 @router.put("/pipes/{id}")
