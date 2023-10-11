@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Sidebar from "../../components/Sidebar";
 import S from "./style";
 
+import ChartComponent from "components/Visualization/Visualization";
 import { useEffect, useState } from "react";
 import PipeList from "components/PipeList/PipeList";
 import FormProvider from "components/Form/FormProvider";
@@ -41,7 +42,8 @@ export default function Home() {
             </div>
             <span>Create a pipeline</span>
           </S.Header>
-          <S.Body>0 pipeline(s) selected
+          <S.Body>
+            0 pipeline(s) selected
             <PipeList />
           </S.Body>
         </S.Container>

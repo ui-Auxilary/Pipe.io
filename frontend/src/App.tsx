@@ -2,7 +2,9 @@ import AppProvider from "helper/AppProvider";
 import Home from "./pages/Home";
 import Login from "./pages/Login/";
 import Register from "./pages/Register";
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet } from "react-router-dom";
+import Graph from "./pages/Graph";
+
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet} from "react-router-dom";
 
 export default function App() {
 
@@ -12,6 +14,8 @@ export default function App() {
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route path="graph" element={<Graph />} />
+
       </Route>
     )
   );

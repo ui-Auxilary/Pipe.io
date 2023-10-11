@@ -1,6 +1,9 @@
 import S from './style'
 import dots from 'assets/dots.svg'
 import view from 'assets/view.svg'
+import ChartComponent from 'components/Visualization/Visualization'
+import { useState } from 'react'
+import { Modal } from 'react-bootstrap'
 import { useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import { JsonToTable } from "react-json-to-table";

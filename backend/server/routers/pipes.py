@@ -92,6 +92,24 @@ async def delete_pipe(id: str):
     pipes_collection.find_one_and_delete(
         {"_id": ObjectId(id)})
 
+# @router.get('/get_stock_data/{stock_name}')
+# async def get_stock_data(stock_name:str):
+#     # Fetch data for the selected stock here
+#     try:
+#         stock_data = yf.Ticker(stock_name)
+#         stock_data = stock_data.history()
+#     except:
+#         print("Stock name is wrong")
+#         return
+#     # Process and return the data
+#     if not isinstance(stock_data, pd.DataFrame):
+#         stock_data = pd.DataFrame(stock_data)
+#     stock_data['stock_name'] = stock_name
+#     stock_data = stock_data.to_dict(orient='records')
+#     stock_collection.insert_many(stock_data)
+#@router.get('/get_stock_data/{stock_name}')
+#async def get_stock_data(stock_name: str):
+#    for stock in stock_collection.find({"stock_name": stock_name}):
 
 @router.delete("/clear/pipes")
 async def clear_all():

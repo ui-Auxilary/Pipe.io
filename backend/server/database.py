@@ -15,5 +15,6 @@ except Exception as e:
 
 db = client["Main"]
 pipes_collection = db["Pipes"]
+stock_collection = db["Stocks"]
 users_collection = db["Users"]
 microservices_collection = db["Microservices"]
