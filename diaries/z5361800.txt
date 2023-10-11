@@ -15,3 +15,16 @@ I conducted research on the use of microservices in other systems and downloaded
 
 I wrote the introduction and, with some help, the relevant works section. Additionally, I took detailed notes from the lectures on the requirements for the proposal for our team to use to ensure we met all the criteria needed.
 
+Week 4:
+We focused completely on sprint 1 - initially having a meeting to discuss our plan for the sprint and decided on having many meetings, trying to finish most deliverables a few days early to allow for time to review features and as a buffer time. Additionally, we allocated tasks based on interests and expertise. I took the backend roles of:
+1. Creating sentiment analysis based on yfinance news data
+2. Creating parsing functionality for uploaded microservices
+3. Creating pipeline executing functionality to allow us to run multiple microservices in series
+4. Creating file management within the above functionality that allowed for separate data in different pipelines to be separated
+
+I completed 1, 2 and 3 during the week and then, once the frontend was able to query the backend properly to facilitate the use, I further edited the functionality to be compatible with the formats provided and required by the frontend. At the same time, I fulfilled by role leading the team by regularly following up with everyone and collaborating with the scrum master on deadlines. 
+
+Week 5:
+I continued working on 2, 3 of the above tasks and finished those along with 4. I additionally, edited some of the microservices to do with data gathering that were done by other team members so that they were compatible with the pipeline executer and the frontend.
+
+We spent some time preparing for the demo and I helped debug relevant code and discuss whether we had met the user stories and goals for sprint 1. Then, I aided in smaller changes via pair programming to ensure that our code was fully functional. We made a list of tasks that had to be done before the demo and completed those. Then, I assisted Christian in recording the demo - discussing what to showcase on the screen during the recording itself.
