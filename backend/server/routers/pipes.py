@@ -2,6 +2,7 @@ import os
 
 from typing import Annotated
 from fastapi import APIRouter, UploadFile, File, Header, HTTPException
+from pprint import pprint
 from server.models.pipes import Pipes
 from server.database import pipes_collection, users_collection
 from server.schemas.schemas import list_pipes_serial
@@ -72,10 +73,11 @@ async def create_pipe(pipe: Pipes, Authorization: str = Header(...)):
     user_pipes.append(_id.inserted_id)
     users_collection.update_one(
         {"_id": userid}, {"$set": {"pipes": user_pipes}})
-    
-    print(f'Input is ----------------------\n{return_dict}')
+
+    # print(f'Input is ----------------------\n{return_dict}')
     pipe_output = execute_pipeline(return_dict)
-    print(f'Output is ----------------------\n{pipe_output}')
+    # print(f'Output is ----------------------\n{pprint(pipe_output)}')
+    pprint(pipe_output)
     return pipe_output
 
 

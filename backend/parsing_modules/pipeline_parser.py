@@ -1,6 +1,8 @@
 import importlib
 import json
 import os
+import shutil
+
 
 def execute_pipeline(pipeline_json):
     # change to the correct directory
@@ -33,10 +35,12 @@ def execute_pipeline(pipeline_json):
             microservice_name = microservice['name']
             microservice_parameters = microservice['parameters']
             # parameters are in the form of variable: value, convert them into a list of variable=eval(value)
-            microservice_parameters = {key:eval(value) for key, value in microservice_parameters.items()}
+            microservice_parameters = {
+                key: eval(value) for key, value in microservice_parameters.items()}
             microservice_function = getattr(imported_module, microservice_name)
 
-            microservice_output = microservice_function(**microservice_parameters)
+            microservice_output = microservice_function(
+                **microservice_parameters)
             pipeline_output['pipeline']['microservices'].append({
                 'name': microservice_name,
                 'output': microservice_output
@@ -49,11 +53,11 @@ def execute_pipeline(pipeline_json):
 
         # errors can only occur in the microservices directory
         os.chdir('..')
-    
+
     # delete the data directory
     os.listdir()
     os.chdir('..')
-    os.rmdir(DATA_DIRECTORY)
+    # shutil.rmtree(DATA_DIRECTORY)
 
     # save json
     print(f'Final directory is: {os.getcwd()} with {os.listdir()}')
