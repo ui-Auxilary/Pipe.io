@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import { JsonToTable } from "react-json-to-table";
 import StockData from "./stock_data.json"
+import ChartComponent from 'components/Visualization/Visualization'
 
 export interface Props {
   id: string
@@ -14,9 +15,12 @@ export interface Props {
 
 export default function Pipe({ id, name, description }: Props) {
   const [show, setShow] = useState(false);
+  const [showChart, setChart] = useState(false);
 
   const handleGraphClose = () => setShow(false);
   const handleGraphShow = () => setShow(true);
+  const handleChartClose = () => setChart(false);
+  const handleChartShow = () => setChart(true);
 
   return (
     <>
@@ -32,7 +36,7 @@ export default function Pipe({ id, name, description }: Props) {
           </div>
         </S.Left>
         <div>
-          <div><S.Button style={{ display: "flex", gap: "10px", justifyContent: "center", alignItems: "center" }}>View <S.View src={view}></S.View></S.Button></div>
+          <div><S.Button onClick={handleChartShow} style={{ display: "flex", gap: "10px", justifyContent: "center", alignItems: "center" }}>View <S.View src={view}></S.View></S.Button></div>
           <div><S.Button onClick={handleGraphShow}>View Data</S.Button></div>
         </div>
       </S.Pipe>
@@ -42,6 +46,14 @@ export default function Pipe({ id, name, description }: Props) {
         </Modal.Header>
         <Modal.Body>
           <JsonToTable json={StockData} />
+        </Modal.Body>
+      </Modal>
+      <Modal dialogClassName="form-modal" show={showChart} onHide={handleChartClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>View Chart</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ChartComponent stockName={"AAPL"} />
         </Modal.Body>
       </Modal>
     </>

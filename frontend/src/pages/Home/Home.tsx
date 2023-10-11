@@ -43,7 +43,6 @@ export default function Home() {
             <span>Create a pipeline</span>
           </S.Header>
           <S.Body>
-            0 pipeline(s) selected
             <PipeList />
           </S.Body>
         </S.Container>
