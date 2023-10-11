@@ -5,6 +5,7 @@ from nltk.sentiment import SentimentIntensityAnalyzer
 UPWEIGHT = 1.5
 DOWNWEIGHT = 0.7
 
+
 def _get_news_titles_by_company(company):
     """ Gets the titles of relevant news articles for the given company
 
@@ -16,6 +17,7 @@ def _get_news_titles_by_company(company):
     """
     ticker = yf.Ticker(company)
     return ticker, [article['title'] for article in ticker.news]
+
 
 def _calculate_overall_sentiment(titles, transform):
     """ Calculates the overall sentiment of a company
@@ -29,8 +31,10 @@ def _calculate_overall_sentiment(titles, transform):
         int: Integer value of the overall sentiment
     """
     sentiment_analyser = SentimentIntensityAnalyzer()
-    sentiments = [sentiment_analyser.polarity_scores(title) for title in titles]
+    sentiments = [sentiment_analyser.polarity_scores(
+        title) for title in titles]
     return transform(sentiments)
+
 
 def _mean_transform(sentiments):
     """ Transforms a list of sentiments into the mean
@@ -42,6 +46,7 @@ def _mean_transform(sentiments):
         int: Integer value of the mean sentiment
     """
     return sum([sentiment['compound'] for sentiment in sentiments]) / len(sentiments)
+
 
 def _weighted_mean_transform(sentiments):
     """ Transforms a list of sentiments into a weighted mean where positive sentiments
@@ -55,6 +60,7 @@ def _weighted_mean_transform(sentiments):
     """
 
     return sum([sentiment['pos'] * UPWEIGHT + sentiment['neg'] * DOWNWEIGHT for sentiment in sentiments]) / len(sentiments)
+
 
 def _determine_which_transform_to_use(transform_name):
     """Returns a transform function based on the transform name provided
@@ -74,6 +80,7 @@ def _determine_which_transform_to_use(transform_name):
         return _weighted_mean_transform
     else:
         raise ValueError('Invalid transform provided')
+
 
 def sentiment_analysis_microservice(stock='MSFT', transform='mean'):
     """ Calculates the sentiment of a company based on the news articles associated
@@ -102,5 +109,7 @@ def sentiment_analysis_microservice(stock='MSFT', transform='mean'):
 
     return _calculate_overall_sentiment(titles, transform)
 
+
 if __name__ == '__main__':
-    print(sentiment_analysis_microservice('INTC', 'weighted_mean'))
+    stock_name = input("Enter a stock: ")
+    print(sentiment_analysis_microservice(stock_name, 'weighted_mean'))
