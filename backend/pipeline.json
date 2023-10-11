@@ -1,20 +1,32 @@
 {
-    "pipeline": "dhruv's pipeline",
+    "pipeline": "hwe",
     "microservices": [
         {
-            "file": "example",
-            "name": "addone",
-            "parameters": [
-                "firstinputnodefault",
-                "secondinputwithdefault=69"
-            ]
+            "file": "another",
+            "name": "add_two",
+            "parameters": {
+                "number": "save"
+            }
         },
         {
-            "file": "example",
-            "name": "addtwo",
-            "parameters": [
-                "second2withdefault=44"
-            ]
+            "file": "another",
+            "name": "add_x",
+            "parameters": {
+                "number": "pookie",
+                "x": "2"
+            }
+        },
+        {
+            "file": "another",
+            "name": "print_hello_world",
+            "parameters": {}
+        },
+        {
+            "file": "another",
+            "name": "print_numpy_array",
+            "parameters": {
+                "list_ints": null
+            }
         }
     ]
 }

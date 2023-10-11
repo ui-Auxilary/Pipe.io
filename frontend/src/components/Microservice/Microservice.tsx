@@ -1,11 +1,14 @@
 import S from './styles'
 import view from 'assets/view.svg'
 import Form from 'components/Form';
-import { useState } from 'react';
+import { useFormData } from 'components/Form/FormProvider';
+import { useEffect, useState } from 'react';
+import axios, { Axios } from 'axios';
 
 import { Modal } from 'react-bootstrap';
 
-export default function Microservice({ code, name, docstring, param, parent_file }) {
+export default function Microservice({ id, code, name, docstring, param, parent_file }) {
+  console.log('INSIDE', id)
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);
 
@@ -14,11 +17,10 @@ export default function Microservice({ code, name, docstring, param, parent_file
   const handleCodeClose = () => setCode(false);
   const handleCodeShow = () => setCode(true);
 
-  const items = param && param.map((el) => (
-    { label: el, "type": "text" }
+  const items = param && Object.keys(param).map((el) => (
+    { label: el, "type": "edit_param", id: name }
   ))
 
-  console.log('ITEMS', items)
 
   const questionsList = [
     {
@@ -26,6 +28,39 @@ export default function Microservice({ code, name, docstring, param, parent_file
       items: items
     }
   ]
+
+  const { userData, microserviceParam, microserviceData, setMicroserviceData } = useFormData();
+  console.log('MICROSERVIEC DATA', microserviceParam);
+
+  const findAndUpdate = (name, data) => {
+    var foundIndex = microserviceData.microservices.findIndex(x => x.name == name);
+    const updatedData = [...microserviceData.microservices]
+    updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: microserviceParam[name] })
+    setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
+  }
+
+  const handleSave = () => {
+    const data = {
+      parent_file: parent_file,
+      name: name,
+      code: code,
+      parameters: microserviceParam[name],
+      docstring: docstring,
+    }
+    console.log('DATA', data)
+    console.log('id', id)
+    console.log('UPDATING DATA')
+    setMicroserviceData({ ...microserviceData, })
+    console.log(microserviceParam, microserviceData)
+    findAndUpdate(name, data)
+    axios.put(`http://localhost:8000/microservice/${id}`, data).then((res) => {
+      console.log(res)
+    }).catch((err) => {
+      console.log(err)
+    })
+    handleEditClose()
+  }
+
   return (
     <>
       <S.Microservice>
@@ -35,7 +70,6 @@ export default function Microservice({ code, name, docstring, param, parent_file
               <h5 style={{ flex: 1 }}>{name}</h5>
               <span style={{ color: "#B6A4A4" }}>#001</span>
             </S.Label>
-            <span style={{ fontSize: "15px" }}>Process financial data</span>
           </div>
         </S.Left>
         <div>
@@ -44,7 +78,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
         </div>
       </S.Microservice>
 
-      
+
       <Modal show={showEdit} onHide={handleEditClose}>
         <Modal.Header closeButton>
           <Modal.Title>Edit</Modal.Title>
@@ -53,7 +87,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
           <Form questions={questionsList} step={0} />
         </Modal.Body>
         <Modal.Footer>
-          <S.Button>Save</S.Button>
+          <S.Button onClick={() => handleSave()}>Save</S.Button>
         </Modal.Footer>
       </Modal>
 

@@ -60,7 +60,7 @@ export default function Dropzone({ filetype }) {
 
   useEffect(() => {
     return () => {
-      if (files && filetype == "python") {
+      if (files) {
         files?.map((file) => {
           console.log('FILE', file.name)
           if (filetype == "python") {
@@ -70,7 +70,21 @@ export default function Dropzone({ filetype }) {
               let base64data = reader.result;
 
               if (base64data) {
-                axios.post('http://localhost:8000/upload', { 'filename': file.name, 'content': base64data }).then((res) => setMicroserviceData(Object.assign(JSON.parse(res.data))))
+                axios.post('http://localhost:8000/upload', { 'filename': file.name, 'content': base64data }).then((res) => setMicroserviceData(JSON.parse(res.data)))
+              }
+            };
+          }
+
+          if (filetype == "csv") {
+
+            var reader = new FileReader();
+            reader.readAsText(file)
+            reader.onload = () => {
+              let base64data = reader.result;
+
+              console.log('POSTING', base64data)
+              if (base64data) {
+                axios.post('http://localhost:8000/upload_csv', { 'filename': file.name, 'content': base64data })
               }
             };
           }

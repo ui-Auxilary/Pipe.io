@@ -15,7 +15,6 @@ export default function MicroserviceList() {
             <S.Container>
                 <span style={{ color: "#907F7F", fontWeight: 500 }}>0 microservice(s) available</span>
             </S.Container>
-            <Microservice code={"hey \nthey"} doc={"WOAH"} param={['x']} name={'Test'}/>
         </S.Wrapper>
     )
 }
