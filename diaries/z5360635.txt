@@ -7,3 +7,12 @@ Praying that we can do it still (without paying of course).
 Week 2
 Taking meeting minutes and now the scrum master for the team, Started work on proposal. I'm working on the figma design to work towards
 the storyboard component of the proposal.
+
+Week 3
+Worked mainly on storyboard design and helping out with some of the user stories.
+
+Week 4
+Worked on authentication on both the backend and front end. Completed over the weekend. Assigned to help out other people with their user stories = mostly frontend work
+
+Week5
+tbd
