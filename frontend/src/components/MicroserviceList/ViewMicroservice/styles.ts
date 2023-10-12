@@ -36,10 +36,28 @@ const Wrapper = styled.div`
   flex-direction: column;
 `
 
+const Scrollbar = styled.div`
+  overflow-y: scroll;
+  height: 480px;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    border: 1px solid #5a5a5a;
+    border-radius: 20px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    width: 5px;
+    background: #5a5a5a;
+    border-radius: 20px;
+  }
+`
+
 export default {
-    Button,
-    Container,
-    Header,
-    Wrapper
+  Button,
+  Container,
+  Header,
+  Wrapper,
+  Scrollbar
 }
 

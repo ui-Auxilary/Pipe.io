@@ -24,11 +24,11 @@ export default function PipeList() {
         axios.get('http://localhost:8000/pipes/list', {
             headers: {
                 "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
-              }
-            }).then(res => {
-                console.log(res.data)
-                setPipes(res.data)
-            }).catch(err => console.log(err)) 
+            }
+        }).then(res => {
+            console.log(res.data)
+            setPipes(res.data)
+        }).catch(err => console.log(err))
     }, [])
 
     return (
