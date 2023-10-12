@@ -34,4 +34,12 @@
 |` name` | `string` |
 | `description` | `string`|
 | contains suffix `id` | `integer` |
-| named exactly `Pipes` | <code>Object</code> containg keys <code>{name, description, user_id, microservices}</code>|
+| named exactly `Pipes` | <code>Object</code> containg keys <code>{name, description, status, user_id, microservices}</code>|
+| `status` | `Optional[str]` |
+| `user_id` | `Optional[str]` |
+| `microservices` | `[Microservices]` |
+| `Microservices` | <code>Object</code> containg keys <code>{name, parameters, parent_file, code, docstring}</code>|
+| `parameters` | `dict` containg parameter names and any default parameter values (`None` if no default parameter value)|
+| `parent_file` | `str` |
+| `code` | `str` |
+| `docstring` | `Optional[str]` |
