@@ -1,8 +1,6 @@
-import { useContext, useState } from 'react';
 import S from './style';
-import Dropzone from 'components/DragAndDrop/Dropzone';
-import { multiFormContext, updateFormData, useFormData } from 'components/Form/FormProvider';
-import { Form, Modal, ModalFooter } from 'react-bootstrap';
+import Dropzone from 'components/Dropzone';
+import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
 import MicroserviceList from 'components/MicroserviceList';
 import ViewMicroservice from 'components/MicroserviceList/ViewMicroservice';
 
@@ -13,16 +11,13 @@ export interface Item {
   id: string
 }
 
-
-
-
 export interface Props {
   item: Item
 }
 
 // Update based on question list to render specific component
 export default function FormItem({ item }: Props) {
-  const { setUserData, userData, submitData, currentStep, setMicroserviceParam, microserviceParam } = useFormData();
+  const { setUserData, userData, setMicroserviceParam, microserviceParam } = useFormData();
 
 
   switch (item.type) {
@@ -54,13 +49,7 @@ export default function FormItem({ item }: Props) {
       return (
         <>
           <S.Label>{item.label}</S.Label>
-          {/* <S.Input value={userData[item.label.toLocaleLowerCase()]} onChange={(e) => setUserData({ ...userData, [item.id]: { [item.label.toLocaleLowerCase()]: e.target.value } })} /> */}
-          {/* <Form onChange={(e) => setMicroserviceParam({ ...microserviceParam, [item.id]: {...microserviceParam[item.id], [item.label.toLocaleLowerCase()]: e.target.value }})}> */}
-            {/* <FormItem item={{ label: item.label, type: 'text', value: '', id: item.id }} /> */}
-            <S.Input value={microserviceParam[item.id] && microserviceParam[item.id][item.label.toLocaleLowerCase()]} onChange={(e) => setMicroserviceParam({ ...microserviceParam, [item.id]: {...microserviceParam[item.id], [item.label.toLocaleLowerCase()]: e.target.value }})}/>
-
-          {/* </Form> */}
-
+          <S.Input value={microserviceParam[item.id] && microserviceParam[item.id][item.label.toLocaleLowerCase()]} onChange={(e) => setMicroserviceParam({ ...microserviceParam, [item.id]: { ...microserviceParam[item.id], [item.label.toLocaleLowerCase()]: e.target.value } })} />
         </>
       );
   }

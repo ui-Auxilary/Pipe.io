@@ -5,7 +5,7 @@ import File from "assets/upload_file.svg";
 
 import S from "./style";
 import axios from "axios";
-import { useFormData } from "components/Form/FormProvider";
+import { useFormData } from "components/MultiStepForm/Form/FormProvider";
 
 
 export default function Dropzone({ filetype }) {
@@ -42,7 +42,7 @@ export default function Dropzone({ filetype }) {
     onDrop,
   });
 
-  const { setMicroserviceData, microserviceData } = useFormData()
+  const { setMicroserviceData } = useFormData()
 
   const fileDisplay = files?.map((file) => {
     return (<S.FileBox key={window.crypto.randomUUID()}>
@@ -64,10 +64,10 @@ export default function Dropzone({ filetype }) {
         files?.map((file) => {
           console.log('FILE', file.name)
           if (filetype == "python") {
-            var reader = new FileReader();
+            const reader = new FileReader();
             reader.readAsBinaryString(file)
             reader.onload = () => {
-              let base64data = reader.result;
+              const base64data = reader.result;
 
               if (base64data) {
                 axios.post('http://localhost:8000/upload', { 'filename': file.name, 'content': base64data }).then((res) => setMicroserviceData(JSON.parse(res.data)))
@@ -77,10 +77,10 @@ export default function Dropzone({ filetype }) {
 
           if (filetype == "csv") {
 
-            var reader = new FileReader();
+            const reader = new FileReader();
             reader.readAsText(file)
             reader.onload = () => {
-              let base64data = reader.result;
+              const base64data = reader.result;
 
               console.log('POSTING', base64data)
               if (base64data) {

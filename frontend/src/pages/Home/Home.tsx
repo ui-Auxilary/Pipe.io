@@ -1,15 +1,14 @@
 import PageTemplate from "components/PageTemplate/PageTemplate";
-import DragAndDrop from "components/DragAndDrop";
+import MultiStepForm from "components/MultiStepForm";
 
 import Button from "react-bootstrap/Button";
 
 import Sidebar from "../../components/Sidebar";
 import S from "./style";
 
-import ChartComponent from "components/Visualization/Visualization";
 import { useEffect, useState } from "react";
 import PipeList from "components/PipeList/PipeList";
-import FormProvider from "components/Form/FormProvider";
+import FormProvider from "components/MultiStepForm/Form/FormProvider";
 import { useAppData } from "helper/AppProvider";
 import getUser from "helper/functions";
 
@@ -23,7 +22,7 @@ export default function Home() {
     window.location.href = "/login";
   }
 
-  const { user, setUser } = useAppData()
+  const { setUser } = useAppData()
 
   useEffect(() => {
     getUser().then(({ user }) => setUser(user.id))
@@ -48,7 +47,7 @@ export default function Home() {
         </S.Container>
       </S.Wrapper>
       <FormProvider>
-        <DragAndDrop show={show} handleClose={handleClose} />
+        <MultiStepForm show={show} handleClose={handleClose} />
       </FormProvider>
     </PageTemplate>
   );

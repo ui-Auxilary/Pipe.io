@@ -1,12 +1,10 @@
 import PageTemplate from "components/PageTemplate/PageTemplate";
-import Sidebar from "../../components/Sidebar";
 import S from "./style";
 
-import { useState } from "react";
 import ChartComponent from "components/Visualization/Visualization";
 
 
-export default function Graph(props: any) {
+export default function Graph() {
   return (
     <PageTemplate>
       <S.Wrapper>

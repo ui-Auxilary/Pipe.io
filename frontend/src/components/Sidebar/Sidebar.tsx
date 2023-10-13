@@ -1,7 +1,5 @@
 import S from "./style";
 import { Button } from "react-bootstrap";
-import { useState } from "react";
-
 
 import Process from 'assets/process.svg'
 import Logo from "assets/logo.svg";

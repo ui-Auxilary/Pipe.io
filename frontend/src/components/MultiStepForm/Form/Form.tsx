@@ -1,12 +1,10 @@
-import FormItem from "components/FormItem"
-import { useContext, useEffect, useState } from "react"
-
-import { useFormData } from "./FormProvider"
+import FormItem from "../FormItem"
 
 export interface Item {
     label: string
     type: string
     value: string
+    id: string
 }
 
 export default function Form({ questions, step }) {
@@ -14,7 +12,7 @@ export default function Form({ questions, step }) {
     return (
         <>
             {
-                questions && questions[step].items.map((item: Item, index) => (
+                questions && questions[step].items.map((item: Item) => (
                     <FormItem key={item.label} item={item} />
                 ))
             }
