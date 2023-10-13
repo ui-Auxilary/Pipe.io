@@ -1,9 +1,9 @@
 import S from './styles'
 import view from 'assets/view.svg'
-import Form from 'components/Form';
-import { useFormData } from 'components/Form/FormProvider';
-import { useEffect, useState } from 'react';
-import axios, { Axios } from 'axios';
+import Form from 'components/MultiStepForm/Form';
+import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
+import { useState } from 'react';
+import axios from 'axios';
 
 import { Modal } from 'react-bootstrap';
 
@@ -29,11 +29,11 @@ export default function Microservice({ id, code, name, docstring, param, parent_
     }
   ]
 
-  const { userData, microserviceParam, microserviceData, setMicroserviceData } = useFormData();
+  const { microserviceParam, microserviceData, setMicroserviceData } = useFormData();
   console.log('MICROSERVIEC DATA', microserviceParam);
 
-  const findAndUpdate = (name, data) => {
-    var foundIndex = microserviceData.microservices.findIndex(x => x.name == name);
+  const findAndUpdate = (name) => {
+    const foundIndex = microserviceData.microservices.findIndex(x => x.name == name);
     const updatedData = [...microserviceData.microservices]
     updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: microserviceParam[name] })
     setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
@@ -47,12 +47,10 @@ export default function Microservice({ id, code, name, docstring, param, parent_
       parameters: microserviceParam[name],
       docstring: docstring,
     }
-    console.log('DATA', data)
-    console.log('id', id)
-    console.log('UPDATING DATA')
+
     setMicroserviceData({ ...microserviceData, })
-    console.log(microserviceParam, microserviceData)
-    findAndUpdate(name, data)
+
+    findAndUpdate(name)
     axios.put(`http://localhost:8000/microservice/${id}`, data).then((res) => {
       console.log(res)
     }).catch((err) => {

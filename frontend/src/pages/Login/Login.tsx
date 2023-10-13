@@ -1,11 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Form, Button, Card } from "react-bootstrap";
 import Logo from "assets/logo.svg";
 
 import s from "./style";
-import { useAppData } from "helper/AppProvider";
-
-
 
 export default function Login() {
   const [values, setValues] = useState({

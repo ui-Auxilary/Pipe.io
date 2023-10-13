@@ -1,16 +1,15 @@
 import axios from 'axios';
-import S from "./style";
-import { Button } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { format } from "date-fns";
-
-
-import Logo from "assets/logo.svg";
-
 
 import { BarChart } from '@mui/x-charts/BarChart';
 
-export default function ChartComponent(props: any) {
+interface ChartProps {
+  stockName: string
+  children?: ReactNode
+}
+
+export default function ChartComponent(props: ChartProps) {
   const stockName = props.stockName;
 
   const [stock, setStock] = useState({
@@ -55,4 +54,4 @@ export default function ChartComponent(props: any) {
       height={600}
     />
   );
-};
+}

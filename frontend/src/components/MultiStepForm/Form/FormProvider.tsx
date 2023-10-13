@@ -1,27 +1,26 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { ReactNode } from "react";
 import { createContext, useContext, useState } from "react"
-import File from '../../test.py'
-import getUser from "helper/functions";
+
 import { useAppData } from "helper/AppProvider";
 interface UserData {
-  [index: string]: string;
+  [index: string]: NonNullable<unknown>;
 }
 
 interface MicroserviceData {
-  [index: string]: any;
+  [index: string]: NonNullable<unknown>;
 }
 
 export interface FormContextType {
   currentStep: number,
   setStep: React.Dispatch<React.SetStateAction<number>>
-  userData: Record<string, any>
-  setUserData: React.Dispatch<React.SetStateAction<{}>>
-  microserviceData: Record<string, any>
-  setMicroserviceData: React.Dispatch<React.SetStateAction<{}>>,
-  submitData(): void,
-  microserviceParam: Record<string, any>,
-  setMicroserviceParam: React.Dispatch<React.SetStateAction<{}>>
+  userData: Record<string, NonNullable<unknown>>
+  setUserData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>
+  microserviceData: Record<string, NonNullable<unknown>>
+  setMicroserviceData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>,
+  submitData(func?: NonNullable<unknown>): void,
+  microserviceParam: Record<string, NonNullable<unknown>>,
+  setMicroserviceParam: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>
 }
 
 export const multiFormContext = createContext<FormContextType>({
@@ -41,7 +40,11 @@ export function useFormData() {
   return useContext(multiFormContext);
 }
 
-export default function FormProvider({ children }: any) {
+interface FormProviderProps {
+  children?: ReactNode
+}
+
+export default function FormProvider({ children }: FormProviderProps) {
   const [currentStep, setStep] = useState<number>(1);
   const [userData, setUserData] = useState<UserData>({})
   const [microserviceData, setMicroserviceData] = useState<MicroserviceData>({});

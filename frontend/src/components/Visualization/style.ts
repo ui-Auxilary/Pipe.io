@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Button } from "react-bootstrap";
 
 const Container = styled.div`
   background: #5a279b;
