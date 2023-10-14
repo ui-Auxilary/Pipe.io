@@ -1,13 +1,17 @@
-import React, { createContext, useContext, useState } from "react"
+import React, { ReactNode, createContext, useContext, useState } from "react"
 
-export interface UserType {
+export interface AppProviderType {
     user: string
     setUser: React.Dispatch<React.SetStateAction<string>>
+    pipeIds: string[]
+    setPipeIds: React.Dispatch<React.SetStateAction<string[]>>
 }
 
-export const AppProviderContext = createContext<UserType>({
+export const AppProviderContext = createContext<AppProviderType>({
     user: "",
-    setUser: () => { }
+    setUser: () => { },
+    pipeIds: [],
+    setPipeIds: () => { }
 });
 
 
@@ -15,11 +19,15 @@ export function useAppData() {
     return useContext(AppProviderContext);
 }
 
-export default function AppProvider({ children }) {
+interface ChildrenProps {
+    children?: ReactNode
+}
+export default function AppProvider({ children }: ChildrenProps) {
     const [user, setUser] = useState("");
+    const [pipeIds, setPipeIds] = useState<string[]>([]);
 
     return (
-        <AppProviderContext.Provider value={{ user, setUser }}>
+        <AppProviderContext.Provider value={{ user, setUser, pipeIds, setPipeIds }}>
             {children}
         </AppProviderContext.Provider>
     )

@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import S from './style'
 import { useEffect, useState } from "react";
+import { useAppData } from "helper/AppProvider";
 export interface Microservice {
     microserviceId: string
     content: string
@@ -19,6 +20,7 @@ export interface Pipe {
 
 export default function PipeList() {
     const [pipes, setPipes] = useState([]);
+    const { pipeIds } = useAppData();
 
     useEffect(() => {
         axios.get('http://localhost:8000/pipes/list', {
@@ -29,7 +31,7 @@ export default function PipeList() {
             console.log(res.data)
             setPipes(res.data)
         }).catch(err => console.log(err))
-    }, [])
+    }, [pipeIds])
 
     return (
         <S.Container>

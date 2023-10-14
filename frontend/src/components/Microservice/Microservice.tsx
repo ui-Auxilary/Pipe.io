@@ -59,6 +59,7 @@ export default function Microservice({ id, code, name, docstring, param, parent_
     handleEditClose()
   }
 
+  console.log("PARAM", param)
   return (
     <>
       <S.Microservice>
@@ -72,7 +73,7 @@ export default function Microservice({ id, code, name, docstring, param, parent_
         </S.Left>
         <div>
           <div><S.Button onClick={handleCodeShow} style={{ display: "flex", width: "150px", gap: "10px", justifyContent: "center", alignItems: "center" }}>Code <S.View src={view}></S.View></S.Button></div>
-          <div><S.Button onClick={handleEditShow} style={{ display: "flex", width: "150px", gap: "10px", justifyContent: "center", alignItems: "center" }}>Input data <S.View src={view}></S.View></S.Button></div>
+          {Object.keys(param).length > 0 && (<div><S.Button onClick={handleEditShow} style={{ display: "flex", width: "150px", gap: "10px", justifyContent: "center", alignItems: "center" }}>Input data <S.View src={view}></S.View></S.Button></div>)}
         </div>
       </S.Microservice>
 
