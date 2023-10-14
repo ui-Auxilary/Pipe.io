@@ -49,10 +49,8 @@ async def create_pipe(pipe: Pipes, Authorization: str = Header(...)):
 
     _id = pipes_collection.insert_one(dict(pipe))
     condensed_microservices = []
-    print('Micro pipe', pipe.microservices)
+
     for microservice in pipe.microservices:
-        # for idx, param in enumerate(microservice["parameters"]):
-        #     microservice["parameters"][idx] = param.split("=")[-1]
         condensed_microservices.append(
             {
                 "file": microservice["parent_file"],
@@ -60,25 +58,33 @@ async def create_pipe(pipe: Pipes, Authorization: str = Header(...)):
                 "parameters": microservice["parameters"]
             }
         )
-    return_dict = {
-        "pipeline": pipe.name,
-        "microservices": condensed_microservices
-    }
-
-    json_object = json.dumps(return_dict, indent=4)
-    with open("pipeline.json", "w") as outfile:
-        outfile.write(json_object)
 
     user_pipes = user["pipes"]
     user_pipes.append(_id.inserted_id)
     users_collection.update_one(
         {"_id": userid}, {"$set": {"pipes": user_pipes}})
+    # MOVE
+    # return_dict = {
+    #     "pipeline": pipe.name,
+    #     "microservices": condensed_microservices
+    # }
 
-    # print(f'Input is ----------------------\n{return_dict}')
-    pipe_output = execute_pipeline(return_dict)
-    # print(f'Output is ----------------------\n{pprint(pipe_output)}')
-    pprint(pipe_output)
-    return pipe_output
+    # # Test object
+    # json_object = json.dumps(return_dict, indent=4)
+    # with open("pipeline.json", "w") as outfile:
+    #     outfile.write(json_object)
+
+    # # print(f'Input is ----------------------\n{return_dict}')
+    # pipe_output = execute_pipeline(return_dict)
+    # # print(f'Output is ----------------------\n{pprint(pipe_output)}')
+    # pprint(pipe_output)
+
+    return {"pipeId": _id.inserted_id.__str__()}
+
+
+@router.post("/pipes/execute/{id}")
+async def execute_pipe(id: str):
+    return {"id": id}
 
 
 @router.put("/pipes/{id}")
@@ -107,9 +113,10 @@ async def delete_pipe(id: str):
 #     stock_data['stock_name'] = stock_name
 #     stock_data = stock_data.to_dict(orient='records')
 #     stock_collection.insert_many(stock_data)
-#@router.get('/get_stock_data/{stock_name}')
-#async def get_stock_data(stock_name: str):
+# @router.get('/get_stock_data/{stock_name}')
+# async def get_stock_data(stock_name: str):
 #    for stock in stock_collection.find({"stock_name": stock_name}):
+
 
 @router.delete("/clear/pipes")
 async def clear_all():
