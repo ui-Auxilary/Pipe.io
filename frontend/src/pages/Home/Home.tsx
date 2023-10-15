@@ -25,7 +25,10 @@ export default function Home() {
   const { setUser } = useAppData()
 
   useEffect(() => {
-    getUser().then(({ user }) => setUser(user.id))
+    getUser().then(({ user }) => {
+      console.log('FOUND USER', JSON.parse(user).id)
+      setUser(JSON.parse(user).id)
+    })
 
   }, [])
 

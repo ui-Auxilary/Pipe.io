@@ -20,19 +20,13 @@ export default function Login() {
   // State to check form validity
   const [valid, setValid] = useState(true)
 
-
-
   const handleEmailInput = (event: Event) => {
     setValues({ ...values, email: event.target.value })
   }
 
-
-
   const handlePasswordInput = (event: Event) => {
     setValues({ ...values, password: event.target.value })
   }
-
-
 
   const validateEmail = (email: string) => {
     // Regex for email validation

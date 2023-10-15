@@ -3,6 +3,7 @@ import React, { ReactNode } from "react";
 import { createContext, useContext, useState } from "react"
 
 import { useAppData } from "helper/AppProvider";
+import getUser from "helper/functions";
 interface UserData {
   [index: string]: NonNullable<unknown>;
 }
@@ -50,16 +51,16 @@ export default function FormProvider({ children }: FormProviderProps) {
   const [microserviceData, setMicroserviceData] = useState<MicroserviceData>({});
   const [microserviceParam, setMicroserviceParam] = useState<MicroserviceData>({});
 
-  const { user } = useAppData()
+  const { user, setPipeIds, pipeIds } = useAppData()
 
   const submitData = (handleClose) => {
-    const data = { user }
-    console.log(data)
+    console.log('USER', getUser())
     axios.post('http://localhost:8000/pipes/create', Object.assign({ user_id: user, microservices: microserviceData.microservices }, userData), {
       headers: {
         "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
       }
-    })
+    }).then(res => setPipeIds(prevIds => [...prevIds, res?.data?.pipeId]))
+    console.log('NEW IDS', pipeIds)
     handleClose()
     setUserData({})
   }
