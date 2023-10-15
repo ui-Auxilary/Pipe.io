@@ -7,38 +7,86 @@ import { JsonToTable } from "react-json-to-table";
 import StockData from "./stock_data.json"
 import ChartComponent from 'components/Visualization/Visualization'
 
+import Content from './Content'
+import axios from 'axios'
+import Result from './Result'
 export interface Props {
+  pipeId: string
   id: string
   name: string
   description?: string
 }
 
-export default function Pipe({ id, name, description }: Props) {
+
+export interface ExecuteProps {
+  time: number,
+  result: object
+}
+
+const handleStatus = (status: string) => {
+  switch (status) {
+    case "Ready":
+      return "Run"
+    case "Completed":
+      return "View Results"
+    case "Error":
+      return "Retry"
+    default:
+      return status
+  }
+}
+
+export default function Pipe({ pipeId, id, name, description }: Props) {
   const [show, setShow] = useState(false);
   const [showChart, setChart] = useState(false);
+  const [status, setStatus] = useState("Ready");
+  const [executed, setExecuted] = useState<ExecuteProps>();
 
   const handleGraphClose = () => setShow(false);
   const handleGraphShow = () => setShow(true);
   const handleChartClose = () => setChart(false);
   const handleChartShow = () => setChart(true);
 
+  const onPipeRun = () => {
+    if (status === "Completed") {
+      handleChartShow()
+    }
+    else {
+      setStatus("Running")
+      axios.post('http://localhost:8000/pipes/execute/', null, { params: { id: pipeId } })
+        .then(res => {
+          setStatus("Completed")
+          setExecuted({ "time": Date.now(), "result": res.data })
+        })
+        .catch(e => {
+          setStatus("Error");
+          console.log(e);
+        })
+    }
+  }
+
   return (
     <>
       <S.Pipe>
-        <S.Left>
-          <span><S.Edit src={dots}></S.Edit></span>
+        <S.Top>
+          <S.Left>
+            <span><S.Edit src={dots}></S.Edit></span>
+            <div>
+              <Content id={id} name={name} description={description} />
+            </div>
+          </S.Left>
           <div>
-            <S.Label>
-              <h4 style={{ flex: 1 }}>{name}</h4>
-              <span style={{ color: "#B6A4A4" }}>#{id}</span>
-            </S.Label>
-            <span style={{ fontSize: "15px" }}>{description}</span>
+            <div style={{ marginRight: "15px" }}>
+              <S.Execute disabled={status == "Running"} onClick={onPipeRun} status={status}>{handleStatus(status)}</S.Execute>
+            </div>
+            {/* <div><S.Button onClick={handleChartShow} style={{ display: "flex", gap: "10px", justifyContent: "center", alignItems: "center" }}>View <S.View src={view}></S.View></S.Button></div> */}
+            {/* <div><S.Button onClick={handleGraphShow}>View Data</S.Button></div> */}
           </div>
-        </S.Left>
-        <div>
-          <div><S.Button onClick={handleChartShow} style={{ display: "flex", gap: "10px", justifyContent: "center", alignItems: "center" }}>View <S.View src={view}></S.View></S.Button></div>
-          <div><S.Button onClick={handleGraphShow}>View Data</S.Button></div>
-        </div>
+        </S.Top>
+        <S.Bottom>
+          <S.Status status={status}>{status.toUpperCase()}</S.Status>
+          <S.Label>Last executed: {executed ? executed.time : "Never"}</S.Label>
+        </S.Bottom>
       </S.Pipe>
       <Modal dialogClassName="form-modal" show={show} onHide={handleGraphClose}>
         <Modal.Header closeButton>
@@ -50,9 +98,10 @@ export default function Pipe({ id, name, description }: Props) {
       </Modal>
       <Modal dialogClassName="form-modal" show={showChart} onHide={handleChartClose}>
         <Modal.Header closeButton>
-          <Modal.Title>View Chart</Modal.Title>
+          <Modal.Title>View Results</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <Result />
           <ChartComponent stockName={"AAPL"} />
         </Modal.Body>
       </Modal>

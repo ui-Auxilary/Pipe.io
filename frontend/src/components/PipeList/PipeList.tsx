@@ -28,15 +28,15 @@ export default function PipeList() {
                 "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
             }
         }).then(res => {
-            console.log(res.data)
+            console.log("PIPES", res.data)
             setPipes(res.data)
         }).catch(err => console.log(err))
     }, [pipeIds])
 
     return (
         <S.Container>
-            {pipes.map(({ id, name, description }, index) => (
-                <Pipe key={id} id={`00${index + 1} `} name={name} description={description} />
+            {pipes.map(({ pipe_id, name, description }, index) => (
+                <Pipe key={pipe_id} pipeId={pipe_id} id={`00${index + 1} `} name={name} description={description} />
             ))}
         </S.Container>
     )

@@ -48,9 +48,22 @@ async def create_pipe(pipe: Pipes, Authorization: str = Header(...)):
         raise HTTPException(status_code=401, detail="Invalid token")
 
     _id = pipes_collection.insert_one(dict(pipe))
+
+    user_pipes = user["pipes"]
+    user_pipes.append(_id.inserted_id)
+    users_collection.update_one(
+        {"_id": userid}, {"$set": {"pipes": user_pipes}})
+
+    return {"pipeId": _id.inserted_id.__str__()}
+
+
+@router.post("/pipes/execute")
+def execute_pipe(id: str):
+    pipe = pipes_collection.find_one({"_id": ObjectId(id)})
+
     condensed_microservices = []
 
-    for microservice in pipe.microservices:
+    for microservice in pipe["microservices"]:
         condensed_microservices.append(
             {
                 "file": microservice["parent_file"],
@@ -59,42 +72,31 @@ async def create_pipe(pipe: Pipes, Authorization: str = Header(...)):
             }
         )
 
-    user_pipes = user["pipes"]
-    user_pipes.append(_id.inserted_id)
-    users_collection.update_one(
-        {"_id": userid}, {"$set": {"pipes": user_pipes}})
-    # MOVE
-    # return_dict = {
-    #     "pipeline": pipe.name,
-    #     "microservices": condensed_microservices
-    # }
+    return_dict = {
+        "pipeline": pipe["name"],
+        "microservices": condensed_microservices
+    }
 
-    # # Test object
-    # json_object = json.dumps(return_dict, indent=4)
-    # with open("pipeline.json", "w") as outfile:
-    #     outfile.write(json_object)
+    # Test object
+    json_object = json.dumps(return_dict, indent=4)
+    with open("pipeline.json", "w") as outfile:
+        outfile.write(json_object)
 
-    # # print(f'Input is ----------------------\n{return_dict}')
-    # pipe_output = execute_pipeline(return_dict)
-    # # print(f'Output is ----------------------\n{pprint(pipe_output)}')
-    # pprint(pipe_output)
-
-    return {"pipeId": _id.inserted_id.__str__()}
-
-
-@router.post("/pipes/execute/{id}")
-async def execute_pipe(id: str):
-    return {"id": id}
+    print(f'Input is ----------------------\n{return_dict}')
+    pipe_output = execute_pipeline(return_dict)
+    print(f'Output is ----------------------\n{pprint(pipe_output)}')
+    pprint(pipe_output)
+    return {id: id}
 
 
 @router.put("/pipes/{id}")
-async def edit_pipe(id: str, pipe: Pipes):
+def edit_pipe(id: str, pipe: Pipes):
     pipes_collection.find_one_and_update(
         {"_id": ObjectId(id)}, {"$set": dict(pipe)})
 
 
 @router.delete("/pipes/{id}")
-async def delete_pipe(id: str):
+def delete_pipe(id: str):
     pipes_collection.find_one_and_delete(
         {"_id": ObjectId(id)})
 
@@ -119,5 +121,5 @@ async def delete_pipe(id: str):
 
 
 @router.delete("/clear/pipes")
-async def clear_all():
+def clear_all():
     pipes_collection.drop()
