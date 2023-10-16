@@ -14,7 +14,7 @@ def import_csv(input_file_path: str = 'default.csv', output_file_path: str = 'st
         pd.DataFrame: Dataframe from the csv file
     """
 
-    df = pd.read_csv(input_file_path)
+    df = pd.read_csv(input_file_path, index_col=[0])
     df.to_csv(output_file_path)
     return df
 
@@ -35,7 +35,7 @@ def import_yahoo(ticker: str = 'msft',
     """
     ticker = yf.Ticker(ticker)
     df = ticker.history(start=start_date, end=end_date, interval="1d")
-    df['Datetime'] = df.index
+    df[0] = df.index
     
     # Save the dataframe to our storage location
     df.to_csv(output_file_path)
