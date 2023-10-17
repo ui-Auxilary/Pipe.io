@@ -7,6 +7,8 @@ import ast
 
 def execute_pipeline(pipeline_json):
     # change to the correct directory
+    if os.getcwd().endswith('parsing_modules'):
+        os.chdir('..')
     os.chdir('parsing_modules')
 
     pipeline_output = {
@@ -19,7 +21,14 @@ def execute_pipeline(pipeline_json):
     }
     print(f"Directory is {os.getcwd()}")
     print(f'is has {os.listdir()}')
+
+    if os.path.exists(f'pipeline_{pipeline_json["pipeline"]}'):
+        shutil.rmtree(f'pipeline_{pipeline_json["pipeline"]}')
+
     os.mkdir(f'pipeline_{pipeline_json["pipeline"]}')
+
+
+
     DATA_DIRECTORY = f'parsing_modules/pipeline_{pipeline_json["pipeline"]}'
     MICROSERVICES_DIRECTORY = '../data'
 
