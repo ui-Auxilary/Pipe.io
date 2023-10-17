@@ -10,6 +10,7 @@ from parsing_modules.microservice_extractor import extract_microservice
 from parsing_modules.pipeline_parser import execute_pipeline
 import jwt
 import json
+import time
 
 # Used for fetching Mongo objectID
 from bson import ObjectId
@@ -82,11 +83,27 @@ def execute_pipe(id: str):
     with open("pipeline.json", "w") as outfile:
         outfile.write(json_object)
 
-    print(f'Input is ----------------------\n{return_dict}')
+    # print(f'Input is ----------------------\n{return_dict}')
     pipe_output = execute_pipeline(return_dict)
-    print(f'Output is ----------------------\n{pprint(pipe_output)}')
-    pprint(pipe_output)
-    return {id: id}
+    # print(f'Output is ----------------------\n{pprint(pipe_output)}')
+    # pprint(pipe_output)
+
+    output_json = json.loads(pipe_output)
+    if output_json["pipeline"]["success"] is False:
+        raise HTTPException(status_code=400, detail=output_json["pipeline"]["error"])
+
+    # print(output_json["pipeline"]["microservices"])
+    for microservice in output_json["pipeline"]["microservices"]:
+        pipe["output"][microservice["name"]] = json.loads(microservice["output"])
+
+
+    pipe["status"] = "Executed"
+    pipe["last_executed"] = time.strftime("%Y-%m-%d %H:%M:%S")
+
+    pipes_collection.find_one_and_update(
+        {"_id": ObjectId(id)}, {"$set": dict(pipe)})
+    
+    return {"pipeId": id}
 
 
 @router.put("/pipes/{id}")
