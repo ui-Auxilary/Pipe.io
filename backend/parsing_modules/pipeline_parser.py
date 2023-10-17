@@ -2,6 +2,7 @@ import importlib
 import json
 import os
 import shutil
+import ast
 
 
 def execute_pipeline(pipeline_json):
@@ -35,8 +36,23 @@ def execute_pipeline(pipeline_json):
             microservice_name = microservice['name']
             microservice_parameters = microservice['parameters']
             # parameters are in the form of variable: value, convert them into a list of variable=eval(value)
-            microservice_parameters = {
-                key: eval(value) for key, value in microservice_parameters.items()}
+
+            # before
+            # microservice_parameters = {
+            #     key: ast.literal_eval(value) for key, value in microservice_parameters.items()}
+
+            # after
+            for key, value in microservice_parameters.items():
+                try:
+                    # Attempt to parse the value with ast.literal_eval
+                    parsed_value = ast.literal_eval(value)
+                    microservice_parameters[key] = parsed_value
+                except (ValueError, SyntaxError):
+                    # Handle the case where ast.literal_eval fails
+                    microservice_parameters[key] = value
+
+
+
             microservice_function = getattr(imported_module, microservice_name)
 
             microservice_output = microservice_function(
@@ -45,6 +61,7 @@ def execute_pipeline(pipeline_json):
                 'name': microservice_name,
                 'output': microservice_output
             })
+
             os.chdir('..')
     except Exception as e:
         print(e)
@@ -61,4 +78,6 @@ def execute_pipeline(pipeline_json):
 
     # save json
     print(f'Final directory is: {os.getcwd()} with {os.listdir()}')
+
+
     return json.dumps(pipeline_output, indent=4)

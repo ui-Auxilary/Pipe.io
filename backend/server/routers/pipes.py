@@ -10,6 +10,7 @@ from parsing_modules.microservice_extractor import extract_microservice
 from parsing_modules.pipeline_parser import execute_pipeline
 import jwt
 import json
+import time
 
 # Used for fetching Mongo objectID
 from bson import ObjectId
@@ -86,7 +87,23 @@ def execute_pipe(id: str):
     pipe_output = execute_pipeline(return_dict)
     print(f'Output is ----------------------\n{pprint(pipe_output)}')
     pprint(pipe_output)
-    return {id: id}
+
+    output_json = json.loads(pipe_output)
+    if output_json["pipeline"]["success"] is False:
+        raise HTTPException(status_code=400, detail=output_json["pipeline"]["error"])
+
+    print(output_json["pipeline"]["microservices"])
+    for microservice in output_json["pipeline"]["microservices"]:
+        pipe["output"][microservice["name"]] = json.loads(microservice["output"])
+
+
+    pipe["status"] = "Executed"
+    pipe["last_executed"] = time.strftime("%Y-%m-%d %H:%M:%S")
+
+    pipes_collection.find_one_and_update(
+        {"_id": ObjectId(id)}, {"$set": dict(pipe)})
+    
+    return {"pipeId": id}
 
 
 @router.put("/pipes/{id}")
@@ -99,6 +116,17 @@ def edit_pipe(id: str, pipe: Pipes):
 def delete_pipe(id: str):
     pipes_collection.find_one_and_delete(
         {"_id": ObjectId(id)})
+
+@router.get("/pipes/{id}")
+def get_pipe(id: str):
+    try: 
+        pipe = pipes_collection.find_one({"_id": ObjectId(id)})
+        if pipe is None:
+            raise HTTPException(status_code=404, detail="Pipe not found")
+        pipe['_id'] = str(pipe['_id']) 
+        return pipe
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # @router.get('/get_stock_data/{stock_name}')
 # async def get_stock_data(stock_name:str):
