@@ -42,7 +42,7 @@ def import_yahoo(ticker: str = 'msft',
 
 
     df = ticker.history(start=start_date, end=end_date, interval="1d")
-    df['Datetime'] = df.index
+    df[0] = df.index
     
     # Save the dataframe to our storage location
     df.to_csv(output_file_path)
