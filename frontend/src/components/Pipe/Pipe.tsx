@@ -1,10 +1,13 @@
 import S from './style'
 import dots from 'assets/dots.svg'
-import { useState } from 'react'
-import { Modal } from 'react-bootstrap'
-import { JsonToTable } from "react-json-to-table";
-
+import { useRef, useState } from 'react'
+import { Button, Modal, OverlayTrigger, Popover, Tooltip } from 'react-bootstrap'
+import View from 'assets/view.svg'
+import Edit from 'assets/pencil.svg'
+import Delete from 'assets/trash.svg'
 import Overlay from 'react-bootstrap/Overlay';
+
+
 import Content from './Content'
 import axios from 'axios'
 
@@ -40,6 +43,10 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
   const [status, setStatus] = useState("Ready");
   const [executed, setExecuted] = useState<ExecuteProps>();
 
+  const target = useRef(null);
+
+  const handleOverlayClose = () => setShow(false);
+  const handleOverlayShow = () => setShow(true);
   const handleChartClose = () => setChart(false);
   const handleChartShow = () => setChart(true);
 
@@ -62,15 +69,42 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
   }
 
   const onEditClick = () => {
-
+    handleOverlayShow()
   }
+
+  const editPipeline = (
+    <Popover>
+      <Popover.Body>
+        <div className="mt-3 mb-1">
+          <S.EditBox>
+            <S.EditOption>
+              <S.View src={Edit} />
+              Edit pipeline
+            </S.EditOption>
+            <S.EditOption>
+              <S.View src={View} />
+              View microservices
+            </S.EditOption>
+            <S.EditOption>
+              <S.View src={Delete} />
+              Delete
+            </S.EditOption>
+          </S.EditBox>
+        </div>
+      </Popover.Body>
+    </Popover>
+  );
 
   return (
     <>
       <S.Pipe>
         <S.Top>
           <S.Left>
-            <span><S.Edit onClick={onEditClick} src={dots}></S.Edit></span>
+            <span>
+              <OverlayTrigger trigger="click" placement="bottom" overlay={editPipeline} rootClose>
+                <S.Edit ref={target} onClick={onEditClick} src={dots} />
+              </OverlayTrigger>
+            </span>
             <div>
               <Content id={id} name={name} description={description} />
             </div>
