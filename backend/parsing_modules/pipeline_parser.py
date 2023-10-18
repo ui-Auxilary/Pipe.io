@@ -27,8 +27,6 @@ def execute_pipeline(pipeline_json):
 
     os.mkdir(f'pipeline_{pipeline_json["pipeline"]}')
 
-
-
     DATA_DIRECTORY = f'parsing_modules/pipeline_{pipeline_json["pipeline"]}'
     MICROSERVICES_DIRECTORY = '../data'
 
@@ -60,8 +58,6 @@ def execute_pipeline(pipeline_json):
                     # Handle the case where ast.literal_eval fails
                     microservice_parameters[key] = value
 
-
-
             microservice_function = getattr(imported_module, microservice_name)
 
             microservice_output = microservice_function(
@@ -87,6 +83,5 @@ def execute_pipeline(pipeline_json):
 
     # save json
     print(f'Final directory is: {os.getcwd()} with {os.listdir()}')
-
 
     return json.dumps(pipeline_output, indent=4)

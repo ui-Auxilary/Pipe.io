@@ -90,19 +90,20 @@ def execute_pipe(id: str):
 
     output_json = json.loads(pipe_output)
     if output_json["pipeline"]["success"] is False:
-        raise HTTPException(status_code=400, detail=output_json["pipeline"]["error"])
+        raise HTTPException(
+            status_code=400, detail=output_json["pipeline"]["error"])
 
     print(output_json["pipeline"]["microservices"])
     for microservice in output_json["pipeline"]["microservices"]:
-        pipe["output"][microservice["name"]] = json.loads(microservice["output"])
-
+        pipe["output"][microservice["name"]] = json.dumps(
+            microservice["output"])
 
     pipe["status"] = "Executed"
     pipe["last_executed"] = time.strftime("%Y-%m-%d %H:%M:%S")
 
     pipes_collection.find_one_and_update(
         {"_id": ObjectId(id)}, {"$set": dict(pipe)})
-    
+
     return {"pipeId": id}
 
 
@@ -117,13 +118,14 @@ def delete_pipe(id: str):
     pipes_collection.find_one_and_delete(
         {"_id": ObjectId(id)})
 
+
 @router.get("/pipes/{id}")
 def get_pipe(id: str):
-    try: 
+    try:
         pipe = pipes_collection.find_one({"_id": ObjectId(id)})
         if pipe is None:
             raise HTTPException(status_code=404, detail="Pipe not found")
-        pipe['_id'] = str(pipe['_id']) 
+        pipe['_id'] = str(pipe['_id'])
         return pipe
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
