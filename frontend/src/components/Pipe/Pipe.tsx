@@ -101,8 +101,7 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
           <Modal.Title>View Results</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Result />
-          <ChartComponent stockName={"AAPL"} />
+          <Result pipeId={pipeId} />
         </Modal.Body>
       </Modal>
     </>
