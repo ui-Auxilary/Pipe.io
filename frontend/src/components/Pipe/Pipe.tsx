@@ -5,8 +5,6 @@ import { Button, Modal, OverlayTrigger, Popover, Tooltip } from 'react-bootstrap
 import View from 'assets/view.svg'
 import Edit from 'assets/pencil.svg'
 import Delete from 'assets/trash.svg'
-import Overlay from 'react-bootstrap/Overlay';
-
 
 import Content from './Content'
 import axios from 'axios'
