@@ -21,4 +21,4 @@ def moving_avergae(input_file_path, output_file_path, window_size, date_column, 
     df.to_csv(output_file_path, index=False)
     return df
     
-moving_avergae("microservices/moving_average/stock_data.csv", "microservices/moving_average/mv.csv", 5, "Date", "Open")
+#moving_avergae("microservices/moving_average/stock_data.csv", "microservices/moving_average/mv.csv", 5, "Date", "Volume")
