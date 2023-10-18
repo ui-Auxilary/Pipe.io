@@ -38,15 +38,9 @@ dependencies:
   react-bootstrap:
     specifier: ^2.9.0
     version: 2.9.0(@types/react@18.2.23)(react-dom@18.2.0)(react@18.2.0)
-<<<<<<< HEAD
   react-bootstrap-pagination-control:
     specifier: ^1.0.5
     version: 1.0.5(@popperjs/core@2.11.8)(@types/react@18.2.23)(react-dom@18.2.0)(react@18.2.0)
-  react-csv-to-table:
-    specifier: ^0.0.4
-    version: 0.0.4(react-dom@18.2.0)(react@18.2.0)
-=======
->>>>>>> cbfbf498d314f926a5d7f1d1f5a4223f60a05017
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
