@@ -3,8 +3,6 @@ import dots from 'assets/dots.svg'
 import view from 'assets/view.svg'
 import { useState } from 'react'
 import { Modal } from 'react-bootstrap'
-import { JsonToTable } from "react-json-to-table";
-import StockData from "./stock_data.json"
 import ChartComponent from 'components/Visualization/Visualization'
 
 import Content from './Content'
@@ -93,7 +91,7 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
           <Modal.Title>View Data</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <JsonToTable json={StockData} />
+
         </Modal.Body>
       </Modal>
       <Modal dialogClassName="form-modal" show={showChart} onHide={handleChartClose}>

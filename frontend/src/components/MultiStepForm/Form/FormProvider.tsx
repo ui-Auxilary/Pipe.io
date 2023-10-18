@@ -17,7 +17,7 @@ export interface FormContextType {
   setStep: React.Dispatch<React.SetStateAction<number>>
   userData: Record<string, NonNullable<unknown>>
   setUserData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>
-  microserviceData: Record<string, NonNullable<unknown>>
+  microserviceData: Record<string, NonNullable<unknown> | []>
   setMicroserviceData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>,
   submitData(func?: NonNullable<unknown>): void,
   microserviceParam: Record<string, NonNullable<unknown>>,
