@@ -1,15 +1,13 @@
 import S from './style'
 import dots from 'assets/dots.svg'
-import view from 'assets/view.svg'
 import { useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import { JsonToTable } from "react-json-to-table";
-import StockData from "./stock_data.json"
-import ChartComponent from 'components/Visualization/Visualization'
 
+import Overlay from 'react-bootstrap/Overlay';
 import Content from './Content'
 import axios from 'axios'
-import Result from './Result'
+
 export interface Props {
   pipeId: string
   id: string
@@ -42,8 +40,6 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
   const [status, setStatus] = useState("Ready");
   const [executed, setExecuted] = useState<ExecuteProps>();
 
-  const handleGraphClose = () => setShow(false);
-  const handleGraphShow = () => setShow(true);
   const handleChartClose = () => setChart(false);
   const handleChartShow = () => setChart(true);
 
@@ -65,12 +61,16 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
     }
   }
 
+  const onEditClick = () => {
+
+  }
+
   return (
     <>
       <S.Pipe>
         <S.Top>
           <S.Left>
-            <span><S.Edit src={dots}></S.Edit></span>
+            <span><S.Edit onClick={onEditClick} src={dots}></S.Edit></span>
             <div>
               <Content id={id} name={name} description={description} />
             </div>
@@ -79,8 +79,6 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
             <div style={{ marginRight: "15px" }}>
               <S.Execute disabled={status == "Running"} onClick={onPipeRun} status={status}>{handleStatus(status)}</S.Execute>
             </div>
-            {/* <div><S.Button onClick={handleChartShow} style={{ display: "flex", gap: "10px", justifyContent: "center", alignItems: "center" }}>View <S.View src={view}></S.View></S.Button></div> */}
-            {/* <div><S.Button onClick={handleGraphShow}>View Data</S.Button></div> */}
           </div>
         </S.Top>
         <S.Bottom>
@@ -88,21 +86,12 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
           <S.Label>Last executed: {executed ? executed.time : "Never"}</S.Label>
         </S.Bottom>
       </S.Pipe>
-      <Modal dialogClassName="form-modal" show={show} onHide={handleGraphClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>View Data</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <JsonToTable json={StockData} />
-        </Modal.Body>
-      </Modal>
       <Modal dialogClassName="form-modal" show={showChart} onHide={handleChartClose}>
         <Modal.Header closeButton>
           <Modal.Title>View Results</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Result />
-          <ChartComponent stockName={"AAPL"} />
+
         </Modal.Body>
       </Modal>
     </>
