@@ -10,6 +10,7 @@ import Overlay from 'react-bootstrap/Overlay';
 
 import Content from './Content'
 import axios from 'axios'
+import { useAppData } from 'helper/AppProvider'
 
 export interface Props {
   pipeId: string
@@ -39,14 +40,16 @@ const handleStatus = (status: string) => {
 
 export default function Pipe({ pipeId, id, name, description }: Props) {
   const [show, setShow] = useState(false);
+  const [del, setDel] = useState(false);
   const [showChart, setChart] = useState(false);
   const [status, setStatus] = useState("Ready");
   const [executed, setExecuted] = useState<ExecuteProps>();
+  const { pipeIds, setPipeIds } = useAppData();
 
-  const target = useRef(null);
+  let target = useRef(null);
 
-  const handleOverlayClose = () => setShow(false);
   const handleOverlayShow = () => setShow(true);
+  const handleDeleteClose = () => setDel(false);
   const handleChartClose = () => setChart(false);
   const handleChartShow = () => setChart(true);
 
@@ -72,6 +75,17 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
     handleOverlayShow()
   }
 
+  const onDeleteClick = () => {
+    setDel(true);
+    document.body.click()
+  }
+
+  const handleDelete = () => {
+    axios.delete(`http://localhost:8000/pipes/${pipeId}`, { params: { id: pipeId } }).then(res => console.log('DONE'))
+    setPipeIds(pipeIds.filter(pipe => pipe !== pipeId));
+    handleDeleteClose();
+  }
+
   const editPipeline = (
     <Popover>
       <Popover.Body>
@@ -85,7 +99,7 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
               <S.View src={View} />
               View microservices
             </S.EditOption>
-            <S.EditOption>
+            <S.EditOption onClick={onDeleteClick}>
               <S.View src={Delete} />
               Delete
             </S.EditOption>
@@ -126,6 +140,17 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
         </Modal.Header>
         <Modal.Body>
 
+        </Modal.Body>
+      </Modal>
+      <Modal show={del} onHide={handleDeleteClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Pipe</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Button onClick={handleDeleteClose}>Cancel</Button>
+            <Button variant="danger" onClick={handleDelete}>Delete</Button>
+          </div>
         </Modal.Body>
       </Modal>
     </>
