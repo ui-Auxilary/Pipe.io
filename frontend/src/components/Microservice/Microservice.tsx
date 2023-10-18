@@ -2,15 +2,15 @@ import S from './styles'
 import view from 'assets/view.svg'
 import Form from 'components/MultiStepForm/Form';
 import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import { Modal } from 'react-bootstrap';
 
-export default function Microservice({ id, code, name, docstring, param, parent_file }) {
-  console.log('INSIDE', id)
+export default function Microservice({ code, name, docstring, param, parent_file }) {
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);
+  const [id, setId] = useState();
 
   const handleEditClose = () => setEdit(false);
   const handleEditShow = () => setEdit(true);
@@ -29,10 +29,14 @@ export default function Microservice({ id, code, name, docstring, param, parent_
     }
   ]
 
+  useEffect(() => {
+    axios.post('http://localhost:8000/microservice/add', { "name": name, "parameters": param, "parent_file": parent_file, "code": code, "docstring": docstring }).then(res => setId(JSON.parse(res.data).id))
+  }, [])
+
   const { microserviceParam, microserviceData, setMicroserviceData } = useFormData();
   console.log('MICROSERVIEC DATA', microserviceParam);
 
-  const findAndUpdate = (name) => {
+  const findAndUpdate = (name: string) => {
     const foundIndex = microserviceData.microservices.findIndex(x => x.name == name);
     const updatedData = [...microserviceData.microservices]
     updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: microserviceParam[name] })
@@ -59,7 +63,6 @@ export default function Microservice({ id, code, name, docstring, param, parent_
     handleEditClose()
   }
 
-  console.log("PARAM", param)
   return (
     <>
       <S.Microservice>
