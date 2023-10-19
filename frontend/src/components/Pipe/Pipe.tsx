@@ -12,6 +12,7 @@ import { format} from 'date-fns';
 import Content from './Content'
 import axios from 'axios'
 import { useAppData } from 'helper/AppProvider'
+import Result from './Result/Result'
 
 export interface Props {
   pipeId: string
@@ -147,6 +148,7 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
           <Modal.Title>View Results</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <Result pipeId={pipeId} />
 
         </Modal.Body>
       </Modal>

@@ -38,6 +38,9 @@ dependencies:
   react-bootstrap:
     specifier: ^2.9.0
     version: 2.9.0(@types/react@18.2.23)(react-dom@18.2.0)(react@18.2.0)
+  react-bootstrap-pagination-control:
+    specifier: ^1.0.5
+    version: 1.0.5(@popperjs/core@2.11.8)(@types/react@18.2.23)(react-dom@18.2.0)(react@18.2.0)
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
@@ -3471,6 +3474,21 @@ packages:
   /queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
     dev: true
+
+  /react-bootstrap-pagination-control@1.0.5(@popperjs/core@2.11.8)(@types/react@18.2.23)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-6OW9NUz0CAYLZ3hBEBWkxEgHggGo/RcxW+Owo0D2FUkgwtWyDEH40gSwZf0hX3r36vl5WfOg1VYkzLPMv3Rqbw==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16'
+    dependencies:
+      bootstrap: 5.3.2(@popperjs/core@2.11.8)
+      react: 18.2.0
+      react-bootstrap: 2.9.0(@types/react@18.2.23)(react-dom@18.2.0)(react@18.2.0)
+    transitivePeerDependencies:
+      - '@popperjs/core'
+      - '@types/react'
+      - react-dom
+    dev: false
 
   /react-bootstrap@2.9.0(@types/react@18.2.23)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-dGh6fGjqR9MBzPOp2KbXJznt1Zy6SWepXYUdxMT18Zu/wJ73HCU8JNZe9dfzjmVssZYsJH9N3HHE4wAtQvNz7g==}
