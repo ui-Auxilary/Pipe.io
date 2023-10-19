@@ -96,9 +96,35 @@ const Label = styled.h6`
     font-size: 15px;
 `;
 
+const EditBox = styled.ul`
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+`;
+
+const EditOption = styled.li`
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+    font-weight: 500;
+    gap: 12px;
+
+    &: hover {
+        border-radius: 5px;
+        padding: 5px;
+        background: rgba(0, 191, 255, 0.2);
+        cursor: pointer;
+    }
+`;
+
 export default {
     Button,
     Edit,
+    EditOption,
+    EditBox,
     Execute,
     View,
     Left,
