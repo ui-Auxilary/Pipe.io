@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import datetime
 
-def calculate_rsi(input_file_path, output_file_path, window_size, date_column, value_column):
+def calculate_rsi(input_file_path:str = 'stock_data.csv', output_file_path:str = 'rsi.csv', window_size: int =5 , date_column: str = 'Date', value_column:str = 'Open'):
     """Calculate the Relative Strength Index (RSI) for a given dataset.
 
     Args:
@@ -41,4 +41,3 @@ def calculate_rsi(input_file_path, output_file_path, window_size, date_column, v
     df.to_csv(output_file_path)
 
     return df
-#calculate_rsi("microservices/moving_average/stock_data.csv", "microservices/moving_average/rsi.csv", 14, "Date", "Close")
