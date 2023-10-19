@@ -109,8 +109,9 @@ def execute_pipe(id: str):
 
 @router.put("/pipes/{id}")
 def edit_pipe(id: str, pipe: Pipes):
+    new_pipe = dict(pipe)
     pipes_collection.find_one_and_update(
-        {"_id": ObjectId(id)}, {"$set": dict(pipe)})
+        {"_id": ObjectId(id)}, {"$set": {"name": new_pipe["name"], "description": new_pipe["description"]}})
 
 
 @router.delete("/pipes/{id}")

@@ -5,13 +5,17 @@ export interface AppProviderType {
     setUser: React.Dispatch<React.SetStateAction<string>>
     pipeIds: string[]
     setPipeIds: React.Dispatch<React.SetStateAction<string[]>>
+    editData: Record<string, NonNullable<unknown>>,
+    setEditData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>
 }
 
 export const AppProviderContext = createContext<AppProviderType>({
     user: "",
     setUser: () => { },
     pipeIds: [],
-    setPipeIds: () => { }
+    setPipeIds: () => { },
+    editData: {},
+    setEditData: () => { }
 });
 
 
@@ -24,10 +28,11 @@ interface ChildrenProps {
 }
 export default function AppProvider({ children }: ChildrenProps) {
     const [user, setUser] = useState("");
+    const [edit, setEdit] = useState({});
     const [pipeIds, setPipeIds] = useState<string[]>([]);
 
     return (
-        <AppProviderContext.Provider value={{ user, setUser, pipeIds, setPipeIds }}>
+        <AppProviderContext.Provider value={{ user, setUser, pipeIds, setPipeIds, edit, setEdit }}>
             {children}
         </AppProviderContext.Provider>
     )

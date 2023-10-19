@@ -63,6 +63,8 @@ export default function FormProvider({ children }: FormProviderProps) {
     console.log('NEW IDS', pipeIds)
     handleClose()
     setUserData({})
+    setMicroserviceData({})
+    setMicroserviceParam({})
   }
 
   return (

@@ -21,7 +21,9 @@ export interface Pipe {
 export default function PipeList() {
     const [pipes, setPipes] = useState([]);
     const { pipeIds } = useAppData();
+    const initialChecked = pipeIds.reduce((o, key) => ({ ...o, [key]: false }), {})
 
+    console.log(initialChecked, 'Init', pipeIds)
     useEffect(() => {
         axios.get('http://localhost:8000/pipes/list', {
             headers: {
