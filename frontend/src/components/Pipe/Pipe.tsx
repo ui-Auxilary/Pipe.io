@@ -80,8 +80,8 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
   }
 
   const handleDelete = () => {
-    axios.delete(`http://localhost:8000/pipes/${pipeId}`, { params: { id: pipeId } }).then(res => console.log('DONE'))
-    setPipeIds(pipeIds.filter(pipe => pipe !== pipeId));
+    axios.delete(`http://localhost:8000/pipes/${pipeId}`, { params: { id: pipeId } }).then(() => setPipeIds(pipeIds.filter(pipe => pipe !== pipeId)))
+
     handleDeleteClose();
   }
 
