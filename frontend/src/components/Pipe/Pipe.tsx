@@ -1,6 +1,6 @@
 import S from './style'
 import dots from 'assets/dots.svg'
-import { useRef, useState } from 'react'
+import React, { forwardRef, useRef, useState } from 'react'
 import { Button, Form, Modal, OverlayTrigger, Popover, Tooltip } from 'react-bootstrap'
 import View from 'assets/view.svg'
 import Pencil from 'assets/pencil.svg'
@@ -19,6 +19,9 @@ export interface Props {
   name: string
   description?: string
   checked?: boolean
+  onCheck(pipeId: string): () => {}
+  ref: React.MutableRefObject<never[]>
+  idx: number
 }
 
 
@@ -28,7 +31,7 @@ export interface ExecuteProps {
 }
 
 
-export default function Pipe({ pipeId, id, name, description }: Props) {
+const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx } : Props, ref) => {
   const [show, setShow] = useState(false);
   const [del, setDel] = useState(false);
   const [showChart, setChart] = useState(false);
@@ -37,8 +40,6 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
   const { pipeIds, setPipeIds } = useAppData();
 
   const [checked, setChecked] = useState(false);
-
-  const checkboxRef = useRef(null);
 
   const handleStatus = (status: string) => {
     switch (status) {
@@ -141,17 +142,17 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
     </Popover>
   );
 
-
+  
   return (
     <>
-      <S.Pipe onClick={() => setChecked(!checked)}>
+      <S.Pipe onClick={() =>  onCheck(pipeId, idx)}>
         <OverlayTrigger trigger="click" placement="bottom" overlay={editPipeline} rootClose>
           <S.Edit ref={target} src={dots} />
         </OverlayTrigger>
         <S.Top>
           <S.Left>
             <S.CheckboxContainer>
-              <S.Checkbox checked={checked} />
+              <S.Checkbox  onClick={() =>  onCheck(pipeId, idx)} defaultChecked={ref.current[idx]?.checked || false} ref={(el) => ref.current[idx] = el}/>
             </S.CheckboxContainer>
             <span>
             </span>
@@ -178,7 +179,6 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
         </Modal.Header>
         <Modal.Body>
           <Result pipeId={pipeId} />
-
         </Modal.Body>
       </Modal>
       <Modal show={del} onHide={handleDeleteClose}>
@@ -195,3 +195,5 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
     </>
   )
 }
+);
+export default Pipe;

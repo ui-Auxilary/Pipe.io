@@ -63,7 +63,7 @@ const Execute = styled.button<Props>`
     padding: 5px 20px;
     border: none;
     border-radius: 5px;
-    margin: 5px;
+    margin: 10px;
     font-weight: 600;
     color: #FFF;
 `
@@ -145,10 +145,10 @@ const CheckboxContainer = styled.div`
 const Checkbox = styled.input.attrs({
     type: 'checkbox'
 })`
-    display: ${props => props.checked ? 'inline-block' : 'none'};;
+    display: ${props => props.defaultChecked ? 'inline-block' : 'none'};
     width: 1em;
     height: 1em;
-    background: ${props => props.checked ? '#fff' : '#000'};
+    background: ${props => props.defaultChecked ? '#fff' : '#000'};
     border: none; 
     border: solid 1px #ccc;
     border-radius: 10px;
