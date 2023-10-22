@@ -12,19 +12,11 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
     const { setMicroserviceData, microserviceData } = useFormData();
     const { edit, setPipeIds } = useAppData();
 
-
-    useEffect(() => {
-        console.log('New', edit)
-
-    }, [edit])
-
     const findAndUpdate = (name: string) => {
         const foundIndex = (microserviceData.microservices as []).findIndex(x => x.name == name);
         const updatedData = [...microserviceData.microservices as []]
 
- 
         let newParams = {...data.parameters}
-        console.log("NEW PARAMS", data.parameters);
 
         // for loop  to find matching keys  between edit[id] and params
         for (const [key, value] of Object.entries(edit[id])) {
@@ -70,6 +62,5 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
                 <S.Button onClick={() => handleSave()}>Save</S.Button>
             </Modal.Footer>
         </Modal>
-
     )
 }
