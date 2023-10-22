@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import { Modal } from 'react-bootstrap';
+import Edit from 'components/Edit';
 
 export default function Microservice({ code, name, docstring, param, parent_file }) {
   const [showEdit, setEdit] = useState(false);
@@ -18,11 +19,10 @@ export default function Microservice({ code, name, docstring, param, parent_file
   const handleCodeShow = () => setCode(true);
 
   const items = param && Object.keys(param).map((el) => (
-    { label: el, "type": "edit_param", id: name }
+    { label: el, "type": "edit_param", id: id }
   ))
 
-
-  const questionsList = [
+  const microserviceList = [
     {
       section: 1,
       items: items
@@ -32,49 +32,12 @@ export default function Microservice({ code, name, docstring, param, parent_file
   useEffect(() => {
     axios.post('http://localhost:8000/microservice/add', { "name": name, "parameters": param, "parent_file": parent_file, "code": code, "docstring": docstring }).then(res => setId(JSON.parse(res.data).id))
   }, [])
-
-  const { microserviceParam, microserviceData, setMicroserviceData } = useFormData();
-  console.log('MICROSERVIEC DATA', microserviceParam);
-
-  const findAndUpdate = (name: string) => {
-    const foundIndex = microserviceData.microservices.findIndex(x => x.name == name);
-    const updatedData = [...microserviceData.microservices]
-    updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: microserviceParam[name] })
-    setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
-  }
-
-  const findAndCompareParameters = (name: string) => {
-    const foundIndex = microserviceData.microservices.findIndex(x => x.name == name);
-    if (foundIndex !== -1) {
-      const microservice = microserviceData.microservices[foundIndex];
-      const parameters = microservice.parameters;
-
-      return parameters;
-    }
-  }
-
-  const handleSave = () => {
-    const data = {
-      parent_file: parent_file,
-      name: name,
-      code: code,
-      parameters: microserviceParam[name],
-      docstring: docstring,
-    }
-    
-
-    setMicroserviceData({ ...microserviceData, })
-
-    findAndCompareParameters(name)
-
-
-    findAndUpdate(name)
-    axios.put(`http://localhost:8000/microservice/${id}`, data).then((res) => {
-      console.log(res)
-    }).catch((err) => {
-      console.log(err)
-    })
-    handleEditClose()
+  
+  const data = {
+    parent_file: parent_file,
+    name: name,
+    code: code,
+    docstring: docstring,
   }
 
   return (
@@ -95,24 +58,13 @@ export default function Microservice({ code, name, docstring, param, parent_file
       </S.Microservice>
 
 
-      <Modal show={showEdit} onHide={handleEditClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form questions={questionsList} step={0} />
-        </Modal.Body>
-        <Modal.Footer>
-          <S.Button onClick={() => handleSave()}>Save</S.Button>
-        </Modal.Footer>
-      </Modal>
-
+      <Edit id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />
       <Modal show={showCode} onHide={handleCodeClose}>
         <Modal.Header closeButton>
           <Modal.Title>Code</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <code>{code.split('\n').map((line) => <p>{line}</p>)}</code>
+          <code>{code.split('\n').map((line: string) => <p>{line}</p>)}</code>
         </Modal.Body>
       </Modal>
     </>

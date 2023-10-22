@@ -4,7 +4,7 @@ import sys
 
 from typing import Annotated
 from fastapi import APIRouter, UploadFile, File
-from server.models.microservices import Microservice
+from server.models.microservices import Microservice, EditMicroservice
 from server.models.microservices import FileContent
 from server.database import microservices_collection
 from server.schemas.schemas import list_microservices_serial
@@ -32,9 +32,11 @@ async def add_microservice(microservice: Microservice):
 
 
 @router.put("/microservice/{id}")
-async def edit_microservice(id: str, microservice: Microservice):
+async def edit_microservice(id: str, microservice: EditMicroservice):
+    new_microservice = dict(microservice)
+    print("Test", new_microservice, new_microservice["parameters"])
     microservices_collection.find_one_and_update(
-        {"_id": ObjectId(id)}, {"$set": dict(microservice)})
+        {"_id": ObjectId(id)}, {"$set": {"parameters": new_microservice["parameters"]}})
 
 
 @router.delete("/microservice/{id}")
