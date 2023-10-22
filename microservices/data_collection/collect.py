@@ -20,6 +20,9 @@ import yfinance as yf
 
 
 def import_yahoo(ticker: str = 'msft',
+                 start_date: str = (datetime.datetime.now(
+                 ) - datetime.timedelta(days=365)).strftime("%Y-%m-%d"),
+                 end_date: str = datetime.datetime.now().strftime("%Y-%m-%d"),
                  output_file_path: str = 'stock_data.csv'):
     """Imports market data from Yahoo using the yfinance Ticker API.
 
@@ -32,14 +35,11 @@ def import_yahoo(ticker: str = 'msft',
     Returns:
         pd.DataFrame: A dataframe containing the imported market data.
     """
-    start_date: str = datetime.datetime.now(
-    ) - datetime.timedelta(days=365)
-    end_date: str = datetime.datetime.now()
     ticker = yf.Ticker(ticker)
-    df = ticker.history(start=start_date, end=end_date, interval="1d")
-    df['Datetime'] = df.index
 
-    print("OOGA BOOGA", os.getcwd())
+    df = ticker.history(start=start_date, end=end_date, interval="1d")
+    df[0] = df.index
+
     # Save the dataframe to our storage location
     df.to_csv(output_file_path)
 
