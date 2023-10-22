@@ -18,11 +18,23 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
 
     }, [edit])
 
-        const findAndUpdate = (name: string) => {
+    const findAndUpdate = (name: string) => {
         const foundIndex = (microserviceData.microservices as []).findIndex(x => x.name == name);
         const updatedData = [...microserviceData.microservices as []]
-        updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: edit[id] })
+
+ 
+        let newParams = {...data.parameters}
+        console.log("NEW PARAMS", data.parameters);
+
+        // for loop  to find matching keys  between edit[id] and params
+        for (const [key, value] of Object.entries(edit[id])) {
+            newParams[key].default = value;
+        }
+
+        updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: newParams })
+        console.log("EDITID: ", newParams);
         setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
+        return newParams
     }
 
     const handleSave = () => {
@@ -36,8 +48,8 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
                 })
                 break;
             default:
-                findAndUpdate(data["name"])
-                axios.put(`http://localhost:8000/microservice/${id}`, {"parameters": edit[id]}).then((res) => {
+                let updated =findAndUpdate(data["name"])
+                axios.put(`http://localhost:8000/microservice/${id}`, {"parameters": updated}).then((res) => {
                     console.log(res)
                 }).catch((err) => {
                     console.log(err)

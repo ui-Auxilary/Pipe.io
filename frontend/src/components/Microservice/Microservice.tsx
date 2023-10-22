@@ -31,13 +31,17 @@ export default function Microservice({ code, name, docstring, param, parent_file
 
   useEffect(() => {
     axios.post('http://localhost:8000/microservice/add', { "name": name, "parameters": param, "parent_file": parent_file, "code": code, "docstring": docstring }).then(res => setId(JSON.parse(res.data).id))
+
+    console.log('First param', param)
   }, [])
-  
+
+  console.log('PRE', param)
   const data = {
     parent_file: parent_file,
     name: name,
     code: code,
     docstring: docstring,
+    parameters: param
   }
 
   return (
