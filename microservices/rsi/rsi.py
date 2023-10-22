@@ -16,6 +16,7 @@ def calculate_rsi(input_file_path:str = 'stock_data.csv', output_file_path:str =
         pd.DataFrame: Dataframe with RSI values.
     """
     # Read the input CSV file
+    input_file_path = os.path.join('/backend/data/', input_file_path)
     df = pd.read_csv(input_file_path)
     df[date_column] = pd.to_datetime(df[date_column])
     df = df.sort_values(by=[date_column])
