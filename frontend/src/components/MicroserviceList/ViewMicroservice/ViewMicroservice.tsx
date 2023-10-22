@@ -7,6 +7,7 @@ import Microservice from 'components/Microservice';
 export default function ViewMicroservice() {
     const { microserviceData } = useFormData()
     const { microservices } = microserviceData
+    console.log('##Microsevices', microservices)
 
     let len = microservices ? (microservices as []).length : 0
     return (
