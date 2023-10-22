@@ -40,7 +40,8 @@ def extract_microservice(python_file=None) -> str:
             if param.default is param.empty:
                 params[param.name] = None
             else:
-                params[param.name] = param.default
+                param_info = {'default': param.default,'type': param.annotation.__name__ if param.annotation != param.empty else None}
+                params[param.name] = param_info
 
         doc = inspect.getdoc(microservice_function)
         microservice_json['microservices'].append({
