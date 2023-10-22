@@ -19,9 +19,8 @@ export default function Microservice({ code, name, docstring, param, parent_file
   const handleCodeShow = () => setCode(true);
 
   const items = param && Object.keys(param).map((el) => (
-    { label: el, "type": "edit_param", id: name }
+    { label: el, "type": "edit_param", id: id }
   ))
-
 
   const microserviceList = [
     {
@@ -33,14 +32,11 @@ export default function Microservice({ code, name, docstring, param, parent_file
   useEffect(() => {
     axios.post('http://localhost:8000/microservice/add', { "name": name, "parameters": param, "parent_file": parent_file, "code": code, "docstring": docstring }).then(res => setId(JSON.parse(res.data).id))
   }, [])
-
-  const { microserviceParam, microserviceData, setMicroserviceData } = useFormData();
-
+  
   const data = {
     parent_file: parent_file,
     name: name,
     code: code,
-    parameters: microserviceParam[name],
     docstring: docstring,
   }
 

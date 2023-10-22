@@ -9,8 +9,8 @@ import { useAppData } from "helper/AppProvider";
 
 export default function Edit({ id, show, params, data, closeOverlay, type = "microservice" }) {
     console.log("IN EDIT", show, params, data)
-    const { setMicroserviceData, microserviceData, microserviceParam, setMicroserviceParam } = useFormData();
-    const { edit, setEditData, pipeIds, setPipeIds } = useAppData();
+    const { setMicroserviceData, microserviceData } = useFormData();
+    const { edit, setPipeIds } = useAppData();
 
 
     useEffect(() => {
@@ -18,13 +18,10 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
 
     }, [edit])
 
-
-    const findAndUpdate = (name: string) => {
-        console.log('Looking for', name)
-        console.log('Check param', microserviceParam)
+        const findAndUpdate = (name: string) => {
         const foundIndex = (microserviceData.microservices as []).findIndex(x => x.name == name);
         const updatedData = [...microserviceData.microservices as []]
-        updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: microserviceParam[name] })
+        updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: edit[id] })
         setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
     }
 
@@ -39,8 +36,8 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
                 })
                 break;
             default:
-                findAndUpdate(data?.name)
-                axios.put(`http://localhost:8000/microservice/${id}`, data).then((res) => {
+                findAndUpdate(data["name"])
+                axios.put(`http://localhost:8000/microservice/${id}`, {"parameters": edit[id]}).then((res) => {
                     console.log(res)
                 }).catch((err) => {
                     console.log(err)

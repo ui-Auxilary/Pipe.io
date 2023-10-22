@@ -18,7 +18,7 @@ export interface Props {
 
 // Update based on question list to render specific component
 export default function FormItem({ item }: Props) {
-  const { setUserData, userData, setMicroserviceParam, microserviceParam } = useFormData();
+  const { setUserData, userData } = useFormData();
   const { edit, setEdit } = useAppData();
 
   switch (item.type) {
@@ -47,23 +47,12 @@ export default function FormItem({ item }: Props) {
         <ViewMicroservice />
       );
     case 'edit_param':
-
-      switch (item.value) {
-        case 'pipe':
-          return (
-            <>
-              <S.Label>{item.label}</S.Label>
-              <S.Input value={edit[item.id] ? edit[item.id][item.label.toLocaleLowerCase()] : ''} onChange={(e) => setEdit({ ...edit, [item.id]: { ...edit[item.id], [item.label.toLocaleLowerCase()]: e.target.value } })} />
-            </>
-          );
-        default:
-          return (
-            <>
-              <S.Label>{item.label}</S.Label>
-              <S.Input value={microserviceParam[item.id] && microserviceParam[item.id][item.label.toLocaleLowerCase()]} onChange={(e) => setMicroserviceParam({ ...microserviceParam, [item.id]: { ...microserviceParam[item.id], [item.label.toLocaleLowerCase()]: e.target.value } })} />
-            </>
-          );
-      }
+      return (
+        <>
+          <S.Label>{item.label}</S.Label>
+          <S.Input value={edit[item.id] ? edit[item.id][item.label.toLocaleLowerCase()] : ''} onChange={(e) => setEdit({ ...edit, [item.id]: { ...edit[item.id], [item.label.toLocaleLowerCase()]: e.target.value } })} />
+        </>
+      );
   }
 
   return (
