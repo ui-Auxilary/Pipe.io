@@ -16,3 +16,11 @@ calls required for the frontend, and began development of the frontend UI accord
 Week 4
 Created models for pipes and microservices. Set up working CRUD routes for them and hooked the backend to the frontend. On the frontend created a dynamic
 multi-step form with upload_file functionality which is sent to the backend and parsed. Rendered the backend pipes on the frontend in a dynamic list.
+
+Week 5
+Changed design of pipe to show status, and be executable multiple times rather than executing output after creation. Worked on cleaning up code/refactoring
+and tried to implement form validation (still in progress).
+
+Week 6
+Refactored editing microservices logic to work with editing pipelines as well, changed view result button to view output from microservices after exection and a paginated display of the results.
+Added select-all and delete functionality for pipes, and togglable tooltip to edit pipelines, view microservices or delete a pipe. 
