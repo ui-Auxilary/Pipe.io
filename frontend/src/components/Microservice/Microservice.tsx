@@ -43,6 +43,16 @@ export default function Microservice({ code, name, docstring, param, parent_file
     setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
   }
 
+  const findAndCompareParameters = (name: string) => {
+    const foundIndex = microserviceData.microservices.findIndex(x => x.name == name);
+    if (foundIndex !== -1) {
+      const microservice = microserviceData.microservices[foundIndex];
+      const parameters = microservice.parameters;
+
+      return parameters;
+    }
+  }
+
   const handleSave = () => {
     const data = {
       parent_file: parent_file,
@@ -51,8 +61,12 @@ export default function Microservice({ code, name, docstring, param, parent_file
       parameters: microserviceParam[name],
       docstring: docstring,
     }
+    
 
     setMicroserviceData({ ...microserviceData, })
+
+    findAndCompareParameters(name)
+
 
     findAndUpdate(name)
     axios.put(`http://localhost:8000/microservice/${id}`, data).then((res) => {
