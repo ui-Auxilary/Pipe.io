@@ -3,6 +3,7 @@ import view from 'assets/view.svg'
 import Form from 'components/MultiStepForm/Form';
 import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
 import { useEffect, useState } from 'react';
+import Select from 'react-select';
 import axios from 'axios';
 
 import { Modal } from 'react-bootstrap';
@@ -11,6 +12,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);
   const [id, setId] = useState();
+  const [selectedTags, setSelectedTags] = useState([]);
 
   const handleEditClose = () => setEdit(false);
   const handleEditShow = () => setEdit(true);
@@ -20,6 +22,14 @@ export default function Microservice({ code, name, docstring, param, parent_file
   const items = param && Object.keys(param).map((el) => (
     { label: el, "type": "edit_param", id: name }
   ))
+
+  const tagOptions = [
+    { value: 'value', label: 'Value' },
+    { value: 'ml', label: 'ML' },
+    { value: 'data_frame', label: 'Dataframe' },
+    { value: 'graph', label: 'Graph'}
+  ];
+  
 
 
   const questionsList = [
@@ -50,6 +60,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
       code: code,
       parameters: microserviceParam[name],
       docstring: docstring,
+      output_type: selectedTags.value
     }
 
     setMicroserviceData({ ...microserviceData, })
@@ -72,6 +83,15 @@ export default function Microservice({ code, name, docstring, param, parent_file
               <h5 style={{ flex: 1 }}>{name}</h5>
               <span style={{ color: "#B6A4A4" }}>#001</span>
             </S.Label>
+            <S.Tag>
+              <Select
+                options={tagOptions}
+                value={selectedTags}
+                onChange={setSelectedTags}
+                placeholder="Select Output Type"
+                style = {{minWidth: "200px", maxWidth: "200px"}}
+              />
+            </S.Tag>
           </div>
         </S.Left>
         <div>

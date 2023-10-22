@@ -2,6 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 import S from './styles'
+import ChartComponent from "components/Visualization/Visualization";
 
 export default function Result({ pipeId }: { pipeId: string }) {
     const [page, setPage] = useState(1);
@@ -29,7 +30,8 @@ export default function Result({ pipeId }: { pipeId: string }) {
             <h5>{pageContent && <p>{pageContent["name"]} </p>}</h5>
             <S.Body>
                 <h6>Output:</h6>
-                {pageContent && pageContent["output"]}
+                {checkForStockData(result) && <ChartComponent stockName={pipeId} />}
+                {pageContent && !checkForStockData(result) && pageContent["output"]}
             </S.Body>
             {result?.output &&
                 <PaginationControl
@@ -42,6 +44,15 @@ export default function Result({ pipeId }: { pipeId: string }) {
                     ellipsis={1}
                 />
             }
+            
         </div>
     )
+}
+
+// will need to generalise this later
+function checkForStockData(result: any) {
+    if (result.output && result.output.import_yahoo) {
+        return true;
+    }
+    return false;
 }

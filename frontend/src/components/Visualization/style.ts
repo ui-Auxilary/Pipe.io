@@ -1,13 +1,8 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-  background: #5a279b;
-  color: #fff;
-  width: 10%;
   display: flex;
   align-items: flex-start;
-  height: 100vh;
-  flex-direction: column;
   justify-content: space-between;
 `;
 
