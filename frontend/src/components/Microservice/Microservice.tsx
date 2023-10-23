@@ -13,6 +13,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);
   const [id, setId] = useState();
+  const [microservices, setMicroservices] = useState([]);
 
   const handleEditClose = () => setEdit(false);
   const handleEditShow = () => setEdit(true);
@@ -32,6 +33,19 @@ export default function Microservice({ code, name, docstring, param, parent_file
 
   useEffect(() => {
     !from_pipe && axios.post('http://localhost:8000/microservice/add', { "name": name, "parameters": param, "parent_file": parent_file, "code": code, "docstring": docstring }).then(res => setId(JSON.parse(res.data).id))
+
+    if (from_pipe) {
+      axios.get('http://localhost:8000/microservice/list', {
+          headers: {
+              "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+          }
+      }).then(res => {    
+          console.log("MICROSERVICES", res.data)
+          setMicroservices(res.data)
+      }).catch(err => console.log(err))
+      setId(microservices.filter(micro => micro.name == name)[0].id)
+      /** TODO from line 37 to 46 is me trying to retrieve (unsuccesfully?) the id of the microservice object */
+    }
   }, [])
   
   const data = {
