@@ -1,4 +1,7 @@
 import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from dateutil.parser import parse
 
 def drop_column(input_file_path: str = 'stock_data.csv', output_file_path: str = 'stock_data.csv', columns: str = ''):
     """Drops specified columns from csv
@@ -18,7 +21,7 @@ def drop_column(input_file_path: str = 'stock_data.csv', output_file_path: str =
         try:
             df = df.drop(columns=[column])
         except KeyError:
-            pass
+            raise ValueError("Column(s) not found")
     
     df.to_csv(output_file_path)
     return df.to_json()
@@ -36,9 +39,9 @@ def sort_column(input_file_path: str = 'stock_data.csv', output_file_path: str =
     """
     df = pd.read_csv(input_file_path, index_col=0)
     combined_column_list = [s.strip() for s in columns.split(',')]
+    # column list and corresponding ascending list which specifies whether the column list item is to be ascending
     ascending_list = []
     column_list = []
-    # column list and corresponding ascending list which specifies whether the column list item is to be ascending
     for col in combined_column_list:
         if col[-3:].lower() == "asc" and col[:-3].strip() in df:
             ascending_list.append(True)
@@ -49,6 +52,8 @@ def sort_column(input_file_path: str = 'stock_data.csv', output_file_path: str =
         elif col in df:
             ascending_list.append(True)
             column_list.append(col)
+        else:
+            raise ValueError(f"Column {col} not found")
 
     if column_list:
         df = df.sort_values(by=column_list, ascending=ascending_list)
@@ -73,7 +78,52 @@ def merge_csv(input_file_path_1: str = 'stock_data.csv', input_file_path_2: str 
     df1 = pd.read_csv(input_file_path_1, index_col=0)
     df2 = pd.read_csv(input_file_path_2, index_col=0)
     
-    df3 = df1.merge(df2, left_on = left_on, right_on = right_on)
+    try:
+        df3 = df1.merge(df2, left_on = left_on, right_on = right_on)
+    except KeyError:
+        raise ValueError("Column(s) not found")
 
     df3.to_csv(output_file_path)
     return df3.to_json()
+
+def is_date(string, fuzzy=False):
+    """
+    Return whether the string can be interpreted as a date.
+
+    :param string: str, string to check for date
+    :param fuzzy: bool, ignore unknown tokens in string if True
+
+    Sourced from https://stackoverflow.com/questions/25341945/check-if-string-has-date-any-format
+    """
+    try: 
+        parse(string, fuzzy=fuzzy)
+        return True
+
+    except ValueError:
+        return False
+
+def plot_data(input_file_path: str = 'stock_data.csv', x_axis: str ='Date', y_axis: str ='Close'):
+    stock_data = pd.read_csv(input_file_path)
+    try:
+        if "date" in x_axis.lower():
+            x = mdates.num2date(mdates.datestr2num(stock_data[x_axis]))
+        else:
+            x = stock_data[x_axis]
+        if "date" in y_axis.lower():
+            y = mdates.num2date(mdates.datestr2num(stock_data[y_axis]))
+        else:
+            y = stock_data[y_axis]
+    except(KeyError):
+        raise ValueError("Column(s) not found")
+    plt.plot(x, y)
+    plt.xlabel(x_axis)
+    plt.ylabel(y_axis)
+    plt.title('Data comparison')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+
+    # Save the chart to a file (optional)
+    plt.savefig('stock_chart.png')
+
+    # Show the chart (optional)
+    # plt.show()
