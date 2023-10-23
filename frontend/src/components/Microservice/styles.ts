@@ -36,7 +36,7 @@ const Button = styled.button`
 `
 
 const Tag = styled.div`
-    width: 150px;
+    width: 200px;
 `
 
 export default {

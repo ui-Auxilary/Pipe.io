@@ -3,6 +3,7 @@ import Dropzone from 'components/Dropzone';
 import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
 import MicroserviceList from 'components/MicroserviceList';
 import ViewMicroservice from 'components/MicroserviceList/ViewMicroservice';
+import { useAppData } from 'helper/AppProvider';
 
 export interface Item {
   label: string
@@ -17,8 +18,8 @@ export interface Props {
 
 // Update based on question list to render specific component
 export default function FormItem({ item }: Props) {
-  const { setUserData, userData, setMicroserviceParam, microserviceParam } = useFormData();
-
+  const { setUserData, userData } = useFormData();
+  const { edit, setEdit } = useAppData();
 
   switch (item.type) {
     case 'text':
@@ -49,7 +50,7 @@ export default function FormItem({ item }: Props) {
       return (
         <>
           <S.Label>{item.label}</S.Label>
-          <S.Input value={microserviceParam[item.id] && microserviceParam[item.id][item.label.toLocaleLowerCase()]} onChange={(e) => setMicroserviceParam({ ...microserviceParam, [item.id]: { ...microserviceParam[item.id], [item.label.toLocaleLowerCase()]: e.target.value } })} />
+          <S.Input value={edit[item.id] ? edit[item.id][item.label.toLocaleLowerCase()] : ''} onChange={(e) => setEdit({ ...edit, [item.id]: { ...edit[item.id], [item.label.toLocaleLowerCase()]: e.target.value } })} />
         </>
       );
   }
