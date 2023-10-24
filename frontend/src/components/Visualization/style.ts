@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
 `;
 
@@ -33,6 +33,11 @@ const ButtonContainer = styled.div`
   flex-direction: column;
 `;
 
+const GraphContainer = styled.div`
+  overflow-y: hidden;
+  max-width: 1600px;
+`;
+
 
 export default {
   Container,
@@ -40,4 +45,5 @@ export default {
   UserContainer,
   UserImg,
   ButtonContainer,
+  GraphContainer,
 };
