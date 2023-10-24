@@ -17,11 +17,9 @@ export interface FormContextType {
   setStep: React.Dispatch<React.SetStateAction<number>>
   userData: Record<string, NonNullable<unknown>>
   setUserData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>
-  microserviceData: Record<string, NonNullable<unknown>>
+  microserviceData: Record<string, NonNullable<unknown> | []>
   setMicroserviceData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>,
-  submitData(func?: NonNullable<unknown>): void,
-  microserviceParam: Record<string, NonNullable<unknown>>,
-  setMicroserviceParam: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>
+  submitData(func?: NonNullable<unknown>): void
 }
 
 export const multiFormContext = createContext<FormContextType>({
@@ -31,9 +29,7 @@ export const multiFormContext = createContext<FormContextType>({
   setUserData: () => { },
   microserviceData: {},
   setMicroserviceData: () => { },
-  submitData: () => { },
-  microserviceParam: {},
-  setMicroserviceParam: () => { }
+  submitData: () => { }
 });
 
 
@@ -49,12 +45,11 @@ export default function FormProvider({ children }: FormProviderProps) {
   const [currentStep, setStep] = useState<number>(1);
   const [userData, setUserData] = useState<UserData>({})
   const [microserviceData, setMicroserviceData] = useState<MicroserviceData>({});
-  const [microserviceParam, setMicroserviceParam] = useState<MicroserviceData>({});
 
   const { user, setPipeIds, pipeIds } = useAppData()
 
   const submitData = (handleClose) => {
-    console.log('USER', getUser())
+    console.log('USER', getUser(), microserviceData)
     axios.post('http://localhost:8000/pipes/create', Object.assign({ user_id: user, microservices: microserviceData.microservices }, userData), {
       headers: {
         "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
@@ -63,10 +58,11 @@ export default function FormProvider({ children }: FormProviderProps) {
     console.log('NEW IDS', pipeIds)
     handleClose()
     setUserData({})
+    setMicroserviceData({})
   }
 
   return (
-    <multiFormContext.Provider value={{ currentStep, setStep, userData, setUserData, microserviceData, setMicroserviceData, submitData, microserviceParam, setMicroserviceParam }}>
+    <multiFormContext.Provider value={{ currentStep, setStep, userData, setUserData, microserviceData, setMicroserviceData, submitData }}>
       {children}
     </multiFormContext.Provider>
   )

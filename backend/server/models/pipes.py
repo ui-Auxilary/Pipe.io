@@ -9,3 +9,5 @@ class Pipes(BaseModel):
     status: Optional[str] = Field(None)
     user_id: Optional[str] = Field(None)
     microservices: Optional[list] = Field([])
+    output: Optional[dict] = Field({})
+    last_executed: Optional[str] = Field(None)
