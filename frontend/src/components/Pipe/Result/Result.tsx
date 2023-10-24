@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 import S from './styles'
 import ChartComponent from "components/Visualization/Visualization";
+import Download from "./Download/Download";
 
 export default function Result({ pipeId }: { pipeId: string }) {
     const [page, setPage] = useState(1);
@@ -28,12 +29,13 @@ export default function Result({ pipeId }: { pipeId: string }) {
     }, [page])
 
     return (
-        <div>
+        <S.Container>
             <h5>{pageContent && <p>{pageContent["name"]} </p>}</h5>
             <S.Body>
                 <h6>Output:</h6>
                 {checkForStockData(result, pageContent) && <ChartComponent index={page-1} name={pageContent["name"]} pipeId={pipeId} data={pageContent.output} />}
-                {pageContent && !checkForStockData(result, pageContent) && pageContent["output"]}
+                {pageContent && checkForValue(result, pageContent) && pageContent["output"]}
+                {checkForPlot(result, pageContent) && <Download pipeId={pipeId} output={pageContent["output"]} />}
             </S.Body>
             {result?.output &&
                 <PaginationControl
@@ -47,13 +49,28 @@ export default function Result({ pipeId }: { pipeId: string }) {
                 />
             }
             
-        </div>
+        </S.Container>
     )
 }
 
 // will need to generalise this later
 function checkForStockData(result: any, pageContent: any) {
     if (result.output && pageContent.output_type == "graph") {
+        return true;
+    }
+    return false;
+}
+
+// check for plot download
+function checkForPlot(result: any, pageContent: any) {
+    if (result.output && pageContent.output_type == "plot") {
+        return true;
+    }
+    return false;
+}
+
+function checkForValue(result: any, pageContent: any) {
+    if (result.output && pageContent.output_type == "value") {
         return true;
     }
     return false;

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Body = styled.div`
-    width: 100%;
+    max-width: 1800px;
     min-height: 400px;
     max-height: 800px;
     background: #F8E5E5;
@@ -11,6 +11,11 @@ const Body = styled.div`
     overflow-y: auto;
 `;
 
+const Container = styled.div`
+    max-width: 1800px;
+`;
+
 export default {
-    Body
+    Body,
+    Container,
 }

@@ -32,7 +32,8 @@ export default function Microservice({ code, name, docstring, param, parent_file
     { value: 'ml', label: 'ML' },
     { value: 'data_frame', label: 'Dataframe' },
     { value: 'graph', label: 'Graph'},
-    { value: 'csv', label: 'CSV'}
+    { value: 'csv', label: 'CSV'},
+    { value: 'plot', label: 'Plot File'}
   ];
   
 
