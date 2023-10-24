@@ -15,9 +15,9 @@ export default function ViewMicroservice() {
             <S.Container>
                 <span style={{ color: "#907F7F", fontWeight: 500 }}>Found {len} microservice(s)</span>
                 <S.Scrollbar>
-                    {microservices && microservices.map(({ code, doc, name, parameters, parent_file }, index) => {
+                    {microservices && microservices.map(({ code, doc, name, parameters, parent_file, output_type }, index) => {
                         console.log('hey loop')
-                        return <Microservice code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file} />
+                        return <Microservice code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file} output_type={output_type} />
                     })}
                 </S.Scrollbar>
             </S.Container>
