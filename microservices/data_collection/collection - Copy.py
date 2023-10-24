@@ -56,30 +56,3 @@ def import_yahoo(ticker: str = 'msft',
     return ret
 
 
-def plot_data(x_axis: str, y_axis: str):
-    """Plots the data from the csv file
-
-    Args:
-        x_axis (str): The column name for the x-axis
-        y_axis (str): The column name for the y-axis
-
-    Returns:
-        plotly.graph_objects.Figure: A plotly figure object
-    """
-    
-    directory = os.getcwd()
-
-    # read all csv files in the direcotry
-    files = os.listdir(directory)
-    csv_files = [file for file in files if file.endswith(".csv")]
-    file_names = {}
-
-    # read the csv files and plot
-    for file in csv_files:
-        df = pd.read_csv(file)
-        fig = plotly.graph_objects.Figure(data=plotly.graph_objects.Scatter(x=df[x_axis], y=df[y_axis]))
-        # plotly.offline.plot(fig, filename=file[:-4] + ".html")
-        html_code = plotly.offline.plot(fig, include_plotlyjs=True, output_type='div')
-        file_names[file[:-4]] = html_code
-
-    return json.dumps(file_names, indent=4)
