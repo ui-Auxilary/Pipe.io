@@ -9,11 +9,14 @@ import axios from 'axios';
 import { Modal } from 'react-bootstrap';
 import Edit from 'components/Edit';
 
-export default function Microservice({ code, name, docstring, param, parent_file }) {
+export default function Microservice({ code, name, docstring, param, parent_file}) {
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);
   const [id, setId] = useState();
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState("value");
+
+  const { setMicroserviceData, microserviceData } = useFormData();
+
 
   const handleEditClose = () => setEdit(false);
   const handleEditShow = () => setEdit(true);
@@ -41,8 +44,25 @@ export default function Microservice({ code, name, docstring, param, parent_file
   ]
 
   useEffect(() => {
-    axios.post('http://localhost:8000/microservice/add', { "name": name, "parameters": param, "parent_file": parent_file, "code": code, "docstring": docstring }).then(res => setId(JSON.parse(res.data).id))
+    axios.post('http://localhost:8000/microservice/add', { "name": name, "parameters": param, "parent_file": parent_file, "code": code, "docstring": docstring, "output_type": selectedTags }).then(res => setId(JSON.parse(res.data).id))
   }, [])
+
+  const handleTagChange = (e: any) => {
+    setSelectedTags(e);
+    const foundIndex = (microserviceData.microservices as []).findIndex(x => x.name == data["name"]);
+    const updatedData = [...microserviceData.microservices as []]
+    updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { output_type: e })
+    setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
+    data["output_type"] = e
+    axios.put(`http://localhost:8000/microservice/${id}`, {"output_type": selectedTags.value}).then((res) => {
+      console.log(res)
+    }).catch((err) => {
+      console.log(err)
+    });
+    console.log("TESTING", microserviceData);
+  }
+
+  
   
   const data = {
     parent_file: parent_file,
@@ -50,7 +70,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
     code: code,
     docstring: docstring,
     parameters: param,
-    output_type: selectedTags
+    output_type: selectedTags.value
   }
 
   return (
@@ -66,7 +86,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
               <Select
                 options={tagOptions}
                 value={selectedTags}
-                onChange={setSelectedTags}
+                onChange={handleTagChange}
                 placeholder="Select Output Type"
                 style = {{minWidth: "200px", maxWidth: "200px"}}
               />
