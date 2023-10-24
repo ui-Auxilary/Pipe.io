@@ -7,7 +7,7 @@ import { Modal } from "react-bootstrap"
 import S from './styles'
 import { useAppData } from "helper/AppProvider";
 
-export default function Edit({ id, show, params, data, closeOverlay, type = "microservice" }) {
+export default function Edit({ id, show, params, data, closeOverlay, type = "microservice"}) {
     console.log("IN EDIT", show, params, data)
     const { setMicroserviceData, microserviceData } = useFormData();
     const { edit, setPipeIds } = useAppData();
@@ -15,13 +15,12 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
 
     useEffect(() => {
         console.log('New', edit)
-
     }, [edit])
 
-        const findAndUpdate = (name: string) => {
+    const findAndUpdate = (name: string) => {
         const foundIndex = (microserviceData.microservices as []).findIndex(x => x.name == name);
         const updatedData = [...microserviceData.microservices as []]
-        updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: edit[id] })
+        updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: edit[id] }, { output_type: data.output_type })
         setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
     }
 
