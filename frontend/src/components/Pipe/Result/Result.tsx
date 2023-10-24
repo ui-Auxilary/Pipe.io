@@ -13,7 +13,8 @@ export default function Result({ pipeId }: { pipeId: string }) {
         axios.get(`http://localhost:8000/pipes/${pipeId}`).then(res => {
             setResult(res.data)
             let output = Object.entries(res.data.output)[page - 1]
-            setPageContent({ ["name"]: output[0], ["output"]: output[1] })
+            let outputType = res.data.microservices[page - 1].output_type
+            setPageContent({ ["name"]: output[0], ["output"]: output[1], ["output_type"]: outputType })
         })
 
     }, [])
@@ -21,7 +22,8 @@ export default function Result({ pipeId }: { pipeId: string }) {
     useEffect(() => {
         if (result?.output) {
             let output = Object.entries(result.output)[page - 1]
-            setPageContent({ ["name"]: output[0], ["output"]: output[1] })
+            let outputType = result.microservices[page - 1].output_type
+            setPageContent({ ["name"]: output[0], ["output"]: output[1], ["output_type"]: outputType })
         }
     }, [page])
 
@@ -30,8 +32,8 @@ export default function Result({ pipeId }: { pipeId: string }) {
             <h5>{pageContent && <p>{pageContent["name"]} </p>}</h5>
             <S.Body>
                 <h6>Output:</h6>
-                {checkForStockData(result) && <ChartComponent stockName={pipeId} />}
-                {pageContent && !checkForStockData(result) && pageContent["output"]}
+                {checkForStockData(result, pageContent) && <ChartComponent index={page-1} name={pageContent["name"]} pipeId={pipeId} data={pageContent.output} />}
+                {pageContent && !checkForStockData(result, pageContent) && pageContent["output"]}
             </S.Body>
             {result?.output &&
                 <PaginationControl
@@ -50,8 +52,8 @@ export default function Result({ pipeId }: { pipeId: string }) {
 }
 
 // will need to generalise this later
-function checkForStockData(result: any) {
-    if (result.output && result.output.import_yahoo) {
+function checkForStockData(result: any, pageContent: any) {
+    if (result.output && pageContent.output_type == "graph") {
         return true;
     }
     return false;

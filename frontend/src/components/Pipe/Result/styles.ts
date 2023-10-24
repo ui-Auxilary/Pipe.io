@@ -8,6 +8,7 @@ const Body = styled.div`
     border-radius: 20px;
     padding: 25px;
     margin-bottom: 20px;
+    overflow-y: auto;
 `;
 
 export default {
