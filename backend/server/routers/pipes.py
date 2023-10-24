@@ -4,6 +4,7 @@ from typing import Annotated
 from fastapi import APIRouter, UploadFile, File, Header, HTTPException
 from pprint import pprint
 from server.models.pipes import Pipes
+from server.models.microservices import EditMicroservice
 from server.database import pipes_collection, users_collection
 from server.schemas.schemas import list_pipes_serial
 from parsing_modules.microservice_extractor import extract_microservice
@@ -112,6 +113,20 @@ def edit_pipe(id: str, pipe: Pipes):
     new_pipe = dict(pipe)
     pipes_collection.find_one_and_update(
         {"_id": ObjectId(id)}, {"$set": {"name": new_pipe["name"], "description": new_pipe["description"]}})
+    
+
+@router.put("/pipes/{id}/microservices")
+def edit_microservice_parameters(id: str, microservice: EditMicroservice):
+    pipe = pipes_collection.find_one({"_id": ObjectId(id)})
+    print(microservice)
+    for m in pipe["microservices"]:
+        
+        if m["name"] == microservice.name:
+            m["parameters"] = microservice.parameters
+            break
+    pipes_collection.find_one_and_update(
+        {"_id": ObjectId(id)}, {"$set": {"microservices": pipe["microservices"]}})
+
 
 
 @router.delete("/pipes/{id}")
