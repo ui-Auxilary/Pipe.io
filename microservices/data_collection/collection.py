@@ -78,8 +78,7 @@ def plot_data(x_axis: str, y_axis: str):
     for file in csv_files:
         df = pd.read_csv(file)
         fig = plotly.graph_objects.Figure(data=plotly.graph_objects.Scatter(x=df[x_axis], y=df[y_axis]))
-        # plotly.offline.plot(fig, filename=file[:-4] + ".html")
-        html_code = plotly.offline.plot(fig, include_plotlyjs=True, output_type='div')
-        file_names[file[:-4]] = html_code
+        plotly.offline.plot(fig, filename=file[:-4] + ".html")
+        file_names[file[:-4]] = file[:-4] + ".html"
 
     return json.dumps(file_names, indent=4)
