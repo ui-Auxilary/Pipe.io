@@ -129,6 +129,20 @@ def edit_microservice_parameters(id: str, microservice: EditMicroservice):
 
 
 
+@router.put("/pipes/{id}/microservices")
+def edit_microservice_parameters(id: str, microservice: EditMicroservice):
+    pipe = pipes_collection.find_one({"_id": ObjectId(id)})
+    print(microservice)
+    for m in pipe["microservices"]:
+        
+        if m["name"] == microservice.name:
+            m["parameters"] = microservice.parameters
+            break
+    pipes_collection.find_one_and_update(
+        {"_id": ObjectId(id)}, {"$set": {"microservices": pipe["microservices"]}})
+
+
+
 @router.delete("/pipes/{id}")
 def delete_pipe(id: str):
     pipes_collection.find_one_and_delete(

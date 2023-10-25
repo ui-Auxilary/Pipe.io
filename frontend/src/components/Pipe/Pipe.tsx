@@ -15,6 +15,8 @@ import axios from 'axios'
 import { useAppData } from 'helper/AppProvider'
 import Result from './Result/Result'
 import Checkbox from 'components/Checkbox/Checkbox'
+import MicroserviceList from 'components/MicroserviceList';
+import ViewMicroserviceFromPipe from 'components/MicroserviceList/ViewMicroservice/ViewMicroserviceFromPipe';
 
 export interface Props {
   pipeId: string
@@ -34,8 +36,9 @@ export interface ExecuteProps {
 }
 
 
-const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx } : Props, ref) => {
+const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck, idx } : Props, ref) => {
   const [show, setShow] = useState(false);
+  const [showView, setShowView] = useState(false);
   const [del, setDel] = useState(false);
   const [showChart, setChart] = useState(false);
   const [status, setStatus] = useState("Ready");
@@ -82,6 +85,8 @@ const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx } : Props
 
   const handleOverlayShow = () => setShow(true);
   const handleOverlayClose = () => setShow(false);
+  const handleViewOverlayShow = () => setShowView(true);
+  const handleViewOverlayClose = () => setShowView(false);
   const handleEditClose = () => setShow(false);
   const handleEditShow = () => setShow(false);
   const handleDeleteClose = () => setDel(false);
@@ -107,6 +112,11 @@ const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx } : Props
 
   const onEditClick = () => {
     handleOverlayShow()
+    document.body.click()
+  }
+
+  const onViewClick = () => {
+    handleViewOverlayShow()
     document.body.click()
   }
 
@@ -138,7 +148,7 @@ const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx } : Props
               <S.View src={Pencil} />
               Edit pipeline
             </S.EditOption>
-            <S.EditOption>
+            <S.EditOption onClick={onViewClick}>
               <S.View src={View} />
               View microservices
             </S.EditOption>
@@ -183,6 +193,18 @@ const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx } : Props
         </S.Bottom>
       </S.Pipe >
       <Edit id={pipeId} show={show} params={pipeList} data={data} closeOverlay={handleOverlayClose} type={"pipe"} />
+      <Modal dialogClassName="form-modal" show={showView} onHide={handleViewOverlayClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>{name} Microservices</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ViewMicroserviceFromPipe pipeId={pipeId} />
+        </Modal.Body>
+        <Modal.Footer>
+          <S.Button onClick={() => handleViewOverlayClose()}>Save</S.Button>
+        </Modal.Footer>
+      </Modal>
+      
       <Modal dialogClassName="form-modal" show={showChart} onHide={handleChartClose}>
         <Modal.Header closeButton>
           <Modal.Title>View Results</Modal.Title>

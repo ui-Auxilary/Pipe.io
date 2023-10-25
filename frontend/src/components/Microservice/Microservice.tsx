@@ -8,15 +8,15 @@ import axios from 'axios';
 
 import { Modal } from 'react-bootstrap';
 import Edit from 'components/Edit';
+import EditFromPipe from 'components/Edit/EditFromPipe';
 
-export default function Microservice({ code, name, docstring, param, parent_file}) {
+export default function Microservice({ code, name, docstring, param, parent_file, from_pipe, parent_pipe_id }) {
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);
   const [id, setId] = useState();
+  const [microservices, setMicroservices] = useState([]);
   const [selectedTags, setSelectedTags] = useState("value");
-
   const { setMicroserviceData, microserviceData } = useFormData();
-
 
   const handleEditClose = () => setEdit(false);
   const handleEditShow = () => setEdit(true);
@@ -45,7 +45,8 @@ export default function Microservice({ code, name, docstring, param, parent_file
   ]
 
   useEffect(() => {
-    axios.post('http://localhost:8000/microservice/add', { "name": name, "parameters": param, "parent_file": parent_file, "code": code, "docstring": docstring, "output_type": selectedTags }).then(res => setId(JSON.parse(res.data).id))
+    /** instead of using the microservice collection id as the id, we use the name of the microservice. */
+    setId(name)
   }, [])
 
   const handleTagChange = (e: any) => {
@@ -100,8 +101,9 @@ export default function Microservice({ code, name, docstring, param, parent_file
         </div>
       </S.Microservice>
 
-
-      <Edit id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />
+      <h1>id is {id}</h1>
+      {!from_pipe&&<Edit id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />}
+      {from_pipe&&<EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} parent_pipe_id={parent_pipe_id}/>}
       <Modal show={showCode} onHide={handleCodeClose}>
         <Modal.Header closeButton>
           <Modal.Title>Code</Modal.Title>
