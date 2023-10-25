@@ -100,8 +100,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
           {Object.keys(param).length > 0 && (<div><S.Button onClick={handleEditShow} style={{ display: "flex", width: "150px", gap: "10px", justifyContent: "center", alignItems: "center" }}>Input data <S.View src={view}></S.View></S.Button></div>)}
         </div>
       </S.Microservice>
-
-      <h1>id is {id}</h1>
+      
       {!from_pipe&&<Edit id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />}
       {from_pipe&&<EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} parent_pipe_id={parent_pipe_id}/>}
       <Modal show={showCode} onHide={handleCodeClose}>
