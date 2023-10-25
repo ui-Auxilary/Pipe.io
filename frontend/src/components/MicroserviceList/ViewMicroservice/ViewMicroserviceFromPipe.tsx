@@ -18,7 +18,6 @@ export default function ViewMicroserviceFromPipe({ pipeId }: Props) {
         })
 
     }, [])
-    console.log("THE MICROSERVIERSASD", microservices)
     let len = microservices ? (microservices as []).length : 0
     return (
         <S.Wrapper>
@@ -27,7 +26,7 @@ export default function ViewMicroserviceFromPipe({ pipeId }: Props) {
                 <span style={{ color: "#907F7F", fontWeight: 500 }}>Found {len} microservice(s)</span>
                 <S.Scrollbar>
                     {microservices && microservices.map(({ code, doc, name, parameters, parent_file }, index) => {
-                        return <Microservice code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file} from_pipe={true} />
+                        return <Microservice code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file} from_pipe={true} parent_pipe_id={pipeId}/>
                     })}
                 </S.Scrollbar>
             </S.Container>

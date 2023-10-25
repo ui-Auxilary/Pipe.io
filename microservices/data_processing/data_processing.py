@@ -102,7 +102,7 @@ def is_date(string, fuzzy=False):
     except ValueError:
         return False
 
-def plot_data(input_file_path: str = 'stock_data.csv', x_axis: str ='Date', y_axis: str ='Close'):
+def plot_data(input_file_path: str = 'stock_data.csv', output_file_path: str = "stock_chart.png", x_axis: str ='Date', y_axis: str ='Close'):
     stock_data = pd.read_csv(input_file_path)
     try:
         if "date" in x_axis.lower():
@@ -123,7 +123,7 @@ def plot_data(input_file_path: str = 'stock_data.csv', x_axis: str ='Date', y_ax
     plt.tight_layout()
 
     # Save the chart to a file (optional)
-    plt.savefig('stock_chart.png')
+    plt.savefig(output_file_path)
 
     # Show the chart (optional)
     # plt.show()

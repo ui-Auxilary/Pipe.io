@@ -10,12 +10,13 @@ import { useAppData } from "helper/AppProvider";
 export default function Edit({ id, show, params, data, closeOverlay, type = "microservice" }) {
     console.log("IN EDIT", show, params, data)
     const { setMicroserviceData, microserviceData } = useFormData();
+    const [ microservices, setMicroservices ] = useState([]);
     const { edit, setPipeIds } = useAppData();
 
 
     useEffect(() => {
         console.log('New', edit)
-
+        setMicroservices(data)
     }, [edit])
 
     const findAndUpdate = (name: string) => {
@@ -24,7 +25,7 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
         console.log('hig')
         const foundIndex = (microserviceData.microservices as []).findIndex(x => x.name == name);
         const updatedData = [...microserviceData.microservices as []]
-        updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: edit[id] })
+        updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: edit[name] })
         setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
     }
 
@@ -39,12 +40,8 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
                 })
                 break;
             default:
+                /** update microserviceData with updated microservices w new params */
                 findAndUpdate(data["name"])
-                axios.put(`http://localhost:8000/microservice/${id}`, {"parameters": edit[id]}).then((res) => {
-                    console.log(res)
-                }).catch((err) => {
-                    console.log(err)
-                })
         }
         closeOverlay();
     }

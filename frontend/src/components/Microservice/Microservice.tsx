@@ -9,7 +9,7 @@ import { Modal } from 'react-bootstrap';
 import Edit from 'components/Edit';
 import EditFromPipe from 'components/Edit/EditFromPipe';
 
-export default function Microservice({ code, name, docstring, param, parent_file, from_pipe }) {
+export default function Microservice({ code, name, docstring, param, parent_file, from_pipe, parent_pipe_id }) {
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);
   const [id, setId] = useState();
@@ -32,20 +32,8 @@ export default function Microservice({ code, name, docstring, param, parent_file
   ]
 
   useEffect(() => {
-    !from_pipe && axios.post('http://localhost:8000/microservice/add', { "name": name, "parameters": param, "parent_file": parent_file, "code": code, "docstring": docstring }).then(res => setId(JSON.parse(res.data).id))
-
-    if (from_pipe) {
-      axios.get('http://localhost:8000/microservice/list', {
-          headers: {
-              "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
-          }
-      }).then(res => {    
-          console.log("MICROSERVICES", res.data)
-          setMicroservices(res.data)
-      }).catch(err => console.log(err))
-      setId(microservices.filter(micro => micro.name == name)[0].id)
-      /** TODO from line 37 to 46 is me trying to retrieve (unsuccesfully?) the id of the microservice object */
-    }
+    /** instead of using the microservice collection id as the id, we use the name of the microservice. */
+    setId(name)
   }, [])
   
   const data = {
@@ -73,9 +61,9 @@ export default function Microservice({ code, name, docstring, param, parent_file
         </div>
       </S.Microservice>
 
-
+      <h1>id is {id}</h1>
       {!from_pipe&&<Edit id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />}
-      {from_pipe&&<EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />}
+      {from_pipe&&<EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} parent_pipe_id={parent_pipe_id}/>}
       <Modal show={showCode} onHide={handleCodeClose}>
         <Modal.Header closeButton>
           <Modal.Title>Code</Modal.Title>
