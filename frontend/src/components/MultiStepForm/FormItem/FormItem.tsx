@@ -4,12 +4,16 @@ import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
 import MicroserviceList from 'components/MicroserviceList';
 import ViewMicroservice from 'components/MicroserviceList/ViewMicroservice';
 import { useAppData } from 'helper/AppProvider';
+import ValidatedInput from 'helper/validation';
+import { FormEvent } from 'react';
 
 export interface Item {
   label: string
   type: string
   value: string
   id: string
+  validation?: string
+  errorMessage?: string
 }
 
 export interface Props {
@@ -18,7 +22,6 @@ export interface Props {
 
 // Update based on question list to render specific component
 export default function FormItem({ item }: Props) {
-  const { setUserData, userData } = useFormData();
   const { edit, setEdit } = useAppData();
 
   switch (item.type) {
@@ -26,7 +29,7 @@ export default function FormItem({ item }: Props) {
       return (
         <>
           <S.Label>{item.label}</S.Label>
-          <S.Input value={userData[item.label.toLocaleLowerCase()]} onChange={(e) => setUserData({ ...userData, [item.label.toLocaleLowerCase()]: e.target.value })} />
+          <ValidatedInput item={item} customValidity={item.validation} errorMessage={item.errorMessage} />
         </>
       );
 
