@@ -102,6 +102,7 @@ def is_date(string, fuzzy=False):
     except ValueError:
         return False
 
+
 def plot_data(input_file_path: str = 'stock_data.csv', output_file_path: str = "stock_chart.png", x_axis: str ='Date', y_axis: str ='Close'):
     stock_data = pd.read_csv(input_file_path)
     try:
@@ -124,6 +125,7 @@ def plot_data(input_file_path: str = 'stock_data.csv', output_file_path: str = "
 
     # Save the chart to a file (optional)
     plt.savefig(output_file_path)
+
 
     # Show the chart (optional)
     # plt.show()
