@@ -7,27 +7,22 @@ import { Modal } from "react-bootstrap"
 import S from './styles'
 import { useAppData } from "helper/AppProvider";
 
-export default function Edit({ id, show, params, data, closeOverlay, type = "microservice" }) {
+export default function EditFromPipe({ id, show, params, data, closeOverlay, type = "microservice", parent_pipe_id}) {
     console.log("IN EDIT", show, params, data)
-    const { setMicroserviceData, microserviceData } = useFormData();
-    const [ microservices, setMicroservices ] = useState([]);
+    const [ microservice, setMicroservice ] = useState([]);
     const { edit, setPipeIds } = useAppData();
 
 
     useEffect(() => {
         console.log('New', edit)
-        setMicroservices(data)
+        setMicroservice(data)
     }, [edit])
 
     const findAndUpdate = (name: string) => {
-        console.log(microserviceData.microservices)
-        console.log(params)
+
+        console.log(microservice)
         console.log('hig')
-        const foundIndex = (microserviceData.microservices as []).findIndex(x => x.name == name);
-        const updatedData = [...microserviceData.microservices as []]
-        updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: edit[name] })
-        setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
-        return newParams
+        
     }
 
     const handleSave = () => {
@@ -41,8 +36,13 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
                 })
                 break;
             default:
-                /** update microserviceData with updated microservices w new params */
                 findAndUpdate(data["name"])
+                axios.put(`http://localhost:8000/pipes/${parent_pipe_id}/microservices`, {"name":microservice.name , "parameters": edit[id]}).then((res) => {
+                    console.log("success", res)
+                    
+                }).catch((err) => {
+                    console.log(err)
+                });
         }
         closeOverlay();
     }
@@ -59,5 +59,6 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
                 <S.Button onClick={() => handleSave()}>Save</S.Button>
             </Modal.Footer>
         </Modal>
+
     )
 }

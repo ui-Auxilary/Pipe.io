@@ -101,7 +101,7 @@ export default function PipeList() {
                     </S.Options>
                 </S.Row>
             )}
-            {pipes.map(({ pipe_id, name, description }, index) => (
+            {pipes.map(({ pipe_id, name, description, microservices }, index) => (
                 <Pipe key={pipe_id} pipeId={pipe_id} id={`00${index + 1} `} name={name} description={description} onCheck={pipeChecked} ref={checkboxRef} idx={index}/>
             ))}
         </S.Container>
