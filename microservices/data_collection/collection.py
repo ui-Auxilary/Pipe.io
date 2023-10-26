@@ -62,6 +62,7 @@ def plot_data(x_axis: str, y_axis: str, filenames: list):
     Args:
         x_axis (str): The column name for the x-axis
         y_axis (str): The column name for the y-axis
+        filenames (list): A list of csv filenames
 
     Returns:
         plotly.graph_objects.Figure: A plotly figure object
