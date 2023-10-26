@@ -56,7 +56,7 @@ def import_yahoo(ticker: str = 'msft',
     return ret
 
 
-def plot_data(x_axis: str, y_axis: str):
+def plot_data(x_axis: str, y_axis: str, filenames: list):
     """Plots the data from the csv file
 
     Args:
@@ -71,14 +71,21 @@ def plot_data(x_axis: str, y_axis: str):
 
     # read all csv files in the direcotry
     files = os.listdir(directory)
-    csv_files = [file for file in files if file.endswith(".csv")]
-    file_names = {}
+    
+    csv_files = []
+
+    for filename in filenames:
+        if filename in files:
+            csv_files.append(filename)
+
+    file_names_ret = {}
 
     # read the csv files and plot
     for file in csv_files:
         df = pd.read_csv(file)
         fig = plotly.graph_objects.Figure(data=plotly.graph_objects.Scatter(x=df[x_axis], y=df[y_axis]))
         plotly.offline.plot(fig, filename=file[:-4] + ".html")
-        file_names[file[:-4]] = file[:-4] + ".html"
+        file_names_ret[file[:-4]] = file[:-4] + ".html"
 
-    return json.dumps(file_names, indent=4)
+
+    return json.dumps(file_names_ret, indent=4)
