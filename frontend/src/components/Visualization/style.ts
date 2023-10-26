@@ -35,8 +35,25 @@ const ButtonContainer = styled.div`
 
 const GraphContainer = styled.div`
   overflow-y: hidden;
-  max-width: 1600px;
+  width: 1600px; 
+  height: 600px; 
+
+  /* Media query for smaller screens */
+  @media (max-width: 1900px) {
+    width: 1000px; 
+  }
+
+  /* Media query for smaller screens */
+  @media (max-width: 1500px) {
+    width: 750px; 
+  }
+
+  /* Media query for even smaller screens */
+  @media (max-width: 480px) {
+    width: 500px; 
+  }
 `;
+
 
 
 export default {

@@ -105,7 +105,7 @@ export default function ChartComponent(props: ChartProps) {
 
   return (
     <S.Container>
-      {/* <S.GraphContainer> */}
+      <S.GraphContainer>
         {chartType.value == 'bar' && <BarChart
           xAxis={[
             {
@@ -142,10 +142,9 @@ export default function ChartComponent(props: ChartProps) {
               label: 'Closing Price $',
             },
           ]}
-          width={1600}
-          height={600}
+          // height={600}
         />}
-      {/* </S.GraphContainer> */}
+      </S.GraphContainer>
       <Form>
         <Form.Group className="mb-3">
           <Form.Label>Chart Type</Form.Label>

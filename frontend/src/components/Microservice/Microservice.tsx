@@ -10,12 +10,12 @@ import { Modal } from 'react-bootstrap';
 import Edit from 'components/Edit';
 import EditFromPipe from 'components/Edit/EditFromPipe';
 
-export default function Microservice({ code, name, docstring, param, parent_file, from_pipe, parent_pipe_id }) {
+export default function Microservice({ code, name, docstring, param, parent_file, from_pipe, parent_pipe_id, output_type }) {
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);
   const [id, setId] = useState();
   const [microservices, setMicroservices] = useState([]);
-  const [selectedTags, setSelectedTags] = useState("value");
+  const [selectedTags, setSelectedTags] = useState("");
   const { setMicroserviceData, microserviceData } = useFormData();
 
   const handleEditClose = () => setEdit(false);
@@ -35,6 +35,10 @@ export default function Microservice({ code, name, docstring, param, parent_file
     { value: 'csv', label: 'CSV'},
     { value: 'plot', label: 'Plot File'}
   ];
+
+
+
+
   
 
   const microserviceList = [
@@ -47,16 +51,15 @@ export default function Microservice({ code, name, docstring, param, parent_file
   useEffect(() => {
     /** instead of using the microservice collection id as the id, we use the name of the microservice. */
     setId(name)
+    if (output_type != undefined) {
+      setSelectedTags(tagOptions.find((el) => el.value == output_type));
+    }
   }, [])
 
   const handleTagChange = (e: any) => {
     setSelectedTags(e);
-    const foundIndex = (microserviceData.microservices as []).findIndex(x => x.name == data["name"]);
-    const updatedData = [...microserviceData.microservices as []]
-    updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { output_type: e })
-    setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
-    data["output_type"] = e
-    axios.put(`http://localhost:8000/microservice/${id}`, {"output_type": selectedTags.value}).then((res) => {
+    data["output_type"] = e;
+    axios.put(`http://localhost:8000/pipes/${parent_pipe_id}/${name}?output_type=${e.value}`).then((res) => {
       console.log(res)
     }).catch((err) => {
       console.log(err)
@@ -72,7 +75,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
     code: code,
     docstring: docstring,
     parameters: param,
-    output_type: selectedTags.value
+    output_type: selectedTags ? selectedTags.value : ""
   }
 
   return (
