@@ -22,6 +22,5 @@ def moving_avergae(input_file_path: str = 'stock_data.csv', output_file_path:str
         df[value_column] = df[value_column].str.replace(',', '').astype(float)
     df['moving_average'] = df[value_column].rolling(window=window_size).mean()
     df.to_csv(output_file_path)
-    return df.to_json
-    
-moving_avergae("stock_data.csv", "moving_average.csv", 5, "Date", "Volume")
+    return df.to_json()
+
