@@ -2,15 +2,18 @@ import S from './styles'
 import view from 'assets/view.svg'
 import Form from 'components/MultiStepForm/Form';
 import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import { Modal } from 'react-bootstrap';
+import Edit from 'components/Edit';
+import EditFromPipe from 'components/Edit/EditFromPipe';
 
-export default function Microservice({ id, code, name, docstring, param, parent_file }) {
-  console.log('INSIDE', id)
+export default function Microservice({ code, name, docstring, param, parent_file, from_pipe, parent_pipe_id }) {
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);
+  const [id, setId] = useState();
+  const [microservices, setMicroservices] = useState([]);
 
   const handleEditClose = () => setEdit(false);
   const handleEditShow = () => setEdit(true);
@@ -18,48 +21,29 @@ export default function Microservice({ id, code, name, docstring, param, parent_
   const handleCodeShow = () => setCode(true);
 
   const items = param && Object.keys(param).map((el) => (
-    { label: el, "type": "edit_param", id: name }
+    { label: el, "type": "edit_param", id: id }
   ))
 
-
-  const questionsList = [
+  const microserviceList = [
     {
       section: 1,
       items: items
     }
   ]
 
-  const { microserviceParam, microserviceData, setMicroserviceData } = useFormData();
-  console.log('MICROSERVIEC DATA', microserviceParam);
-
-  const findAndUpdate = (name) => {
-    const foundIndex = microserviceData.microservices.findIndex(x => x.name == name);
-    const updatedData = [...microserviceData.microservices]
-    updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: microserviceParam[name] })
-    setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
+  useEffect(() => {
+    /** instead of using the microservice collection id as the id, we use the name of the microservice. */
+    setId(name)
+  }, [])
+  
+  const data = {
+    parent_file: parent_file,
+    name: name,
+    code: code,
+    docstring: docstring,
+    parameters: param
   }
 
-  const handleSave = () => {
-    const data = {
-      parent_file: parent_file,
-      name: name,
-      code: code,
-      parameters: microserviceParam[name],
-      docstring: docstring,
-    }
-
-    setMicroserviceData({ ...microserviceData, })
-
-    findAndUpdate(name)
-    axios.put(`http://localhost:8000/microservice/${id}`, data).then((res) => {
-      console.log(res)
-    }).catch((err) => {
-      console.log(err)
-    })
-    handleEditClose()
-  }
-
-  console.log("PARAM", param)
   return (
     <>
       <S.Microservice>
@@ -77,25 +61,15 @@ export default function Microservice({ id, code, name, docstring, param, parent_
         </div>
       </S.Microservice>
 
-
-      <Modal show={showEdit} onHide={handleEditClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form questions={questionsList} step={0} />
-        </Modal.Body>
-        <Modal.Footer>
-          <S.Button onClick={() => handleSave()}>Save</S.Button>
-        </Modal.Footer>
-      </Modal>
-
+      <h1>id is {id}</h1>
+      {!from_pipe&&<Edit id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />}
+      {from_pipe&&<EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} parent_pipe_id={parent_pipe_id}/>}
       <Modal show={showCode} onHide={handleCodeClose}>
         <Modal.Header closeButton>
           <Modal.Title>Code</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <code>{code.split('\n').map((line) => <p>{line}</p>)}</code>
+          <code>{code.split('\n').map((line: string) => <p>{line}</p>)}</code>
         </Modal.Body>
       </Modal>
     </>

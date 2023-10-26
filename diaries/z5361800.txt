@@ -28,3 +28,10 @@ Week 5:
 I continued working on 2, 3 of the above tasks and finished those along with 4. I additionally, edited some of the microservices to do with data gathering that were done by other team members so that they were compatible with the pipeline executer and the frontend.
 
 We spent some time preparing for the demo and I helped debug relevant code and discuss whether we had met the user stories and goals for sprint 1. Then, I aided in smaller changes via pair programming to ensure that our code was fully functional. We made a list of tasks that had to be done before the demo and completed those. Then, I assisted Christian in recording the demo - discussing what to showcase on the screen during the recording itself.
+
+We conducted the demo and the retrospective, making a list of everything that went well and everything to improve. Using this, we came up with actionables for the next sprint. Then, we had a meeting to allocate tasks for sprint 2 and started the sprint.
+
+Week 6:
+This week I worked on the machine learning aspect of our project. This involves taking the completed sentiment analysis from the previous sprint and incorporating it with a convolutional neural network to predict future stock prices using a specific number of prior days.
+
+I conducted research into typical methods to achieve this and came up with some of the basic code to feed into a simple neural network. Next week I hope to tune the hyperparameters and incorporate sentiment analysis features to increase the accuracy of the model.

@@ -4,12 +4,14 @@ from typing import Annotated
 from fastapi import APIRouter, UploadFile, File, Header, HTTPException
 from pprint import pprint
 from server.models.pipes import Pipes
+from server.models.microservices import EditMicroservice
 from server.database import pipes_collection, users_collection
 from server.schemas.schemas import list_pipes_serial
 from parsing_modules.microservice_extractor import extract_microservice
 from parsing_modules.pipeline_parser import execute_pipeline
 import jwt
 import json
+import time
 
 # Used for fetching Mongo objectID
 from bson import ObjectId
@@ -86,19 +88,63 @@ def execute_pipe(id: str):
     pipe_output = execute_pipeline(return_dict)
     print(f'Output is ----------------------\n{pprint(pipe_output)}')
     pprint(pipe_output)
-    return {id: id}
+
+    output_json = json.loads(pipe_output)
+    if output_json["pipeline"]["success"] is False:
+        raise HTTPException(
+            status_code=400, detail=output_json["pipeline"]["error"])
+
+    print(output_json["pipeline"]["microservices"])
+    for microservice in output_json["pipeline"]["microservices"]:
+        pipe["output"][microservice["name"]] = json.dumps(
+            microservice["output"])
+
+    pipe["status"] = "Executed"
+    pipe["last_executed"] = time.strftime("%Y-%m-%d %H:%M:%S")
+
+    pipes_collection.find_one_and_update(
+        {"_id": ObjectId(id)}, {"$set": dict(pipe)})
+
+    return {"pipeId": id}
 
 
 @router.put("/pipes/{id}")
 def edit_pipe(id: str, pipe: Pipes):
+    new_pipe = dict(pipe)
     pipes_collection.find_one_and_update(
-        {"_id": ObjectId(id)}, {"$set": dict(pipe)})
+        {"_id": ObjectId(id)}, {"$set": {"name": new_pipe["name"], "description": new_pipe["description"]}})
+
+
+@router.put("/pipes/{id}/microservices")
+def edit_microservice_parameters(id: str, microservice: EditMicroservice):
+    pipe = pipes_collection.find_one({"_id": ObjectId(id)})
+    print(microservice)
+    for m in pipe["microservices"]:
+        
+        if m["name"] == microservice.name:
+            m["parameters"] = microservice.parameters
+            break
+    pipes_collection.find_one_and_update(
+        {"_id": ObjectId(id)}, {"$set": {"microservices": pipe["microservices"]}})
+
 
 
 @router.delete("/pipes/{id}")
 def delete_pipe(id: str):
     pipes_collection.find_one_and_delete(
         {"_id": ObjectId(id)})
+
+
+@router.get("/pipes/{id}")
+def get_pipe(id: str):
+    try:
+        pipe = pipes_collection.find_one({"_id": ObjectId(id)})
+        if pipe is None:
+            raise HTTPException(status_code=404, detail="Pipe not found")
+        pipe['_id'] = str(pipe['_id'])
+        return pipe
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # @router.get('/get_stock_data/{stock_name}')
 # async def get_stock_data(stock_name:str):

@@ -1,19 +1,19 @@
 {
-    "pipeline": "hwe",
+    "pipeline": "asd",
     "microservices": [
         {
             "file": "another",
             "name": "add_two",
             "parameters": {
-                "number": "save"
+                "number": "2"
             }
         },
         {
             "file": "another",
             "name": "add_x",
             "parameters": {
-                "number": "pookie",
-                "x": "2"
+                "number": "2",
+                "x": "5"
             }
         },
         {
@@ -25,7 +25,7 @@
             "file": "another",
             "name": "print_numpy_array",
             "parameters": {
-                "list_ints": null
+                "list_ints": "[1,2,3]"
             }
         }
     ]

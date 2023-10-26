@@ -1,20 +1,29 @@
 import S from './style'
 import dots from 'assets/dots.svg'
-import view from 'assets/view.svg'
-import { useState } from 'react'
-import { Modal } from 'react-bootstrap'
-import { JsonToTable } from "react-json-to-table";
-import StockData from "./stock_data.json"
-import ChartComponent from 'components/Visualization/Visualization'
+import React, { forwardRef, useRef, useState } from 'react'
+import { Button, Form, Modal, OverlayTrigger, Popover, Tooltip } from 'react-bootstrap'
+import View from 'assets/view.svg'
+import Pencil from 'assets/pencil.svg'
+import Edit from 'components/Edit'
+import Delete from 'assets/trash.svg'
 
 import Content from './Content'
 import axios from 'axios'
-import Result from './Result'
+import { useAppData } from 'helper/AppProvider'
+import Result from './Result/Result'
+import Checkbox from 'components/Checkbox/Checkbox'
+import MicroserviceList from 'components/MicroserviceList';
+import ViewMicroserviceFromPipe from 'components/MicroserviceList/ViewMicroservice/ViewMicroserviceFromPipe';
+
 export interface Props {
   pipeId: string
   id: string
   name: string
   description?: string
+  checked?: boolean
+  onCheck(pipeId: string): () => {}
+  ref: React.MutableRefObject<never[]>
+  idx: number
 }
 
 
@@ -23,27 +32,61 @@ export interface ExecuteProps {
   result: object
 }
 
-const handleStatus = (status: string) => {
-  switch (status) {
-    case "Ready":
-      return "Run"
-    case "Completed":
-      return "View Results"
-    case "Error":
-      return "Retry"
-    default:
-      return status
-  }
-}
 
-export default function Pipe({ pipeId, id, name, description }: Props) {
+const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck, idx } : Props, ref) => {
   const [show, setShow] = useState(false);
+  const [showView, setShowView] = useState(false);
+  const [del, setDel] = useState(false);
   const [showChart, setChart] = useState(false);
   const [status, setStatus] = useState("Ready");
   const [executed, setExecuted] = useState<ExecuteProps>();
+  const { pipeIds, setPipeIds } = useAppData();
 
-  const handleGraphClose = () => setShow(false);
-  const handleGraphShow = () => setShow(true);
+  const [checked, setChecked] = useState(false);
+
+  const handleStatus = (status: string) => {
+    switch (status) {
+      case "Ready":
+        return "Run"
+      case "Completed":
+        return "View Results"
+      case "Error":
+        return "Retry"
+      default:
+        return status
+    }
+  }
+
+
+  const data = {
+    name: name,
+    description: description
+  }
+
+
+  const items = Object.keys(data).map((el) => (
+    { label: el, "type": "edit_param", id: pipeId, value: "pipe" }
+  ))
+
+
+  const pipeList = [
+    {
+      section: 1,
+      items: items
+    }
+  ]
+
+  console.log('LIST', pipeList)
+
+  let target = useRef(null);
+
+  const handleOverlayShow = () => setShow(true);
+  const handleOverlayClose = () => setShow(false);
+  const handleViewOverlayShow = () => setShowView(true);
+  const handleViewOverlayClose = () => setShowView(false);
+  const handleEditClose = () => setShow(false);
+  const handleEditShow = () => setShow(false);
+  const handleDeleteClose = () => setDel(false);
   const handleChartClose = () => setChart(false);
   const handleChartShow = () => setChart(true);
 
@@ -65,12 +108,64 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
     }
   }
 
+  const onEditClick = () => {
+    handleOverlayShow()
+    document.body.click()
+  }
+
+  const onViewClick = () => {
+    handleViewOverlayShow()
+    document.body.click()
+  }
+
+  const onDeleteClick = () => {
+    setDel(true);
+    document.body.click()
+  }
+
+  const handleDelete = () => {
+    axios.delete(`http://localhost:8000/pipes/${pipeId}`, { params: { id: pipeId } }).then(() => setPipeIds(pipeIds.filter(pipe => pipe !== pipeId)))
+
+    handleDeleteClose();
+  }
+
+  const editPipeline = (
+    <Popover>
+      <Popover.Body>
+        <div className="mt-3 mb-1">
+          <S.EditBox>
+            <S.EditOption onClick={onEditClick}>
+              <S.View src={Pencil} />
+              Edit pipeline
+            </S.EditOption>
+            <S.EditOption onClick={onViewClick}>
+              <S.View src={View} />
+              View microservices
+            </S.EditOption>
+            <S.EditOption onClick={onDeleteClick}>
+              <S.View src={Delete} />
+              Delete
+            </S.EditOption>
+          </S.EditBox>
+        </div>
+      </Popover.Body>
+    </Popover>
+  );
+
+  
   return (
     <>
-      <S.Pipe>
+      <S.Pipe onClick={() =>  onCheck(pipeId, idx)}>
+        <OverlayTrigger trigger="click" placement="bottom" overlay={editPipeline} rootClose>
+          <S.Edit ref={target} src={dots} />
+        </OverlayTrigger>
         <S.Top>
           <S.Left>
-            <span><S.Edit src={dots}></S.Edit></span>
+            <S.CheckboxContainer>
+              <S.Checkbox  onClick={() =>  onCheck(pipeId, idx)} defaultChecked={ref.current[idx]?.checked || false} ref={(el) => ref.current[idx] = el}/>
+            </S.CheckboxContainer>
+            <span>
+            </span>
             <div>
               <Content id={id} name={name} description={description} />
             </div>
@@ -79,32 +174,48 @@ export default function Pipe({ pipeId, id, name, description }: Props) {
             <div style={{ marginRight: "15px" }}>
               <S.Execute disabled={status == "Running"} onClick={onPipeRun} status={status}>{handleStatus(status)}</S.Execute>
             </div>
-            {/* <div><S.Button onClick={handleChartShow} style={{ display: "flex", gap: "10px", justifyContent: "center", alignItems: "center" }}>View <S.View src={view}></S.View></S.Button></div> */}
-            {/* <div><S.Button onClick={handleGraphShow}>View Data</S.Button></div> */}
+
           </div>
         </S.Top>
         <S.Bottom>
           <S.Status status={status}>{status.toUpperCase()}</S.Status>
           <S.Label>Last executed: {executed ? executed.time : "Never"}</S.Label>
         </S.Bottom>
-      </S.Pipe>
-      <Modal dialogClassName="form-modal" show={show} onHide={handleGraphClose}>
+      </S.Pipe >
+      <Edit id={pipeId} show={show} params={pipeList} data={data} closeOverlay={handleOverlayClose} type={"pipe"} />
+      <Modal dialogClassName="form-modal" show={showView} onHide={handleViewOverlayClose}>
         <Modal.Header closeButton>
-          <Modal.Title>View Data</Modal.Title>
+          <Modal.Title>{name} Microservices</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <JsonToTable json={StockData} />
+          <ViewMicroserviceFromPipe pipeId={pipeId} />
         </Modal.Body>
+        <Modal.Footer>
+          <S.Button onClick={() => handleViewOverlayClose()}>Save</S.Button>
+        </Modal.Footer>
       </Modal>
+      
       <Modal dialogClassName="form-modal" show={showChart} onHide={handleChartClose}>
         <Modal.Header closeButton>
           <Modal.Title>View Results</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Result />
-          <ChartComponent stockName={"AAPL"} />
+          <Result pipeId={pipeId} />
+        </Modal.Body>
+      </Modal>
+      <Modal show={del} onHide={handleDeleteClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Pipe</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Button onClick={handleDeleteClose}>Cancel</Button>
+            <Button variant="danger" onClick={handleDelete}>Delete</Button>
+          </div>
         </Modal.Body>
       </Modal>
     </>
   )
 }
+);
+export default Pipe;

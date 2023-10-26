@@ -14,8 +14,11 @@ const handleColorType = (status: string) => {
 };
 
 const Edit = styled.img`
-    width: 100%;
     cursor: pointer;
+    position: absolute;
+    right: 1em;
+    top: 1em;
+    width: 1.6%;
 `;
 
 const View = styled.img``;
@@ -26,14 +29,15 @@ const Left = styled.div`
 `
 
 const Pipe = styled.li`
+    position: relative;
     background: #fff;
-    display: flex;
     justify-content: space-between;
     width: 75%;
     height: 150px;
     margin: 10px;
     border-radius: 10px;
     flex-direction: column;
+    list-style: none;
 `;
 
 const Button = styled.button`
@@ -59,7 +63,7 @@ const Execute = styled.button<Props>`
     padding: 5px 20px;
     border: none;
     border-radius: 5px;
-    margin: 5px;
+    margin: 10px;
     font-weight: 600;
     color: #FFF;
 `
@@ -79,6 +83,8 @@ const Bottom = styled.div`
     padding: 10px 25px;
     gap: 10px;
     align-items: flex-end;
+    bottom: 0;
+    position: absolute;
 `
 const Status = styled.div<Props>`
     background: ${({ status }) => handleColorType(status)};
@@ -96,9 +102,73 @@ const Label = styled.h6`
     font-size: 15px;
 `;
 
+const EditBox = styled.ul`
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+`;
+
+const EditOption = styled.li`
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+    font-weight: 500;
+    gap: 12px;
+
+    &: hover {
+        border-radius: 5px;
+        padding: 5px;
+        background: rgba(0, 191, 255, 0.2);
+        cursor: pointer;
+    }
+`;
+
+const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
+  border: 0;
+  clip: rect(0 0 0 0);
+  clippath: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+`
+const CheckboxContainer = styled.div`
+    display: flex;
+    align-items: center;
+`;
+const Checkbox = styled.input.attrs({
+    type: 'checkbox'
+})`
+    display: ${props => props.defaultChecked ? 'inline-block' : 'none'};
+    width: 1em;
+    height: 1em;
+    background: ${props => props.defaultChecked ? '#fff' : '#000'};
+    border: none; 
+    border: solid 1px #ccc;
+    border-radius: 10px;
+  transition: all 150ms;
+  ${HiddenCheckbox}:focus + & {
+    box-shadow: 0 0 0 3px pink;
+  }
+
+  ${Pipe}:hover & {
+    display: inline-block;
+  }
+`
+
 export default {
     Button,
+    CheckboxContainer,
+    Checkbox,
     Edit,
+    EditOption,
+    EditBox,
     Execute,
     View,
     Left,
