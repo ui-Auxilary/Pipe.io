@@ -32,9 +32,6 @@ export default function Microservice({ code, name, docstring, param, parent_file
   ]
 
   useEffect(() => {
-    axios.post('http://localhost:8000/microservice/add', { "name": name, "parameters": param, "parent_file": parent_file, "code": code, "docstring": docstring }).then(res => setId(JSON.parse(res.data).id))
-
-    console.log('First param', param)
     /** instead of using the microservice collection id as the id, we use the name of the microservice. */
     setId(name)
   }, [])

@@ -27,7 +27,7 @@ def extract_microservice(python_file=None) -> str:
     for service in dir(imported_module):
         if not re.match(r'__.*__', service):
             # check if callable
-            if callable(getattr(imported_module, service)):
+            if callable(getattr(imported_module, service)) and not service.startswith("_"):
                 microservice_names.append(service)
 
     for microservice in microservice_names:
