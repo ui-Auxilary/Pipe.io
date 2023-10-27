@@ -24,14 +24,14 @@ export default function MultiStepForm({ show, handleClose }: Props) {
           label: 'Name',
           type: 'text',
           value: 'name',
-          validation: /^[a-zA-Z]{1,25}$/,
+          validation: /^[a-zA-Z_ ]{1,25}$/,
           errorMessage: 'Name must not exceed 25 characters'
         },
         {
           label: 'Description',
           type: 'text',
           value: 'description',
-          validation: /^[a-zA-Z]{1,250}$/,
+          validation: /^[a-zA-Z_ ]{1,250}$/,
           errorMessage: 'Description must not exceed 250 characters'
         },
         {

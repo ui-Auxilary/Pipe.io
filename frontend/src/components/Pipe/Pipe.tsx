@@ -21,7 +21,7 @@ export interface Props {
   name: string
   description?: string
   checked?: boolean
-  onCheck(pipeId: string): () => {}
+  onCheck: (pipeId: string, id: number) => void
   ref: React.MutableRefObject<never[]>
   idx: number
 }
@@ -33,7 +33,7 @@ export interface ExecuteProps {
 }
 
 
-const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck, idx } : Props, ref) => {
+const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck, idx }: Props, ref) => {
   const [show, setShow] = useState(false);
   const [showView, setShowView] = useState(false);
   const [del, setDel] = useState(false);
@@ -152,17 +152,17 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
     </Popover>
   );
 
-  
+
   return (
     <>
-      <S.Pipe onClick={() =>  onCheck(pipeId, idx)}>
+      <S.Pipe>
         <OverlayTrigger trigger="click" placement="bottom" overlay={editPipeline} rootClose>
           <S.Edit ref={target} src={dots} />
         </OverlayTrigger>
         <S.Top>
           <S.Left>
             <S.CheckboxContainer>
-              <S.Checkbox  onClick={() =>  onCheck(pipeId, idx)} defaultChecked={ref.current[idx]?.checked || false} ref={(el) => ref.current[idx] = el}/>
+              <S.Checkbox onClick={() => onCheck(pipeId, idx)} defaultChecked={ref.current[idx]?.checked || false} ref={(el) => ref.current[idx] = el} />
             </S.CheckboxContainer>
             <span>
             </span>
@@ -194,7 +194,7 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
           <S.Button onClick={() => handleViewOverlayClose()}>Save</S.Button>
         </Modal.Footer>
       </Modal>
-      
+
       <Modal dialogClassName="form-modal" show={showChart} onHide={handleChartClose}>
         <Modal.Header closeButton>
           <Modal.Title>View Results</Modal.Title>

@@ -20,12 +20,18 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
     }, [edit])
 
     const findAndUpdate = (name: string) => {
+
         const foundIndex = (microserviceData.microservices as []).findIndex(x => x.name == name);
-        if (foundIndex) {
+        console.log('updating', foundIndex, edit, edit[name], name)
+        if (foundIndex >= 0) {
+            console.log('IN')
             const updatedData = [...microserviceData.microservices as []]
+            let poo = { parameters: edit[name] }
+            console.log('POO', poo)
             updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: edit[name] })
             setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
         }
+        console.log('NEW', microserviceData)
     }
 
     const handleSave = () => {
