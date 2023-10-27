@@ -20,7 +20,7 @@ export default function ViewMicroservice() {
                 <S.Scrollbar length={len}>
                     {microservices && microservices.map(({ code, doc, name, parameters, parent_file }, index) => {
                         console.log('hey loop')
-                        return <Microservice code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file} />
+                        return <Microservice code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file} from_pipe={false} />
                     })}
                 </S.Scrollbar>
             </S.Container>

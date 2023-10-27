@@ -13,7 +13,7 @@ export interface Item {
     errorMessage?: string
 }
 
-export default function Form({ questions, step, onHandleClose }) {
+export default function Form({ questions, step, edit = false, onHandleClose = () => { } }) {
     console.log('Q', questions)
     const formRef = useRef(null);
 
@@ -26,6 +26,7 @@ export default function Form({ questions, step, onHandleClose }) {
             console.log('here')
         }
     }
+    console.log(edit, "EDIT")
 
     return (
         <form ref={formRef}>
@@ -34,11 +35,11 @@ export default function Form({ questions, step, onHandleClose }) {
                     <FormItem key={item.label} item={item} />
                 ))
             }
-            {currentStep == questions.length ? (
+            {!edit && (currentStep == questions.length ? (
                 <Button style={{ marginTop: '50px', position: 'relative', right: '-90%' }} onClick={() => submitData(onHandleClose)} variant="secondary">Submit</Button>
             ) : (
                 <Button style={{ marginTop: '50px', position: 'relative', right: '-90%' }} onClick={onNext}>Next</Button>
-            )}
+            ))}
         </form>
     )
 }
