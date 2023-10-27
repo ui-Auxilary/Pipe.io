@@ -2,7 +2,7 @@ import axios from "axios";
 import Form from "components/MultiStepForm/Form";
 import { useFormData } from "components/MultiStepForm/Form/FormProvider";
 import { useEffect, useState } from "react";
-import { Modal } from "react-bootstrap"
+import { Button, Modal } from "react-bootstrap"
 
 import S from './styles'
 import { useAppData } from "helper/AppProvider";
@@ -10,7 +10,7 @@ import { useAppData } from "helper/AppProvider";
 export default function Edit({ id, show, params, data, closeOverlay, type = "microservice" }) {
     console.log("IN EDIT", show, params, data)
     const { setMicroserviceData, microserviceData } = useFormData();
-    const [ microservices, setMicroservices ] = useState([]);
+    const [microservices, setMicroservices] = useState([]);
     const { edit, setPipeIds } = useAppData();
 
 
@@ -20,23 +20,29 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
         setMicroservices(data)
     }, [edit])
 
-    const findAndUpdate = (name: string) => {
+    const findAndUpdate = (name: string, parameters) => {
+
         const foundIndex = (microserviceData.microservices as []).findIndex(x => x.name == name);
+        // console.log('updating', foundIndex, edit, edit[name], name)
+        // console.log('Microdata', microserviceData)
         const updatedData = [...microserviceData.microservices as []]
+        if (foundIndex >= 0) {
 
-        let newParams = {...data.parameters}
+            console.log('Updated', updatedData[foundIndex]["parameters"], name, parameters, edit[name])
+            console.log('OLD', parameters)
+            Object.keys(parameters).forEach(key => {
+                console.log('Edit', edit[name][key], 'params', parameters[key])
+                let newParams = Object.assign(parameters[key], { value: edit[name][key] })
+                console.log('NEW para', newParams)
+                updatedData[foundIndex]["parameters"][key] = newParams
+            })
 
-        // for loop  to find matching keys  between edit[id] and params
-        for (const [key, value] of Object.entries(edit[name])) {
-            newParams[key].default = value;
         }
-
-        // updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: newParams })
-        console.log("EDITID: ", newParams);
-        console.log(microserviceData.microservices)
-        updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: newParams })
+        console.log('Updated Data', updatedData,)
+        // updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: edit[name] })
         setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
-        return newParams
+
+        console.log('NEW', microserviceData)
     }
 
     const handleSave = () => {
@@ -50,8 +56,7 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
                 })
                 break;
             default:
-                /** update microserviceData with updated microservices w new params */
-                findAndUpdate(data["name"])
+                findAndUpdate(data["name"], data["parameters"])
         }
         closeOverlay();
     }
@@ -62,11 +67,8 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
                 <Modal.Title>Edit</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form questions={params} step={0} />
+                <Form questions={params} step={0} edit={true} onHandleClose={handleSave} />
             </Modal.Body>
-            <Modal.Footer>
-                <S.Button onClick={() => handleSave()}>Save</S.Button>
-            </Modal.Footer>
         </Modal>
     )
 }
