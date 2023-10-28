@@ -15,6 +15,7 @@ export interface Item {
   validation?: string
   errorMessage?: string
   elType?: string
+  id?: string
 }
 
 export interface Props {
@@ -56,7 +57,7 @@ export default function FormItem({ item }: Props) {
         <ViewMicroservice />
       );
     case 'edit_param':
-      console.log('POO', edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || '')
+      console.log('POO', item)
       return (
         <>
           <S.Label>{item.label}</S.Label>

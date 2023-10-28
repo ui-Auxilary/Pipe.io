@@ -15,16 +15,19 @@ interface ValidationProps {
 export default function ValidatedInput({ item, customValidity, errorMessage, isEdit, ...downProps }: ValidationProps) {
     const ref = useRef(null);
     const { edit } = useAppData();
-    let stringTest = /^[a-zA-Z_./\ ]{1,}$/
+    let stringTest = /^[a-zA-Z0-9_. ]*$/
     let numTest = /^[0-9 ]{1,}$/
     let objTest = /^(?!\s*:\s*)(?:\{[^}]*\})$/
     let listTest = /^(?!\s*:\s*)(?:\[[^}]*\])$/
 
     const matchType = (value: any, type: string): boolean => {
         console.log('MATCHING Value', value, 'type', type)
-        if (stringTest.test(value) && type === "str") {
+        if (type === "None") {
             return true;
-        } else if (numTest.test(value) && type === "int") {
+        }
+        else if (numTest.test(value) && type === "int") {
+            return true;
+        } else if (stringTest.test(value) && type === "str") {
             return true;
         } else if (objTest.test(value) && type === "object") {
             return true;

@@ -65,7 +65,7 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
 
 
   const items = Object.keys(data).map((el) => (
-    { label: el, "type": "edit_param", id: pipeId, value: "pipe" }
+    { label: el, "type": "edit_param", id: pipeId, name: pipeId }
   ))
 
 
@@ -84,8 +84,6 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
   const handleOverlayClose = () => setShow(false);
   const handleViewOverlayShow = () => setShowView(true);
   const handleViewOverlayClose = () => setShowView(false);
-  const handleEditClose = () => setShow(false);
-  const handleEditShow = () => setShow(false);
   const handleDeleteClose = () => setDel(false);
   const handleChartClose = () => setChart(false);
   const handleChartShow = () => setChart(true);

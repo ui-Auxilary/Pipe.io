@@ -8,15 +8,11 @@ import S from './styles'
 import { useAppData } from "helper/AppProvider";
 
 export default function Edit({ id, show, params, data, closeOverlay, type = "microservice" }) {
-    console.log("IN EDIT", show, params, data)
+    console.log("IN BETTER EDIT", show, params, data)
     const { setMicroserviceData, microserviceData } = useFormData();
     const [microservices, setMicroservices] = useState([]);
     const { edit, setPipeIds } = useAppData();
 
-
-    useEffect(() => {
-        console.log('PICKA');
-    }, [])
 
     useEffect(() => {
         console.log('New', edit)
@@ -34,23 +30,27 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
             console.log('Updated', updatedData[foundIndex]["parameters"], name, parameters, edit[name])
             console.log('OLD', parameters)
             Object.keys(parameters).forEach(key => {
-                console.log('Edit', edit[name][key], 'params', parameters[key])
-                let newParams = Object.assign(parameters[key], { value: edit[name][key] })
+
+                let newParams = edit[name] && parameters[key] ? Object.assign(parameters[key], { value: edit[name][key] }) : parameters[key] || edit[name]
                 console.log('NEW para', newParams)
                 updatedData[foundIndex]["parameters"][key] = newParams
             })
 
         }
-        console.log('Updated Data', updatedData,)
+        console.log('Updated Data', updatedData)
         // updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: edit[name] })
         setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
 
         console.log('NEW', microserviceData)
     }
 
+    useEffect(() => {
+        console.log('CHECK EDIt', edit)
+    }, [edit])
     const handleSave = () => {
         switch (type) {
             case "pipe":
+                console.log('EDITING', edit, edit[id], id)
                 axios.put(`http://localhost:8000/pipes/${id}`, edit[id]).then((res) => {
                     console.log(res)
                     setPipeIds(prev => [...prev])

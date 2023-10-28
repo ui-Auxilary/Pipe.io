@@ -5,20 +5,24 @@ import Microservice from 'components/Microservice';
 
 interface Props {
     pipeId: string
-  }
+}
 
 export default function ViewMicroserviceFromPipe({ pipeId }: Props) {
     const [microservices, setMicroservices] = useState([]);
 
     useEffect(() => {
-        console.log(pipeId)
+        console.log('PIPEID', pipeId)
         axios.get(`http://localhost:8000/pipes/${pipeId}`).then(res => {
-            
+
             setMicroservices(res.data.microservices)
         })
 
     }, [])
     let len = microservices ? (microservices as []).length : 0
+
+    useEffect(() => {
+        console.log('###MICRO', microservices)
+    }, [microservices])
     return (
         <S.Wrapper>
             <h5>Edit microservices</h5>
@@ -26,7 +30,7 @@ export default function ViewMicroserviceFromPipe({ pipeId }: Props) {
                 <span style={{ color: "#907F7F", fontWeight: 500 }}>Found {len} microservice(s)</span>
                 <S.Scrollbar>
                     {microservices && microservices.map(({ code, doc, name, parameters, parent_file }, index) => {
-                        return <Microservice code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file} from_pipe={true} parent_pipe_id={pipeId}/>
+                        return <Microservice code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file} from_pipe={true} parent_pipe_id={pipeId} />
                     })}
                 </S.Scrollbar>
             </S.Container>

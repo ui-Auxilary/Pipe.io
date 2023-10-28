@@ -8,7 +8,7 @@ import Edit from 'components/Edit';
 import EditFromPipe from 'components/Edit/EditFromPipe';
 import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
 
-export default function Microservice({ code, name, docstring, param, parent_file, from_pipe }) {
+export default function Microservice({ code, name, docstring, param, parent_file, from_pipe, parent_pipe_id }) {
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);
   const [id, setId] = useState();
@@ -19,8 +19,9 @@ export default function Microservice({ code, name, docstring, param, parent_file
   const handleCodeClose = () => { setCode(false) };
   const handleCodeShow = (e: React.SyntheticEvent<EventTarget>) => { e.preventDefault(); setCode(true) };
 
+  param && console.log('ITEMS', param)
   const items = param && Object.keys(param).map((el) => (
-    { label: el, type: "edit_param", name: id, value: param[el]["default"] || '', elType: param[el]["type"] || '' }
+    { label: el, type: "edit_param", name: id, value: param[el] ? param[el]["default"] : '', elType: param[el] ? param[el]["type"] : 'None' }
   ))
 
 
@@ -64,7 +65,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
       </S.Microservice>
 
       {!from_pipe && <Edit id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />}
-      {from_pipe && <EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />}
+      {from_pipe && <EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} parent_pipe_id={parent_pipe_id} />}
 
       <Modal show={showCode} onHide={handleCodeClose}>
         <Modal.Header closeButton>
