@@ -64,7 +64,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
       </S.Microservice>
 
       {!from_pipe && <Edit id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />}
-      {from_pipe && <EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} parent_pipe_id={parent_pipe_id} />}
+      {from_pipe && <EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />}
 
       <Modal show={showCode} onHide={handleCodeClose}>
         <Modal.Header closeButton>

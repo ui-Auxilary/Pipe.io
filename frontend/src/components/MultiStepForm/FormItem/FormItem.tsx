@@ -34,7 +34,8 @@ export default function FormItem({ item }: Props) {
             item={item} customValidity={item.validation}
             errorMessage={item.errorMessage}
             value={userData[item.label.toLocaleLowerCase()]}
-            onChange={(e) => setUserData({ ...userData, [item.label.toLocaleLowerCase()]: e.target.value })} />
+            onChange={(e) => setUserData({ ...userData, [item.label.toLocaleLowerCase()]: e.target.value })}
+          />
         </>
       );
 
@@ -55,15 +56,16 @@ export default function FormItem({ item }: Props) {
         <ViewMicroservice />
       );
     case 'edit_param':
+      console.log('POO', edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || '')
       return (
         <>
           <S.Label>{item.label}</S.Label>
           <ValidatedInput
             value={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}
+            item={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}
             onChange={(e) => setEdit({ ...edit, [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e.target.value } })}
-            item={item}
             customValidity={item.elType}
-            edit={true}
+            isEdit={true}
           />
         </>
       );

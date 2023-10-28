@@ -29,7 +29,7 @@ export default function Form({ questions, step, edit = false, onHandleClose = ()
 
     const onEdit = () => {
         if (formRef.current.reportValidity()) {
-            console.log('VALID')
+            onHandleClose();
         }
     }
     console.log(edit, "EDIT")

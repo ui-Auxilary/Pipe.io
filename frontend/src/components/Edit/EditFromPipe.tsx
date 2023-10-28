@@ -11,12 +11,16 @@ export default function EditFromPipe({ id, show, params, data, closeOverlay, typ
     console.log("IN EDIT", show, params, data)
     const [microservice, setMicroservice] = useState([]);
     const { edit, setPipeIds } = useAppData();
-
+    console.log('PIPE', params)
 
     useEffect(() => {
         console.log('New', edit)
         setMicroservice(data)
     }, [edit])
+
+    useEffect(() => {
+        console.log('HERE FROM PIPE')
+    }, [])
 
 
     const findAndUpdate = (name: string) => {

@@ -14,6 +14,9 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
     const { edit, setPipeIds } = useAppData();
 
 
+    useEffect(() => {
+        console.log('PICKA');
+    }, [])
 
     useEffect(() => {
         console.log('New', edit)
