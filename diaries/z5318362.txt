@@ -3,3 +3,11 @@ week1, we make a 5-person group and decided to Project7. And our group name is "
 week2, we had twice meeting. First meeting we decided to do Project10 because yahoo finance api is free. Second meeting we made a draft about the delegation. we had a client meeting on friday.
 
 week3, we started doing the proposal. I did something in background and write some user stories. I did some visualization story board.
+
+week4, we started the sprint1. Created routers to get stock data from yfinance API. 
+
+week5, showed Demo A and Retrospective A, started doing sprint2
+
+week6, working on microservices and finished the calculation of moving average and RSI, also finished the backend of checking validation.
+
+week7, checking validation was conflict with microservices editing, tried to fix and finish the validation frontend

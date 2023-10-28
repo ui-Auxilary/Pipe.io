@@ -14,5 +14,8 @@ Worked mainly on storyboard design and helping out with some of the user stories
 Week 4
 Worked on authentication on both the backend and front end. Completed over the weekend. Assigned to help out other people with their user stories = mostly frontend work
 
-Week5
-tbd
+Week 5
+Worked on graphing and worked on token authentication for routes. Changed the get pipelines route to only get the users pipelines. Worked on microservice parameter inputs on both frontend and backend.
+
+Week 6
+Worked on output tags and provided stock graphs on the front end which can take inputs and update while viewing the graph.
