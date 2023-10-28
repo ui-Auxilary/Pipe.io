@@ -24,3 +24,6 @@ and tried to implement form validation (still in progress).
 Week 6
 Refactored editing microservices logic to work with editing pipelines as well, changed view result button to view output from microservices after exection and a paginated display of the results.
 Added select-all and delete functionality for pipes, and togglable tooltip to edit pipelines, view microservices or delete a pipe. 
+
+Week 7
+Added form validaton and input validation for the microservice fields, and made them use the default value as a placeholder
