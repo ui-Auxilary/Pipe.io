@@ -8,8 +8,10 @@ import Select from 'react-select';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
-import { BarChart } from '@mui/x-charts/BarChart';
-import { LineChart } from '@mui/x-charts/LineChart';
+// import { BarChart } from '@mui/x-charts/BarChart';
+// import { LineChart } from '@mui/x-charts/LineChart';
+
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from 'recharts';
 
 interface ChartProps {
   pipeId: string
@@ -46,25 +48,36 @@ export default function ChartComponent(props: ChartProps) {
 
   const [refresh, setRefresh] = useState(false);
   const [chartType, setChartType] = useState(chartOptions[0]);
+  const [showStartCalendar, setShowStartCalendar] = useState(false);
 
 
   useEffect(() => {
     axios.get(`http://localhost:8000/pipes/${pipeId}`).then((res:any) => {     
       setTicker(res.data.microservices[props.index].parameters.ticker);
-      setStock(JSON.parse(res.data.output[props.name]));
-      setStartDate(JSON.parse(res.data.output[props.name]).Date[0]);
-      let endDate = JSON.parse(res.data.output[props.name]).Date[JSON.parse(res.data.output[props.name]).Date.length - 1];
+      const output = JSON.parse(JSON.parse(res.data.output[props.name]));
+
+      const stockObj = Object.keys(output.Close).map((key) => {
+        return {
+          Date: parseInt(key),
+          Close: output.Close[key]
+        }
+      });
+
+      setStock(stockObj);
+      console.log("RES", stockObj)
+
+      const start = new Date(stockObj[0].Date);
+      let endDate = new Date(stockObj[stockObj.length - 1].Date);
       // add extra day to endDate
-      endDate = new Date(endDate);
       endDate.setDate(endDate.getDate() + 1);
-      console.log("RES",res.date)
+      setStartDate(format(start, "yyyy-MM-dd"));
       setEndDate(format(endDate, "yyyy-MM-dd"));
     });
   }, [refresh])
 
 
   const formatDate = (date: string) => {
-    return format(new Date(date), "dd-MM-y");
+    return format(new Date(date), "dd/MM/yy");
   }
 
   const handleStockChange = (e: any) => {
@@ -106,44 +119,27 @@ export default function ChartComponent(props: ChartProps) {
   return (
     <S.Container>
       <S.GraphContainer>
-        {chartType.value == 'bar' && <BarChart
-          xAxis={[
-            {
-              id: 'Date',
-              data: stock.Date,
-              scaleType: 'band',
-              valueFormatter: formatDate,
-              label: 'Date',
-            },
-          ]}
-          series={[
-            {
-              data: stock.Close,
-              label: 'Closing Price $',
-            },
-          ]}
-          width={1600}
-          height={600}
-        />}
+        { chartType.value == 'bar' &&
+          <BarChart width={1500} height={500} data={stock}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="Date" domain={['dataMin', 'dataMax']} tickFormatter={formatDate} />
+            <YAxis />
+            <Tooltip labelFormatter={formatDate} />
+            <Legend />
+            <Bar dataKey="Close" fill="#02b2af"/>
+          </BarChart>
+        }
 
-        {chartType.value == 'line' &&<LineChart
-          xAxis={[
-            {
-              id: 'Date',
-              data: stock.Date.map((date: string) =>new Date(date)),
-              scaleType: 'time',
-              label: 'Date',
-              tickFormatter: (date) => format(date, 'MMM'),
-            },
-          ]}
-          series={[
-            {
-              data: stock.Close,
-              label: 'Closing Price $',
-            },
-          ]}
-          // height={600}
-        />}
+        { chartType.value == 'line' &&
+          <LineChart width={1400} height={600} data={stock}>
+            <Line type="monotone" dataKey="Close" stroke="#02b2af" strokeWidth={2}/>
+            <CartesianGrid stroke="#ccc" />
+            <XAxis dataKey="Date" scale="time" domain={['dataMin', 'dataMax']} type="number" tickFormatter={formatDate} />
+            <YAxis />
+            <Tooltip labelFormatter={formatDate}/>
+            <Legend />
+          </LineChart>
+        }
       </S.GraphContainer>
       <Form>
         <Form.Group className="mb-3">
@@ -167,9 +163,14 @@ export default function ChartComponent(props: ChartProps) {
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Start Date</Form.Label>
-          <Form.Control type="text" value={startDate} onChange={handleStartDateChange}/>
-          
-          {/* <Calendar onChange={setStartDate} value={new Date(startDate)} /> */}
+          <Form.Control type="text" value={startDate} onChange={handleStartDateChange} onClick={() => setShowStartCalendar(!showStartCalendar)}/>
+{/*           
+          {showStartCalendar && <S.CalendarContainer>
+          <Calendar onChange={setStartDate} value={new Date(startDate)}/>
+          </S.CalendarContainer>
+          } */}
+
+
           <Form.Text className="text-muted">
             Choose the start date
           </Form.Text>
