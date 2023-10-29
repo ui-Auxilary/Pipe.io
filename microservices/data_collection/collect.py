@@ -38,14 +38,8 @@ def import_yahoo(ticker: str = 'msft',
     ticker = yf.Ticker(ticker)
 
     df = ticker.history(start=start_date, end=end_date, interval="1d")
-    # df['Date'] = df.index
 
     # Save the dataframe to our storage location
     df.to_csv(output_file_path)
 
-    ret = df.reset_index().to_dict(orient='list')
-
-    # fix timestamp
-    ret['Date'] = [str(x.strftime("%Y-%m-%d")) for x in ret['Date']]
-
-    return ret
+    return df.to_json()
