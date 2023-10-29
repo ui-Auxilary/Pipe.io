@@ -31,6 +31,7 @@ def calculate_mfi(input_file_path: str ="stock_data.csv", output_file_path:str =
             
 
     # Calculate typical price
+    
     df['Typical Price'] = (df[high_column] + df[low_column] + df[close_column]) / 3
     
     # Calculate Money Flow (MF)
@@ -40,6 +41,7 @@ def calculate_mfi(input_file_path: str ="stock_data.csv", output_file_path:str =
     # Calculate Positive Money Flow (PMF) and Negative Money Flow (NMF)
     df['PMF'] = 0.0
     df['NMF'] = 0.0
+    
     df.loc[df['Typical Price'] > df['Typical Price'].shift(1), 'PMF'] = df['Money Flow']
     df.loc[df['Typical Price'] < df['Typical Price'].shift(1), 'NMF'] = df['Money Flow']
     
@@ -48,7 +50,6 @@ def calculate_mfi(input_file_path: str ="stock_data.csv", output_file_path:str =
     
     # Calculate Money Flow Index (MFI)
     df['MFI'] = 100 - (100 / (1 + df['MR']))
+    
     df.to_csv(output_file_path)
     return df.to_json()
-
-calculate_mfi("C:/Users/86150/Desktop/39003/capstone-project-3900h15auntiltedproject/microservices/moving_average/stock_data.csv", "C:/Users/86150/Desktop/39003/capstone-project-3900h15auntiltedproject/microservices/moving_average/mfi.csv", 14, "High", "Low", "Close", "Volume", "Date")
