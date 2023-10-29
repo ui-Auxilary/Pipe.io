@@ -34,8 +34,7 @@ const ButtonContainer = styled.div`
 `;
 
 const GraphContainer = styled.div`
-  overflow-y: hidden;
-  width: 1600px; 
+  width: 1500px; 
   height: 600px; 
 
   /* Media query for smaller screens */
@@ -52,6 +51,11 @@ const GraphContainer = styled.div`
   @media (max-width: 480px) {
     width: 500px; 
   }
+  margin-right: 10px;
+`;
+
+const CalendarContainer = styled.div`
+  width: 275px; 
 `;
 
 
@@ -63,4 +67,5 @@ export default {
   UserImg,
   ButtonContainer,
   GraphContainer,
+  CalendarContainer
 };
