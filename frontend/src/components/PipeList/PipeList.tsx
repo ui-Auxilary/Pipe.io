@@ -25,13 +25,13 @@ export default function PipeList() {
     const [checked, setChecked] = useState(false);
     const [numChecked, setNumChecked] = useState(0);
     const checkboxRef = useRef([]);
-    
+
     const onHandleDelete = () => {
         let itemsChecked = numChecked
         Object.entries(refData).map(([pipeId, isChecked]) => {
             if (isChecked) {
                 itemsChecked > 0 ? itemsChecked -= 1 : null;
-                axios.delete(`http://localhost:8000/pipes/${pipeId}`, { params: { id: pipeId } }).then(() => {setPipeIds([...pipeIds])})
+                axios.delete(`http://localhost:8000/pipes/${pipeId}`, { params: { id: pipeId } }).then(() => { setPipeIds([...pipeIds]) })
                 setPipes(pipes.filter(pipe => pipe.pipe_id != pipeId));
             }
         })
@@ -44,7 +44,7 @@ export default function PipeList() {
         for (let i = 0; i < checkboxRef.current.length; i++) {
             if (checkboxRef.current[i]) {
                 checkboxRef.current[i].checked = false;
-                Object.assign(updatedRefData, {[pipes[i]["pipe_id"]]: false })
+                Object.assign(updatedRefData, { [pipes[i]["pipe_id"]]: false })
             }
         }
         setRefData(updatedRefData)
@@ -58,17 +58,16 @@ export default function PipeList() {
             if (checkboxRef.current[i]) {
                 checkboxRef.current[i].checked = true;
                 setCheck += 1
-                Object.assign(updatedRefData, {[pipes[i]["pipe_id"]]: true })  
+                Object.assign(updatedRefData, { [pipes[i]["pipe_id"]]: true })
             }
         }
-        console.log('Confirm', updatedRefData, setCheck, checkboxRef.current.length )
+        console.log('Confirm', updatedRefData, setCheck, checkboxRef.current.length)
         setRefData(updatedRefData)
         setNumChecked(setCheck);
     }
 
     const pipeChecked = useCallback((pipeId: string, id: number) => {
-        checkboxRef.current[id].checked = !checkboxRef.current[id].checked;
-        setRefData(prev => ({...prev, [pipeId]: checkboxRef.current[id].checked}))
+        setRefData(prev => ({ ...prev, [pipeId]: checkboxRef.current[id].checked }))
     }, [])
 
     useEffect(() => {
@@ -76,7 +75,7 @@ export default function PipeList() {
             headers: {
                 "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
             }
-        }).then(res => {    
+        }).then(res => {
             console.log("PIPES", res.data)
             setPipes(res.data)
         }).catch(err => console.log(err))
@@ -102,7 +101,7 @@ export default function PipeList() {
                 </S.Row>
             )}
             {pipes.map(({ pipe_id, name, description }, index) => (
-                <Pipe key={pipe_id} pipeId={pipe_id} id={`00${index + 1} `} name={name} description={description} onCheck={pipeChecked} ref={checkboxRef} idx={index}/>
+                <Pipe key={pipe_id} pipeId={pipe_id} id={`00${index + 1} `} name={name} description={description} onCheck={pipeChecked} ref={checkboxRef} idx={index} />
             ))}
         </S.Container>
     )

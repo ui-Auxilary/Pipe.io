@@ -1,26 +1,29 @@
 import S from './styles'
 import view from 'assets/view.svg'
-import Form from 'components/MultiStepForm/Form';
-import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
 import { Modal } from 'react-bootstrap';
 import Edit from 'components/Edit';
+import EditFromPipe from 'components/Edit/EditFromPipe';
+import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
 
-export default function Microservice({ code, name, docstring, param, parent_file }) {
+export default function Microservice({ code, name, docstring, param, parent_file, from_pipe, parent_pipe_id }) {
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);
   const [id, setId] = useState();
+  const { microserviceData } = useFormData();
 
-  const handleEditClose = () => setEdit(false);
-  const handleEditShow = () => setEdit(true);
-  const handleCodeClose = () => setCode(false);
-  const handleCodeShow = () => setCode(true);
+  const handleEditClose = () => { setEdit(false) }
+  const handleEditShow = (e: React.SyntheticEvent<EventTarget>) => { e.preventDefault(); setEdit(true) };
+  const handleCodeClose = () => { setCode(false) };
+  const handleCodeShow = (e: React.SyntheticEvent<EventTarget>) => { e.preventDefault(); setCode(true) };
 
+  param && console.log('ITEMS', param)
   const items = param && Object.keys(param).map((el) => (
-    { label: el, "type": "edit_param", id: id }
+    { label: el, type: "edit_param", name: id, value: param[el] ? param[el]["default"] : '', elType: param[el] ? param[el]["type"] : '' }
   ))
+
 
   const microserviceList = [
     {
@@ -30,17 +33,21 @@ export default function Microservice({ code, name, docstring, param, parent_file
   ]
 
   useEffect(() => {
-    axios.post('http://localhost:8000/microservice/add', { "name": name, "parameters": param, "parent_file": parent_file, "code": code, "docstring": docstring }).then(res => setId(JSON.parse(res.data).id))
+    /** instead of using the microservice collection id as the id, we use the name of the microservice. */
+    setId(name)
+    console.log('PARAM', param, microserviceData)
   }, [])
-  
+
   const data = {
     parent_file: parent_file,
     name: name,
     code: code,
     docstring: docstring,
+    parameters: param
   }
 
   return (
+
     <>
       <S.Microservice>
         <S.Left>
@@ -57,8 +64,9 @@ export default function Microservice({ code, name, docstring, param, parent_file
         </div>
       </S.Microservice>
 
+      {!from_pipe && <Edit id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />}
+      {from_pipe && <EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} parent_pipe_id={parent_pipe_id} />}
 
-      <Edit id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />
       <Modal show={showCode} onHide={handleCodeClose}>
         <Modal.Header closeButton>
           <Modal.Title>Code</Modal.Title>
