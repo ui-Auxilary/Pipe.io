@@ -8,6 +8,7 @@ h11==0.14.0
 httptools==0.6.0
 httpx==0.25.0
 idna==3.4
+nltk
 numpy==1.26.0
 pandas==2.1.1
 plotly==5.17.0 
