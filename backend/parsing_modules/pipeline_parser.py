@@ -53,14 +53,15 @@ def execute_pipeline(pipeline_json):
 
             # after
             for key, value_dict in microservice_parameters.items():
+                print('PRE', key, value_dict['default'])
                 try:
                     value = value_dict['value'] if 'value' in value_dict else value_dict['default']
                     # Attempt to parse the value with ast.literal_eval
-                    parsed_value = ast.literal_eval(value[key])
+                    parsed_value = ast.literal_eval(value)
                     microservice_parameters[key] = parsed_value
                 except (ValueError, SyntaxError):
                     # Handle the case where ast.literal_eval fails
-                    microservice_parameters[key] = value
+                    microservice_parameters[key] = value_dict['value'] if 'value' in value_dict else value_dict['default']
 
             microservice_function = getattr(imported_module, microservice_name)
 
