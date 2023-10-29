@@ -52,11 +52,11 @@ def execute_pipeline(pipeline_json):
             #     key: ast.literal_eval(value) for key, value in microservice_parameters.items()}
 
             # after
-            for key, value in microservice_parameters.items():
+            for key, value_dict in microservice_parameters.items():
                 try:
-
+                    value = value_dict['value'] if 'value' in value_dict else value_dict['default']
                     # Attempt to parse the value with ast.literal_eval
-                    parsed_value = ast.literal_eval(value)
+                    parsed_value = ast.literal_eval(value[key])
                     microservice_parameters[key] = parsed_value
                 except (ValueError, SyntaxError):
                     # Handle the case where ast.literal_eval fails
