@@ -21,7 +21,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
 
   param && console.log('ITEMS', param)
   const items = param && Object.keys(param).map((el) => (
-    { label: el, type: "edit_param", name: id, value: param[el] ? param[el]["default"] : '', elType: param[el] ? param[el]["type"] : 'None' }
+    { label: el, type: "edit_param", name: id, value: param[el] ? param[el]["default"] : '', elType: param[el] ? param[el]["type"] : '' }
   ))
 
 

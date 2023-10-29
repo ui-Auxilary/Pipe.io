@@ -3,10 +3,13 @@ import json
 import os
 import shutil
 import ast
+import pprint
 
 
 def execute_pipeline(pipeline_json):
     # change to the correct directory
+    print('INPUT')
+    pprint.pprint(pipeline_json)
     if os.getcwd().endswith('parsing_modules'):
         os.chdir('..')
     os.chdir('parsing_modules')
@@ -51,6 +54,7 @@ def execute_pipeline(pipeline_json):
             # after
             for key, value in microservice_parameters.items():
                 try:
+
                     # Attempt to parse the value with ast.literal_eval
                     parsed_value = ast.literal_eval(value)
                     microservice_parameters[key] = parsed_value

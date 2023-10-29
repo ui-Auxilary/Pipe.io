@@ -22,7 +22,7 @@ export default function ValidatedInput({ item, customValidity, errorMessage, isE
 
     const matchType = (value: any, type: string): boolean => {
         console.log('MATCHING Value', value, 'type', type)
-        if (type === "None") {
+        if (!type || !value) {
             return true;
         }
         else if (numTest.test(value) && type === "int") {
