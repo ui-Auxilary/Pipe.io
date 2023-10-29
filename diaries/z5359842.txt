@@ -24,3 +24,7 @@ and tried to implement form validation (still in progress).
 Week 6
 Refactored editing microservices logic to work with editing pipelines as well, changed view result button to view output from microservices after exection and a paginated display of the results.
 Added select-all and delete functionality for pipes, and togglable tooltip to edit pipelines, view microservices or delete a pipe. 
+
+Week 7
+Refactored frontend to accept and validate input parameters based on type parsed in from backend. Bug fixing to ensure this new format works in the backend pipeline_parser. Set up custom regex tests 
+to filter input and reduce errors which would break the pipeline.
