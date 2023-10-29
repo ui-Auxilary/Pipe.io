@@ -46,7 +46,7 @@ export default function FormProvider({ children }: FormProviderProps) {
   const [userData, setUserData] = useState<UserData>({})
   const [microserviceData, setMicroserviceData] = useState<MicroserviceData>({});
 
-  const { user, setPipeIds, pipeIds } = useAppData()
+  const { user, setPipeIds, pipeIds, setEdit } = useAppData()
 
   const submitData = (handleClose) => {
     console.log('USER', getUser(), microserviceData)
@@ -58,6 +58,7 @@ export default function FormProvider({ children }: FormProviderProps) {
     console.log('NEW IDS', pipeIds)
     handleClose()
     setUserData({})
+    setEdit({})
     setMicroserviceData({})
   }
 

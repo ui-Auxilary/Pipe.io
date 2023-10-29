@@ -4,12 +4,18 @@ import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
 import MicroserviceList from 'components/MicroserviceList';
 import ViewMicroservice from 'components/MicroserviceList/ViewMicroservice';
 import { useAppData } from 'helper/AppProvider';
+import ValidatedInput from 'helper/validation';
+import React, { FormEvent } from 'react';
 
 export interface Item {
   label: string
   type: string
   value: string
-  id: string
+  name: string
+  validation?: string
+  errorMessage?: string
+  elType?: string
+  id?: string
 }
 
 export interface Props {
@@ -18,15 +24,19 @@ export interface Props {
 
 // Update based on question list to render specific component
 export default function FormItem({ item }: Props) {
-  const { setUserData, userData } = useFormData();
   const { edit, setEdit } = useAppData();
-
+  const { userData, setUserData } = useFormData();
   switch (item.type) {
     case 'text':
       return (
         <>
           <S.Label>{item.label}</S.Label>
-          <S.Input value={userData[item.label.toLocaleLowerCase()]} onChange={(e) => setUserData({ ...userData, [item.label.toLocaleLowerCase()]: e.target.value })} />
+          <ValidatedInput
+            item={item} customValidity={item.validation}
+            errorMessage={item.errorMessage}
+            value={userData[item.label.toLocaleLowerCase()]}
+            onChange={(e) => setUserData({ ...userData, [item.label.toLocaleLowerCase()]: e.target.value })}
+          />
         </>
       );
 
@@ -47,10 +57,17 @@ export default function FormItem({ item }: Props) {
         <ViewMicroservice />
       );
     case 'edit_param':
+      console.log('POO', item)
       return (
         <>
           <S.Label>{item.label}</S.Label>
-          <S.Input value={edit[item.id] ? edit[item.id][item.label.toLocaleLowerCase()] : ''} onChange={(e) => setEdit({ ...edit, [item.id]: { ...edit[item.id], [item.label.toLocaleLowerCase()]: e.target.value } })} />
+          <ValidatedInput
+            value={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}
+            item={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}
+            onChange={(e) => setEdit({ ...edit, [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e.target.value } })}
+            customValidity={item.elType}
+            isEdit={true}
+          />
         </>
       );
   }
