@@ -36,8 +36,8 @@ const Wrapper = styled.div`
   flex-direction: column;
 `
 
-const Scrollbar = styled.div`
-  overflow-y: scroll;
+const Scrollbar = styled.div<{ length: number }>`
+  overflow-y: ${props => props.length > 3 ? 'scroll' : 'hidden'};
   height: 480px;
 
   &::-webkit-scrollbar {

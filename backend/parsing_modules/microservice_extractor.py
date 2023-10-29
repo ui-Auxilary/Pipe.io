@@ -37,10 +37,9 @@ def extract_microservice(python_file=None) -> str:
 
         params = {}
         for param in microservice_signature.parameters.values():
-            if param.default is param.empty:
-                params[param.name] = None
-            else:
-                params[param.name] = param.default
+            param_info = {'default': param.default if param.default != param.empty else None,
+                          'type': param.annotation.__name__ if param.annotation != param.empty else None}
+            params[param.name] = param_info
 
         doc = inspect.getdoc(microservice_function)
         microservice_json['microservices'].append({
