@@ -28,9 +28,8 @@ def import_yahoo(ticker: str = 'msft',
 
     Args:
         ticker (str, optional): The stock ticker symbol. Defaults to 'msft'.
-        start_date (str, optional): The start date for the data in 'YYYY-MM-DD' format. Defaults to one year ago from today.
-        end_date (str, optional): The end date for the data in 'YYYY-MM-DD' format. Defaults to today.
-        output_file_path (str, optional): path for the output csv. Defaults to 'stock_data.csv'.
+        output_file_path (str, optional): The output file path. Defaults to 'stock_data.csv'.
+        time_period (str, optional): The time period to import data for. Defaults to '1y'.
 
     Returns:
         pd.DataFrame: A dataframe containing the imported market data.
@@ -38,14 +37,8 @@ def import_yahoo(ticker: str = 'msft',
     ticker = yf.Ticker(ticker)
 
     df = ticker.history(start=start_date, end=end_date, interval="1d")
-    # df['Date'] = df.index
 
     # Save the dataframe to our storage location
     df.to_csv(output_file_path)
-
-    # ret = df.reset_index().to_dict(orient='list')
-
-    # # fix timestamp
-    # ret['Date'] = [str(x.strftime("%Y-%m-%d")) for x in ret['Date']]
 
     return df.to_json()
