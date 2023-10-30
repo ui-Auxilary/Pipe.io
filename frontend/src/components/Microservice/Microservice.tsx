@@ -16,7 +16,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
   const [id, setId] = useState();
   const [microservices, setMicroservices] = useState([]);
   const [selectedTags, setSelectedTags] = useState("");
-  const { microserviceData } = useFormData();
+  const { setMicroserviceData, microserviceData } = useFormData();
 
   const handleEditClose = () => { setEdit(false) }
   const handleEditShow = (e: React.SyntheticEvent<EventTarget>) => { e.preventDefault(); setEdit(true) };
@@ -30,10 +30,10 @@ export default function Microservice({ code, name, docstring, param, parent_file
 
   const tagOptions = [
     { value: 'value', label: 'Value' },
-    { value: 'ml', label: 'ML' },
-    { value: 'data_frame', label: 'Dataframe' },
-    { value: 'graph', label: 'Graph'},
-    { value: 'csv', label: 'CSV'},
+    // { value: 'ml', label: 'ML' },
+    // { value: 'data_frame', label: 'Dataframe' },
+    { value: 'graph', label: 'Stock Graph'},
+    // { value: 'csv', label: 'CSV'},
     { value: 'plot', label: 'Plot File'}
   ];
 
@@ -66,6 +66,9 @@ export default function Microservice({ code, name, docstring, param, parent_file
       console.log(err)
     });
     console.log("TESTING", microserviceData);
+    const newData = {...microserviceData};
+    newData["microservices"][name]["output_type"] = e.value;
+    setMicroserviceData(newData);
   }
 
   
