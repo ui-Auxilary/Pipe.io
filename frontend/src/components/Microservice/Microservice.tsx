@@ -24,9 +24,17 @@ export default function Microservice({ code, name, docstring, param, parent_file
   const handleCodeShow = (e: React.SyntheticEvent<EventTarget>) => { e.preventDefault(); setCode(true) };
 
   param && console.log('ITEMS', param)
-  const items = param && Object.keys(param).map((el) => (
-    { label: el, type: "edit_param", name: id, value: param[el] ? param[el]["default"] : '', elType: param[el] ? param[el]["type"] : '' }
-  ))
+  
+  const items = param && Object.keys(param).map((el) => {
+    let value = "";
+    if (param[el]["value"] != undefined) {
+      value = param[el]["value"];
+    } else if (param[el]["default"]) {
+      value = param[el]["default"];
+    }
+    return ({ label: el, type: "edit_param", name: id, value: value, elType: param[el] ? param[el]["type"] : '' })
+  })
+  
 
   const tagOptions = [
     { value: 'value', label: 'Value' },
