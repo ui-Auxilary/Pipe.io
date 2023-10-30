@@ -5,10 +5,11 @@ import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import S from './style';
 import Select from 'react-select';
+import Button from 'react-bootstrap/Button';
 // import Calendar from 'react-calendar';
 // import 'react-calendar/dist/Calendar.css';
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, ResponsiveContainer } from 'recharts';
 
 interface ChartProps {
   pipeId: string
@@ -41,38 +42,97 @@ export default function ChartComponent(props: ChartProps) {
 
 
   const [ticker, setTicker] = useState("");
+  const [enableTicker, setEnableTicker] = useState(false);
 
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [enableStartDate, setEnableStartDate] = useState(false);
+  const [enableEndDate, setEnableEndDate] = useState(false);
 
   const [refresh, setRefresh] = useState(false);
   const [chartType, setChartType] = useState(chartOptions[0]);
   const [showStartCalendar, setShowStartCalendar] = useState(false);
+  const [microserviceData, setMicroserviceData] = useState({});
+
+
 
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/pipes/${pipeId}`).then((res:any) => {     
-      setTicker(res.data.microservices[props.index].parameters.ticker);
+
+    setTicker("");
+    setEnableTicker(false);
+    setStartDate("");
+    setEnableStartDate(false);
+    setEndDate("");
+    setEnableEndDate(false);
+
+    axios.get(`http://localhost:8000/pipes/${pipeId}`).then((res:any) => {
+      if (res.data.microservices[props.index].parameters.ticker != undefined) {
+        setTicker(res.data.microservices[props.index].parameters.ticker.value ? 
+          res.data.microservices[props.index].parameters.ticker.value : 
+          res.data.microservices[props.index].parameters.ticker.default);
+        setEnableTicker(true);
+        setEnableStartDate(true);
+        setEnableEndDate(true);
+      }
+
       const output = JSON.parse(JSON.parse(res.data.output[props.name]));
+
+      setMicroserviceData(res.data.microservices[props.index].parameters);
 
       console.log("OUTPUT", output)
 
       const stockObj = Object.keys(output.Close).map((key) => {
-        return {
-          Date: parseInt(key),
-          Close: output.Close[key]
-        }
+
+        if (output.Date === undefined) {
+          return {
+            Date: parseInt(key),
+            Close: output.Close[key],
+            Dividends: output.Dividends[key],
+            "Stock Splits": output["Stock Splits"][key],
+            High: output.High[key],
+            Low: output.Low[key],
+            Open: output.Open[key],
+            Volume: output.Volume[key]
+          }
+        } else if (typeof output.Date[key] === "string") {
+          console.log("HELLO")
+          return {
+            Date: new Date(output.Date[key]).getTime(),
+            Close: output.Close[key],
+            Dividends: output.Dividends[key],
+            "Stock Splits": output["Stock Splits"][key],
+            High: output.High[key],
+            Low: output.Low[key],
+            Open: output.Open[key],
+            Volume: output.Volume[key]
+          }
+        } 
       });
 
       setStock(stockObj);
       console.log("RES", stockObj)
       
-      const start = new Date(stockObj[0].Date);
-      let endDate = new Date(stockObj[stockObj.length - 1].Date);
-      // add extra day to endDate
-      endDate.setDate(endDate.getDate() + 1);
-      setStartDate(format(start, "yyyy-MM-dd"));
-      setEndDate(format(endDate, "yyyy-MM-dd"));
+
+      if (stockObj[0].Date != undefined) {
+        const start = new Date(stockObj[0].Date);
+        if (format(start, "yyyy-MM-dd") != "1970-01-01") {
+          setStartDate(format(start, "yyyy-MM-dd"));
+        }
+
+
+      }
+
+      if (stockObj[stockObj.length - 1].Date != undefined) {
+        let endDate = new Date(stockObj[stockObj.length - 1].Date);
+        // add extra day to endDate
+        endDate.setDate(endDate.getDate() + 1);
+        if (format(endDate, "yyyy-MM-dd") != "1970-01-02") {
+          setEndDate(format(endDate, "yyyy-MM-dd"));
+        }
+      }
+    }).catch((err) => {
+      console.error(err);
     });
   }, [refresh, props.name])
 
@@ -97,7 +157,14 @@ export default function ChartComponent(props: ChartProps) {
 
   const handleSave = (e) => {
     e.preventDefault();
-    axios.put(`http://localhost:8000/pipes/${pipeId}/microservices`, {"name":props.name , "parameters": {"ticker": ticker, "start_date": startDate, "end_date": endDate}}).then((res) => {
+    const updatedParams = {...microserviceData}
+
+    updatedParams["ticker"] = {...updatedParams["ticker"], value: ticker};
+    updatedParams["start_date"] = {...updatedParams["start_date"], value: startDate};
+    updatedParams["end_date"] = {...updatedParams["end_date"], value: endDate};
+
+
+    axios.put(`http://localhost:8000/pipes/${pipeId}/microservices`, {"name":props.name , "parameters": updatedParams}).then((res) => {
       console.log(res)
       updateStock();
     }).catch((err) => {
@@ -117,39 +184,72 @@ export default function ChartComponent(props: ChartProps) {
 
   // round to 2 decimal places
   const roundPrice = (price: number) => {
+
+    if (stock.find((el) => el.Volume == price)) {
+      return price;
+    }
+
     const priceNew = Math.round(price * 100) / 100;
 
     return "$" + priceNew.toString() + " USD";
   }
 
 
-
-
+  const [showClose, setShowClose] = useState(true);
+  const [showOpen, setShowOpen] = useState(false);
+  const [showHigh, setShowHigh] = useState(false);
+  const [showLow, setShowLow] = useState(false);
+  const [showVolume, setShowVolume] = useState(false);
+  const [showDividends, setShowDividends] = useState(false);
 
   return (
     <S.Container>
       <S.GraphContainer>
+        
         { chartType.value == 'bar' &&
-          <BarChart width={1500} height={500} data={stock}>
+          <ResponsiveContainer width="95%" height={"90%"}>
+          <BarChart data={stock}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="Date" domain={['dataMin', 'dataMax']} tickFormatter={formatDate} />
             <YAxis />
             <Tooltip labelFormatter={formatDate} formatter={roundPrice}/>
             <Legend />
-            <Bar dataKey="Close" fill="#02b2af"/>
+            {showClose && <Bar dataKey="Close" fill="#02b2af"/>}
+            {showOpen && <Bar dataKey="Open" fill="#8884d8"/>}
+            {showHigh && <Bar dataKey="High" fill="#82ca9d"/>}
+            {showLow && <Bar dataKey="Low" fill="#ffc658"/>}
+            {showVolume && <Bar dataKey="Volume" fill="#ff0000"/>}
+            {showDividends && <Bar dataKey="Dividends" fill="#0000ff"/>}
           </BarChart>
+          </ResponsiveContainer>
         }
 
         { chartType.value == 'line' &&
-          <LineChart width={1400} height={600} data={stock}>
-            <Line type="monotone" dataKey="Close" stroke="#02b2af" strokeWidth={2}/>
-            <CartesianGrid stroke="#ccc" />
-            <XAxis dataKey="Date" scale="time" domain={['dataMin', 'dataMax']} type="number" tickFormatter={formatDate} />
-            <YAxis />
-            <Tooltip labelFormatter={formatDate} formatter={roundPrice}/>
-            <Legend />
-          </LineChart>
+          <ResponsiveContainer width="95%" height={"90%"}>
+            <LineChart data={stock}>
+              {showClose && <Line type="monotone" dataKey="Close" stroke="#02b2af" strokeWidth={2}/>}
+              {showOpen && <Line type="monotone" dataKey="Open" stroke="#8884d8" strokeWidth={2}/>}
+              {showHigh && <Line type="monotone" dataKey="High" stroke="#82ca9d" strokeWidth={2}/>}
+              {showLow && <Line type="monotone" dataKey="Low" stroke="#ffc658" strokeWidth={2}/>}
+              {showVolume && <Line type="monotone" dataKey="Volume" stroke="#ff0000" strokeWidth={2}/> } 
+              {showDividends && <Line type="monotone" dataKey="Dividends" stroke="#0000ff" strokeWidth={2}/>}
+              <CartesianGrid stroke="#ccc" />
+              <XAxis dataKey="Date" scale="time" domain={['dataMin', 'dataMax']} type="number" tickFormatter={formatDate} />
+              <YAxis width={80}/>
+              <Tooltip labelFormatter={formatDate} formatter={roundPrice}/>
+              <Legend />
+            </LineChart>
+          </ResponsiveContainer>
         }
+
+        <S.ButtonGroup>
+          <Button onClick={() => setShowClose(!showClose)} variant={showClose ? "primary" : "secondary"}>Close</Button>
+          <Button onClick={() => setShowOpen(!showOpen)} variant={showOpen ? "primary" : "secondary"}>Open</Button>
+          <Button onClick={() => setShowHigh(!showHigh)} variant={showHigh ? "primary" : "secondary"}>High</Button>
+          <Button onClick={() => setShowLow(!showLow)} variant={showLow ? "primary" : "secondary"}>Low</Button>
+          <Button onClick={() => setShowVolume(!showVolume)} variant={showVolume ? "primary" : "secondary"}>Volume</Button>
+          <Button onClick={() => setShowDividends(!showDividends)} variant={showDividends ? "primary" : "secondary"}>Dividends</Button>
+        </S.ButtonGroup>
       </S.GraphContainer>
       <Form>
         <Form.Group className="mb-3">
@@ -166,14 +266,14 @@ export default function ChartComponent(props: ChartProps) {
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Stock Name</Form.Label>
-          <Form.Control type="text" value={ticker} onChange={handleStockChange}/>
+          <Form.Control type="text" value={ticker ? ticker : ""} onChange={handleStockChange} disabled={!enableTicker}/>
           <Form.Text className="text-muted">
             Choose which stock to visualize
           </Form.Text>
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Start Date</Form.Label>
-          <Form.Control type="text" value={startDate} onChange={handleStartDateChange} onClick={() => setShowStartCalendar(!showStartCalendar)}/>
+          <Form.Control type="text" value={startDate ? startDate : ""} onChange={handleStartDateChange} onClick={() => setShowStartCalendar(!showStartCalendar)} disabled={!enableStartDate}/>
 {/*           
           {showStartCalendar && <S.CalendarContainer>
           <Calendar onChange={setStartDate} value={new Date(startDate)}/>
@@ -187,12 +287,12 @@ export default function ChartComponent(props: ChartProps) {
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>End Date</Form.Label>
-          <Form.Control type="text" value={endDate} onChange={handleEndDateChange}/>
+          <Form.Control type="text" value={endDate ? endDate : ""} onChange={handleEndDateChange} disabled={!enableEndDate}/>
           <Form.Text className="text-muted">
             Choose the end date
           </Form.Text>
         </Form.Group>
-        <button type="submit" className="btn btn-primary" onClick={(e) => handleSave(e)}>Update</button>
+        <button disabled={!ticker || !startDate || !endDate} type="submit" className="btn btn-primary" onClick={(e) => handleSave(e)}>Update</button>
       </Form>
     </S.Container>
   );

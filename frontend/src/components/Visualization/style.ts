@@ -51,11 +51,27 @@ const GraphContainer = styled.div`
   @media (max-width: 480px) {
     width: 500px; 
   }
-  margin-right: 10px;
+
+
 `;
 
 const CalendarContainer = styled.div`
   width: 275px; 
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-top: 10px;
+  padding-bottom: 20px;
+
+  /* add space between buttons */
+  & > * {
+    margin: 0 2px;
+  }
+
+
 `;
 
 
@@ -67,5 +83,6 @@ export default {
   UserImg,
   ButtonContainer,
   GraphContainer,
-  CalendarContainer
+  CalendarContainer,
+  ButtonGroup,
 };
