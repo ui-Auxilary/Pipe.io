@@ -15,7 +15,7 @@ interface ValidationProps {
 export default function ValidatedInput({ item, customValidity, errorMessage, isEdit, ...downProps }: ValidationProps) {
     const ref = useRef(null);
     const { edit } = useAppData();
-    let stringTest = /^[a-zA-Z0-9_. ]*$/
+    let stringTest = /^[a-zA-Z0-9_. -]*$/
     let numTest = /^[0-9 ]{1,}$/
     let objTest = /^(?!\s*:\s*)(?:\{[^}]*\})$/
     let listTest = /^(?!\s*:\s*)(?:\[[^}]*\])$/
