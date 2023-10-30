@@ -5,7 +5,7 @@ import MicroserviceList from 'components/MicroserviceList';
 import ViewMicroservice from 'components/MicroserviceList/ViewMicroservice';
 import { useAppData } from 'helper/AppProvider';
 import ValidatedInput from 'helper/validation';
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useEffect } from 'react';
 import Switch from 'react-switch';
 
 export interface Item {
@@ -27,6 +27,13 @@ export interface Props {
 export default function FormItem({ item }: Props) {
   const { edit, setEdit } = useAppData();
   const { userData, setUserData } = useFormData();
+
+  useEffect(() => {
+    if (item.name != undefined) {
+      edit[item.name] && setEdit({ ...edit, [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: item.value } })
+      edit[item.name] = { ...edit[item.name], [item.label.toLocaleLowerCase()]: item.value }
+    }
+  }, [])
 
   switch (item.type) {
     case 'text':
