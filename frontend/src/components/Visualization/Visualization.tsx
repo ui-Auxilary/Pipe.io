@@ -72,9 +72,17 @@ export default function ChartComponent(props: ChartProps) {
           res.data.microservices[props.index].parameters.ticker.value : 
           res.data.microservices[props.index].parameters.ticker.default);
         setEnableTicker(true);
+
+      }
+
+      if (res.data.microservices[props.index].parameters.start_date != undefined) {
         setEnableStartDate(true);
+      }
+
+      if (res.data.microservices[props.index].parameters.end_date != undefined) {
         setEnableEndDate(true);
       }
+
 
       const output = JSON.parse(JSON.parse(res.data.output[props.name]));
 
