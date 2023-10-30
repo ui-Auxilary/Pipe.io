@@ -41,4 +41,3 @@ def import_yahoo(ticker: str = 'msft',
     df.to_csv(output_file_path)
 
     return df.to_json()
-

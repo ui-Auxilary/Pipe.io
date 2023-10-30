@@ -2,6 +2,9 @@ import pandas as pd
 import os
 import datetime
 import yfinance as yf
+import json
+import plotly
+
 
 def import_csv(input_file_path: str = 'default.csv', output_file_path: str = 'stock_data.csv'):
     """Imports data from a csv as a pandas dataframe
@@ -16,12 +19,14 @@ def import_csv(input_file_path: str = 'default.csv', output_file_path: str = 'st
 
     input_file_path = os.path.join('/backend/data/', input_file_path)
 
-    df = pd.read_csv(input_file_path)
+    df = pd.read_csv(input_file_path, index_col=None)
     df.to_csv(output_file_path)
     return df.to_json()
 
-def import_yahoo(ticker: str = 'msft', 
-                 start_date: str = (datetime.datetime.now() - datetime.timedelta(days=365)).strftime("%Y-%m-%d"),
+
+def import_yahoo(ticker: str = 'msft',
+                 start_date: str = (datetime.datetime.now(
+                 ) - datetime.timedelta(days=365)).strftime("%Y-%m-%d"),
                  end_date: str = datetime.datetime.now().strftime("%Y-%m-%d"),
                  output_file_path: str = 'stock_data.csv'):
     """Imports market data from Yahoo using the yfinance Ticker API.
@@ -37,12 +42,12 @@ def import_yahoo(ticker: str = 'msft',
     """
     ticker = yf.Ticker(ticker)
 
-
-
     df = ticker.history(start=start_date, end=end_date, interval="1d")
-    df['Datetime'] = df.index
-    
+    # df['Date'] = df.index
+
     # Save the dataframe to our storage location
     df.to_csv(output_file_path)
 
     return df.to_json()
+
+

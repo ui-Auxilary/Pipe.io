@@ -38,20 +38,17 @@ def execute_pipeline(pipeline_json):
             # load the microservice needed
             os.chdir(MICROSERVICES_DIRECTORY)
             python_file = microservice['file']
+            
             imported_module = importlib.import_module(python_file)
             os.chdir('..')
 
             # call the microservices in series
             os.chdir(DATA_DIRECTORY)
             microservice_name = microservice['name']
-            microservice_parameters = microservice['parameters']
+            microservice_parameters = dict(microservice['parameters'])
+
             # parameters are in the form of variable: value, convert them into a list of variable=eval(value)
 
-            # before
-            # microservice_parameters = {
-            #     key: ast.literal_eval(value) for key, value in microservice_parameters.items()}
-
-            # after
             for key, value_dict in microservice_parameters.items():
                 print('PRE', key, value_dict['default'])
                 try:
@@ -64,6 +61,7 @@ def execute_pipeline(pipeline_json):
                     microservice_parameters[key] = value_dict['value'] if 'value' in value_dict else value_dict['default']
 
             microservice_function = getattr(imported_module, microservice_name)
+
 
             microservice_output = microservice_function(
                 **microservice_parameters)

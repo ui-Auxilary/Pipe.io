@@ -37,7 +37,7 @@ const Wrapper = styled.div`
 `
 
 const Scrollbar = styled.div<{ length: number }>`
-  overflow-y: ${props => props.length > 3 ? 'scroll' : 'hidden'};
+  overflow-y: ${props => props.length >= 3 ? 'auto' : 'hidden'};
   height: 480px;
 
   &::-webkit-scrollbar {

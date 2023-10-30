@@ -49,7 +49,7 @@ export default function FormProvider({ children }: FormProviderProps) {
   const { user, setPipeIds, pipeIds, setEdit } = useAppData()
 
   const submitData = (handleClose) => {
-    console.log('USER', getUser(), microserviceData)
+    console.log('USER', microserviceData)
     axios.post('http://localhost:8000/pipes/create', Object.assign({ user_id: user, microservices: microserviceData.microservices }, userData), {
       headers: {
         "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
