@@ -62,11 +62,15 @@ export default function FormItem({ item }: Props) {
       console.log('POO', item)
 
       if (item.elType === 'bool') {
+        console.log(item,"BOOL");
+        console.log("8==D", edit[item.name]);
         return (
           <>
             <S.Label>{item.label}</S.Label>
             <Switch
-              onChange={(e) => setEdit({ ...edit, [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e } })}
+              onChange={(e) => {
+                setEdit({ ...edit, [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e } });
+              }}
               checked={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || false}
             />
           </>

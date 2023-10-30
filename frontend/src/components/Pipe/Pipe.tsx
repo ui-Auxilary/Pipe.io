@@ -1,11 +1,14 @@
 import S from './style'
 import dots from 'assets/dots.svg'
-import React, { forwardRef, useRef, useState } from 'react'
+import React, { forwardRef, useRef, useState, useEffect } from 'react'
 import { Button, Form, Modal, OverlayTrigger, Popover, Tooltip } from 'react-bootstrap'
 import View from 'assets/view.svg'
 import Pencil from 'assets/pencil.svg'
 import Edit from 'components/Edit'
 import Delete from 'assets/trash.svg'
+import Overlay from 'react-bootstrap/Overlay';
+import { format} from 'date-fns';
+
 
 import Content from './Content'
 import axios from 'axios'
@@ -90,21 +93,20 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
 
   const onPipeRun = () => {
     if (status === "Completed") {
-      handleChartShow()
-    }
-    else {
-      setStatus("Running")
+      handleChartShow();
+    } else {
+      setStatus("Running");
       axios.post('http://localhost:8000/pipes/execute/', null, { params: { id: pipeId } })
         .then(res => {
-          setStatus("Completed")
-          setExecuted({ "time": Date.now(), "result": res.data })
+          setStatus("Completed");
+          setExecuted({ "time": format(Date.now(), 'yyyy-MM-dd HH:mm:ss'), "result": res.data });
         })
-        .catch(e => {
+        .catch((e: any) => {
           setStatus("Error");
           console.log(e);
-        })
+        });
     }
-  }
+  };
 
   const onEditClick = () => {
     handleOverlayShow()
@@ -126,6 +128,14 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
 
     handleDeleteClose();
   }
+
+  useEffect(() => {
+    axios.get(`http://localhost:8000/pipes/${pipeId}`).then(res => {
+      // setStatus(res.data.status)
+      // setExecuted(res.data.executed.last_executed)
+      setExecuted(executed => ({ ...executed, "time": res.data.last_executed }))
+    })
+  }, []);
 
   const editPipeline = (
     <Popover>

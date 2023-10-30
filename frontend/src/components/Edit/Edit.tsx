@@ -36,6 +36,10 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
                 updatedData[foundIndex]["parameters"][key] = newParams
             })
 
+            console.log('OUTPUT_TYPE', data);
+
+            updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { output_type: data.output_type })
+
         }
         console.log('Updated Data', updatedData)
         // updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: edit[name] })

@@ -23,10 +23,25 @@ export default function EditFromPipe({ id, show, params, data, closeOverlay, typ
     }, [])
 
 
-    const findAndUpdate = (name: string) => {
+    const findAndUpdate = (name: string, parameters) => {
+        // console.log('updating', foundIndex, edit, edit[name], name)
+        console.log('Microdata', microservice)
+        const updatedData = {...microservice}
 
-        console.log(microservice)
-        console.log('hig')
+        // console.log('Updated', updatedData["parameters"], name, parameters, edit[name])
+        console.log('OLD', parameters)
+        Object.keys(parameters).forEach(key => {
+            if (edit[name][key] != undefined) {
+                let newParams = edit[name] && parameters[key] ? Object.assign(parameters[key], { value: edit[name][key] }) : parameters[key] || edit[name]
+                console.log('NEW para', newParams)
+                updatedData["parameters"][key] = newParams
+            }
+        })
+        console.log('Updated Data', updatedData)
+        // updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: edit[name] })
+        setMicroservice(prev => ({ ...prev, microservices: updatedData }))
+
+        console.log('NEW', microservice)
 
     }
 
@@ -42,10 +57,9 @@ export default function EditFromPipe({ id, show, params, data, closeOverlay, typ
                 })
                 break;
             default:
-                findAndUpdate(data["name"])
-                axios.put(`http://localhost:8000/pipes/${parent_pipe_id}/microservices`, { "name": microservice.name, "parameters": edit[id] }).then((res) => {
+                findAndUpdate(data["name"], data["parameters"])
+                axios.put(`http://localhost:8000/pipes/${parent_pipe_id}/microservices`, { "name": microservice.name, "parameters":  microservice["parameters"] }).then((res) => {
                     console.log("success", res)
-
                 }).catch((err) => {
                     console.log(err)
                 });
