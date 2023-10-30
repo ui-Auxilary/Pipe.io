@@ -168,8 +168,11 @@ export default function ChartComponent(props: ChartProps) {
     const updatedParams = {...microserviceData}
 
     updatedParams["ticker"] = {...updatedParams["ticker"], value: ticker};
-    updatedParams["start_date"] = {...updatedParams["start_date"], value: startDate};
-    updatedParams["end_date"] = {...updatedParams["end_date"], value: endDate};
+    
+    if (enableStartDate && enableEndDate) {
+      updatedParams["start_date"] = {...updatedParams["start_date"], value: startDate};
+      updatedParams["end_date"] = {...updatedParams["end_date"], value: endDate};
+    }
 
 
     axios.put(`http://localhost:8000/pipes/${pipeId}/microservices`, {"name":props.name , "parameters": updatedParams}).then((res) => {
