@@ -45,7 +45,6 @@ export default function EditFromPipe({ id, show, params, data, closeOverlay, typ
                 findAndUpdate(data["name"])
                 axios.put(`http://localhost:8000/pipes/${parent_pipe_id}/microservices`, { "name": microservice.name, "parameters": edit[id] }).then((res) => {
                     console.log("success", res)
-
                 }).catch((err) => {
                     console.log(err)
                 });

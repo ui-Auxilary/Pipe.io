@@ -1,31 +1,22 @@
 import S from './styles'
 import view from 'assets/view.svg'
-<<<<<<< HEAD
 import Form from 'components/MultiStepForm/Form';
 import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
-import { useEffect, useState } from 'react';
 import Select from 'react-select';
-=======
 import React, { useEffect, useRef, useState } from 'react';
->>>>>>> 10e2ca1f45dc5294e9f0b7112fb421a4e29bcdbd
 import axios from 'axios';
-
 import { Modal } from 'react-bootstrap';
 import Edit from 'components/Edit';
 import EditFromPipe from 'components/Edit/EditFromPipe';
-import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
+
 
 export default function Microservice({ code, name, docstring, param, parent_file, from_pipe, parent_pipe_id, output_type }) {
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);
   const [id, setId] = useState();
-<<<<<<< HEAD
   const [microservices, setMicroservices] = useState([]);
   const [selectedTags, setSelectedTags] = useState("");
-  const { setMicroserviceData, microserviceData } = useFormData();
-=======
   const { microserviceData } = useFormData();
->>>>>>> 10e2ca1f45dc5294e9f0b7112fb421a4e29bcdbd
 
   const handleEditClose = () => { setEdit(false) }
   const handleEditShow = (e: React.SyntheticEvent<EventTarget>) => { e.preventDefault(); setEdit(true) };
@@ -37,7 +28,6 @@ export default function Microservice({ code, name, docstring, param, parent_file
     { label: el, type: "edit_param", name: id, value: param[el] ? param[el]["default"] : '', elType: param[el] ? param[el]["type"] : '' }
   ))
 
-<<<<<<< HEAD
   const tagOptions = [
     { value: 'value', label: 'Value' },
     { value: 'ml', label: 'ML' },
@@ -51,8 +41,6 @@ export default function Microservice({ code, name, docstring, param, parent_file
 
 
   
-=======
->>>>>>> 10e2ca1f45dc5294e9f0b7112fb421a4e29bcdbd
 
   const microserviceList = [
     {
@@ -64,7 +52,6 @@ export default function Microservice({ code, name, docstring, param, parent_file
   useEffect(() => {
     /** instead of using the microservice collection id as the id, we use the name of the microservice. */
     setId(name)
-<<<<<<< HEAD
     if (output_type != undefined) {
       setSelectedTags(tagOptions.find((el) => el.value == output_type));
     }
@@ -83,11 +70,6 @@ export default function Microservice({ code, name, docstring, param, parent_file
 
   
   
-=======
-    console.log('PARAM', param, microserviceData)
-  }, [])
-
->>>>>>> 10e2ca1f45dc5294e9f0b7112fb421a4e29bcdbd
   const data = {
     parent_file: parent_file,
     name: name,
@@ -123,16 +105,9 @@ export default function Microservice({ code, name, docstring, param, parent_file
           {Object.keys(param).length > 0 && (<div><S.Button onClick={handleEditShow} style={{ display: "flex", width: "150px", gap: "10px", justifyContent: "center", alignItems: "center" }}>Input data <S.View src={view}></S.View></S.Button></div>)}
         </div>
       </S.Microservice>
-<<<<<<< HEAD
       
       {!from_pipe&&<Edit id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />}
       {from_pipe&&<EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} parent_pipe_id={parent_pipe_id}/>}
-=======
-
-      {!from_pipe && <Edit id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />}
-      {from_pipe && <EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} parent_pipe_id={parent_pipe_id} />}
-
->>>>>>> 10e2ca1f45dc5294e9f0b7112fb421a4e29bcdbd
       <Modal show={showCode} onHide={handleCodeClose}>
         <Modal.Header closeButton>
           <Modal.Title>Code</Modal.Title>

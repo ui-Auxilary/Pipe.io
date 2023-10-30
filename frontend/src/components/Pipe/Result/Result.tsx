@@ -26,6 +26,7 @@ export default function Result({ pipeId }: { pipeId: string }) {
             let outputType = result.microservices[page - 1].output_type
             setPageContent({ ["name"]: output[0], ["output"]: output[1], ["output_type"]: outputType })
         }
+        
     }, [page])
 
     return (

@@ -5,11 +5,8 @@ import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import S from './style';
 import Select from 'react-select';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-
-// import { BarChart } from '@mui/x-charts/BarChart';
-// import { LineChart } from '@mui/x-charts/LineChart';
+// import Calendar from 'react-calendar';
+// import 'react-calendar/dist/Calendar.css';
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from 'recharts';
 
@@ -41,10 +38,12 @@ export default function ChartComponent(props: ChartProps) {
   ];
 
 
-  const [ticker, setTicker] = useState("AAPL");
 
-  const [startDate, setStartDate] = useState("2021-09-07T00:00:00-04:00");
-  const [endDate, setEndDate] = useState("2021-09-07T00:00:00-04:00");
+
+  const [ticker, setTicker] = useState("");
+
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
 
   const [refresh, setRefresh] = useState(false);
   const [chartType, setChartType] = useState(chartOptions[0]);
@@ -56,6 +55,8 @@ export default function ChartComponent(props: ChartProps) {
       setTicker(res.data.microservices[props.index].parameters.ticker);
       const output = JSON.parse(JSON.parse(res.data.output[props.name]));
 
+      console.log("OUTPUT", output)
+
       const stockObj = Object.keys(output.Close).map((key) => {
         return {
           Date: parseInt(key),
@@ -65,7 +66,7 @@ export default function ChartComponent(props: ChartProps) {
 
       setStock(stockObj);
       console.log("RES", stockObj)
-
+      
       const start = new Date(stockObj[0].Date);
       let endDate = new Date(stockObj[stockObj.length - 1].Date);
       // add extra day to endDate
@@ -73,7 +74,7 @@ export default function ChartComponent(props: ChartProps) {
       setStartDate(format(start, "yyyy-MM-dd"));
       setEndDate(format(endDate, "yyyy-MM-dd"));
     });
-  }, [refresh])
+  }, [refresh, props.name])
 
 
   const formatDate = (date: string) => {
@@ -114,6 +115,15 @@ export default function ChartComponent(props: ChartProps) {
     });
   }
 
+  // round to 2 decimal places
+  const roundPrice = (price: number) => {
+    const priceNew = Math.round(price * 100) / 100;
+
+    return "$" + priceNew.toString() + " USD";
+  }
+
+
+
 
 
   return (
@@ -124,7 +134,7 @@ export default function ChartComponent(props: ChartProps) {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="Date" domain={['dataMin', 'dataMax']} tickFormatter={formatDate} />
             <YAxis />
-            <Tooltip labelFormatter={formatDate} />
+            <Tooltip labelFormatter={formatDate} formatter={roundPrice}/>
             <Legend />
             <Bar dataKey="Close" fill="#02b2af"/>
           </BarChart>
@@ -136,7 +146,7 @@ export default function ChartComponent(props: ChartProps) {
             <CartesianGrid stroke="#ccc" />
             <XAxis dataKey="Date" scale="time" domain={['dataMin', 'dataMax']} type="number" tickFormatter={formatDate} />
             <YAxis />
-            <Tooltip labelFormatter={formatDate}/>
+            <Tooltip labelFormatter={formatDate} formatter={roundPrice}/>
             <Legend />
           </LineChart>
         }
