@@ -99,7 +99,7 @@ def sentiment_analysis_microservice(input_file_path: str = 'news_data.csv', tran
     
     return _sentiment_value_to_analysed_value(sentiment_value, transform)
 
-def time_prediction_future_stock_values(stock_input_file_path: str = 'stock_data.csv', sentiment_input_file_path: str = 'sentiment_data.csv', number_of_days_to_predict: int = EXTRAPOLATE_DAYS, days_from_each_prediction: int = DAYS_TO_TAKE_FROM_EACH_PREDICTION, prepend_stock_data: str = 'no'):
+def time_prediction_future_stock_values(stock_input_file_path: str = 'stock_data.csv', sentiment_input_file_path: str = 'sentiment_data.csv', number_of_days_to_predict: int = EXTRAPOLATE_DAYS, days_from_each_prediction: int = DAYS_TO_TAKE_FROM_EACH_PREDICTION, prepend_stock_data: bool = False):
     
     """ Predicts the future values of a stock based on a model trained on historical data.
     

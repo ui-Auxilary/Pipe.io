@@ -46,7 +46,7 @@ export default function Form({ questions, step, edit = false, onHandleClose = ()
             ) : (
                 <Button style={{ marginTop: '50px', position: 'relative', right: '-90%' }} onClick={onNext}>Next</Button>
             ))}
-            {edit && <Button style={{ position: 'relative', right: '-80%' }} onClick={onEdit}>Update</Button>}
+            {edit && <S.ButtonContainer><Button onClick={onEdit}>Update</Button></S.ButtonContainer>}
         </form>
     )
 }

@@ -12,6 +12,12 @@ const Button = styled.button`
     position: relative;
 `;
 
+const ButtonContainer = styled.div`
+    display: flex;
+    justify-content: flex-end;
+`;
+
 export default {
-    Button
+    Button,
+    ButtonContainer
 }

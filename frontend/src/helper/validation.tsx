@@ -19,6 +19,7 @@ export default function ValidatedInput({ item, customValidity, errorMessage, isE
     let numTest = /^[0-9 ]{1,}$/
     let objTest = /^(?!\s*:\s*)(?:\{[^}]*\})$/
     let listTest = /^(?!\s*:\s*)(?:\[[^}]*\])$/
+    let boolTest = /^([Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee])$/
 
     const matchType = (value: any, type: string): boolean => {
         console.log('MATCHING Value', value, 'type', type)
@@ -32,6 +33,8 @@ export default function ValidatedInput({ item, customValidity, errorMessage, isE
         } else if (objTest.test(value) && type === "object") {
             return true;
         } else if (listTest.test(value) && type === "list") {
+            return true;
+        } else if (boolTest.test(value) && type === "bool") {
             return true;
         }
         return false;
