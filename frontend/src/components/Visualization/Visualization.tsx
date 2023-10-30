@@ -222,7 +222,7 @@ export default function ChartComponent(props: ChartProps) {
           <BarChart data={stock}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="Date" domain={['dataMin', 'dataMax']} tickFormatter={formatDate} />
-            <YAxis />
+            <YAxis width={80}/>
             <Tooltip labelFormatter={formatDate} formatter={roundPrice}/>
             <Legend />
             {showClose && <Bar dataKey="Close" fill="#02b2af"/>}
