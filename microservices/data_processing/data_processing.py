@@ -86,22 +86,6 @@ def merge_csv(input_file_path_1: str = 'stock_data.csv', input_file_path_2: str 
     df3.to_csv(output_file_path)
     return df3.to_json()
 
-def is_date(string, fuzzy=False):
-    """
-    Return whether the string can be interpreted as a date.
-
-    :param string: str, string to check for date
-    :param fuzzy: bool, ignore unknown tokens in string if True
-
-    Sourced from https://stackoverflow.com/questions/25341945/check-if-string-has-date-any-format
-    """
-    try: 
-        parse(string, fuzzy=fuzzy)
-        return True
-
-    except ValueError:
-        return False
-
 
 def plot_data(input_file_path: str = 'stock_data.csv', output_file_path: str = "stock_chart.png", x_axis: str ='Date', y_axis: str ='Close'):
     stock_data = pd.read_csv(input_file_path)
