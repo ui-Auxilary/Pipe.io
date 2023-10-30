@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/Button';
 // import Calendar from 'react-calendar';
 // import 'react-calendar/dist/Calendar.css';
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, ResponsiveContainer, AreaChart, Area} from 'recharts';
 
 interface ChartProps {
   pipeId: string
@@ -36,6 +36,7 @@ export default function ChartComponent(props: ChartProps) {
   const chartOptions = [
     { value: 'line', label: 'Line' },
     { value: 'bar', label: 'Bar' },
+    { value: 'area', label: 'Area'},
   ];
 
 
@@ -250,6 +251,24 @@ export default function ChartComponent(props: ChartProps) {
               <Tooltip labelFormatter={formatDate} formatter={roundPrice}/>
               <Legend />
             </LineChart>
+          </ResponsiveContainer>
+        }
+
+        { chartType.value == 'area' &&
+          <ResponsiveContainer width="95%" height={"90%"}>
+            <AreaChart data={stock}>
+              {showClose && <Area type="monotone" dataKey="Close" stroke="#02b2af" fill="#02b2af" strokeWidth={2}/>}
+              {showOpen && <Area type="monotone" dataKey="Open" stroke="#8884d8" fill="#8884d8" strokeWidth={2}/>}
+              {showHigh && <Area type="monotone" dataKey="High" stroke="#82ca9d" fill="#82ca9d" strokeWidth={2}/>}
+              {showLow && <Area type="monotone" dataKey="Low" stroke="#ffc658" fill="#ffc658" strokeWidth={2}/>}
+              {showVolume && <Area type="monotone" dataKey="Volume" stroke="#ff0000" fill="#ff0000" strokeWidth={2}/> } 
+              {showDividends && <Area type="monotone" dataKey="Dividends" stroke="#0000ff" fill="#0000ff" strokeWidth={2}/>}
+              <CartesianGrid stroke="#ccc" />
+              <XAxis dataKey="Date" scale="time" domain={['dataMin', 'dataMax']} type="number" tickFormatter={formatDate} />
+              <YAxis width={80}/>
+              <Tooltip labelFormatter={formatDate} formatter={roundPrice}/>
+              <Legend />
+            </AreaChart>
           </ResponsiveContainer>
         }
 
