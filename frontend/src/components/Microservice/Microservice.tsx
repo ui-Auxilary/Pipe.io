@@ -67,7 +67,8 @@ export default function Microservice({ code, name, docstring, param, parent_file
     });
     console.log("TESTING", microserviceData);
     const newData = {...microserviceData};
-    newData["microservices"][name]["output_type"] = e.value;
+    console.log(name)
+    newData["microservices"].filter((e) => e.name == name)[0]["output_type"] = e.value;
     setMicroserviceData(newData);
   }
 
