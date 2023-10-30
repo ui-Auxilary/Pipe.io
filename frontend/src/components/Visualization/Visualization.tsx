@@ -196,7 +196,7 @@ export default function ChartComponent(props: ChartProps) {
   // round to 2 decimal places
   const roundPrice = (price: number) => {
 
-    if (stock.find((el) => el.Volume == price)) {
+    if (showVolume && stock.find((el) => el.Volume == price)) {
       return price;
     }
 
