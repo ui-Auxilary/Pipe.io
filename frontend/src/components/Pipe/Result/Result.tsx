@@ -4,6 +4,7 @@ import { PaginationControl } from 'react-bootstrap-pagination-control';
 import S from './styles'
 import ChartComponent from "components/Visualization/Visualization";
 import Download from "./Download/Download";
+import DownloadCSV from "./CSV/DownloadCSV";
 
 export default function Result({ pipeId }: { pipeId: string }) {
     const [page, setPage] = useState(1);
@@ -37,6 +38,7 @@ export default function Result({ pipeId }: { pipeId: string }) {
                 {checkForStockData(result, pageContent) && <ChartComponent index={page-1} name={pageContent["name"]} pipeId={pipeId} data={pageContent.output} />}
                 {pageContent && checkForValue(result, pageContent) && pageContent["output"]}
                 {checkForPlot(result, pageContent) && <Download pipeId={pipeId} output={pageContent["output"]} />}
+                {checkForCSV(result, pageContent) && <DownloadCSV pipeId={pipeId} output={pageContent["output"]} name={pageContent["name"]} />}
             </S.Body>
             {result?.output &&
                 <PaginationControl
@@ -72,6 +74,13 @@ function checkForPlot(result: any, pageContent: any) {
 
 function checkForValue(result: any, pageContent: any) {
     if (result.output && pageContent.output_type == "value") {
+        return true;
+    }
+    return false;
+}
+
+function checkForCSV(result: any, pageContent: any) {
+    if (result.output && pageContent.output_type == "csv") {
         return true;
     }
     return false;

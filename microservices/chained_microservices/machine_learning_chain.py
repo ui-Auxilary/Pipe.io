@@ -7,6 +7,8 @@ import pandas as pd
 import tensorflow as tf
 import numpy as np
 import json
+import plotly.graph_objects as go
+import os
 
 # DEFAULT CONSTANTS
 EXTRAPOLATE_DAYS = 200
@@ -133,7 +135,62 @@ def time_prediction_future_stock_values(stock_input_file_path: str = 'stock_data
     model_completed_predictions = np.array(list(stock_df.Close) + list(complete_predictions))
     return_predictions = model_completed_predictions if prepend_stock_data == 'yes' else model_completed_predictions[-EXTRAPOLATE_DAYS:]
     
-    return pd.DataFrame(return_predictions).to_json()
+    df = pd.DataFrame(return_predictions)
+
+    df.reset_index(inplace=True)
+    df=df.set_axis(["Date","Close"], axis=1)
+
+    start_date = stock_df["Datetime"].iloc[-1]
+    date_range = pd.date_range(start_date, periods=len(df))
+    df["Date"] = date_range
+
+    df.to_csv("output.csv", header=True)
+
+    return df.to_json()
+
+
+def ulot_to_graph(x_axis: str, y_axis: str, filenames: str):
+    """Plots the data from the csv file
+
+    Args:
+        x_axis (str): The column name for the x-axis
+        y_axis (str): The column name for the y-axis
+        filenames (str): The name of the csv files comma separated
+
+    Returns:
+        plotly.graph_objects.Figure: A plotly figure object
+    """
+    
+    directory = os.getcwd()
+
+    # read all csv files in the direcotry
+    files = os.listdir(directory)
+
+    
+    csv_files = []
+
+
+    #remove white space
+    filenames = filenames.replace(" ", "")
+    filenames = filenames.split(",")
+
+
+
+    for filename in filenames:
+        if filename in files:
+            csv_files.append(filename)
+
+    file_names_ret = {}
+
+    # read the csv files and plot
+    for file in csv_files:
+        df = pd.read_csv(file)
+        fig = go.Figure(data=go.Scatter(x=df[x_axis], y=df[y_axis]))
+        fig.write_html(file[:-4] + ".html")
+        file_names_ret[file[:-4]] = file[:-4] + ".html"
+       
+
+    return json.dumps(file_names_ret, indent=4)
 
 
 

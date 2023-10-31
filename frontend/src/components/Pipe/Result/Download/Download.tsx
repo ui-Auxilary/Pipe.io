@@ -18,8 +18,6 @@ export default function Download(props: DownloadProps) {
 
   const [download, setDownload] = useState("")
 
-  console.log("PENIS", output);
-
 
   const handleDownload = (filePath: string) => {
     const link = document.createElement('a');
