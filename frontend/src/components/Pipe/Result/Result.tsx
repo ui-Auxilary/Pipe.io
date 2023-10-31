@@ -35,7 +35,7 @@ export default function Result({ pipeId }: { pipeId: string }) {
             <S.Body>
                 <h6>Output:</h6>
                 {checkForStockData(result, pageContent) && <ChartComponent index={page-1} name={pageContent["name"]} pipeId={pipeId} data={pageContent.output} />}
-                {pageContent && checkForValue(result, pageContent) && pageContent["output"]}
+                {pageContent && checkForValue(result, pageContent) && JSON.parse(pageContent["output"])}
                 {checkForPlot(result, pageContent) && <Download pipeId={pipeId} output={pageContent["output"]} />}
             </S.Body>
             {result?.output &&
