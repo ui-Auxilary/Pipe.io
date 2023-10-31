@@ -133,7 +133,7 @@ def time_prediction_future_stock_values(stock_input_file_path: str = 'stock_data
         last_window = np.concatenate((last_window[DAYS_TO_TAKE_FROM_EACH_PREDICTION:], prediction[0]))
     
     model_completed_predictions = np.array(list(stock_df.Close) + list(complete_predictions))
-    return_predictions = model_completed_predictions if prepend_stock_data == 'yes' else model_completed_predictions[-EXTRAPOLATE_DAYS:]
+    return_predictions = model_completed_predictions if prepend_stock_data else model_completed_predictions[-EXTRAPOLATE_DAYS:]
     
     df = pd.DataFrame(return_predictions)
 

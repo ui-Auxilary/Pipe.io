@@ -227,6 +227,10 @@ export default function ChartComponent(props: ChartProps) {
 
 
   const [showClose, setShowClose] = useState(true);
+  if (stock[0] && stock[0].Close == undefined) {
+    setShowClose(false);
+  }
+
   const [showOpen, setShowOpen] = useState(false);
   const [showHigh, setShowHigh] = useState(false);
   const [showLow, setShowLow] = useState(false);
@@ -243,6 +247,36 @@ export default function ChartComponent(props: ChartProps) {
 
   const isRSI = () => {
     if (stock[0] && stock[0].RSI != undefined) {
+      return true;
+    }
+  }
+
+  const isOpen = () => {
+    if (stock[0] && stock[0].Open != undefined) {
+      return true;
+    }
+  }
+
+  const isHigh = () => {
+    if (stock[0] && stock[0].High != undefined) {
+      return true;
+    }
+  }
+
+  const isLow = () => {
+    if (stock[0] && stock[0].Low != undefined) {
+      return true;
+    }
+  }
+
+  const isVolume = () => {
+    if (stock[0] && stock[0].Volume != undefined) {
+      return true;
+    }
+  }
+
+  const isClose = () => {
+    if (stock[0] && stock[0].Close != undefined) {
       return true;
     }
   }
@@ -331,11 +365,11 @@ export default function ChartComponent(props: ChartProps) {
         
 
         <S.ButtonGroup>
-          <Button onClick={() => setShowClose(!showClose)} variant={showClose ? "primary" : "secondary"}>Close</Button>
-          <Button onClick={() => setShowOpen(!showOpen)} variant={showOpen ? "primary" : "secondary"}>Open</Button>
-          <Button onClick={() => setShowHigh(!showHigh)} variant={showHigh ? "primary" : "secondary"}>High</Button>
-          <Button onClick={() => setShowLow(!showLow)} variant={showLow ? "primary" : "secondary"}>Low</Button>
-          <Button onClick={() => setShowVolume(!showVolume)} variant={showVolume ? "primary" : "secondary"}>Volume</Button>
+          {isClose() && <Button onClick={() => setShowClose(!showClose)} variant={showClose ? "primary" : "secondary"}>Close</Button>}
+          {isOpen() && <Button onClick={() => setShowOpen(!showOpen)} variant={showOpen ? "primary" : "secondary"}>Open</Button>}
+          {isHigh() && <Button onClick={() => setShowHigh(!showHigh)} variant={showHigh ? "primary" : "secondary"}>High</Button>}
+          {isLow() && <Button onClick={() => setShowLow(!showLow)} variant={showLow ? "primary" : "secondary"}>Low</Button>}
+          {isVolume() && <Button onClick={() => setShowVolume(!showVolume)} variant={showVolume ? "primary" : "secondary"}>Volume</Button>}
           {isMovingAverage() && <Button onClick={() => setShowMovingAverage(!showMovingAverage)} variant={showMovingAverage ? "primary" : "secondary"}>Moving Average</Button>}
           {isRSI() && <Button onClick={() => setShowRSI(!showRSI)} variant={showRSI ? "primary" : "secondary"}>RSI</Button>}
           
