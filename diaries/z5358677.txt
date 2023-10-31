@@ -11,4 +11,10 @@ Week 4
 Writing microservice functions for uploading csv and gathering data from Yahoo using yfinance. Standardised Microservices and Pipes classes. Co-wrote API for uploading microservices to MongoDB. Created JSON ouput for microservice chaining.
 
 Week 5
-Project Retrospective A. Writing retrospective report.
+Project Retrospective A. Writing retrospective report. Writing data processing microservices now. Drop column and sort by column
+
+Week 6
+Flex week. Wrote merge column microservice
+
+Week 7
+Currently attempting to enable editing of parameters on existing pipelines. Completed the frontend interface. Removed references to microservice collection on MongoDB.

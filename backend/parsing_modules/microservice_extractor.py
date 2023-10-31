@@ -27,7 +27,7 @@ def extract_microservice(python_file=None) -> str:
     for service in dir(imported_module):
         if not re.match(r'__.*__', service):
             # check if callable
-            if callable(getattr(imported_module, service)):
+            if callable(getattr(imported_module, service)) and not service.startswith("_"):
                 microservice_names.append(service)
 
     for microservice in microservice_names:
@@ -37,10 +37,9 @@ def extract_microservice(python_file=None) -> str:
 
         params = {}
         for param in microservice_signature.parameters.values():
-            if param.default is param.empty:
-                params[param.name] = None
-            else:
-                params[param.name] = param.default
+            param_info = {'default': param.default if param.default != param.empty else None,
+                          'type': param.annotation.__name__ if param.annotation != param.empty else None}
+            params[param.name] = param_info
 
         doc = inspect.getdoc(microservice_function)
         microservice_json['microservices'].append({

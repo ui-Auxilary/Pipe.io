@@ -1,13 +1,8 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-  background: #5a279b;
-  color: #fff;
-  width: 10%;
   display: flex;
-  align-items: flex-start;
-  height: 100vh;
-  flex-direction: column;
+  align-items: center;
   justify-content: space-between;
 `;
 
@@ -38,6 +33,48 @@ const ButtonContainer = styled.div`
   flex-direction: column;
 `;
 
+const GraphContainer = styled.div`
+  width: 1500px; 
+  height: 600px; 
+
+  /* Media query for smaller screens */
+  @media (max-width: 1900px) {
+    width: 1000px; 
+  }
+
+  /* Media query for smaller screens */
+  @media (max-width: 1500px) {
+    width: 750px; 
+  }
+
+  /* Media query for even smaller screens */
+  @media (max-width: 480px) {
+    width: 500px; 
+  }
+
+
+`;
+
+const CalendarContainer = styled.div`
+  width: 275px; 
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-top: 10px;
+  padding-bottom: 20px;
+
+  /* add space between buttons */
+  & > * {
+    margin: 0 2px;
+  }
+
+
+`;
+
+
 
 export default {
   Container,
@@ -45,4 +82,7 @@ export default {
   UserContainer,
   UserImg,
   ButtonContainer,
+  GraphContainer,
+  CalendarContainer,
+  ButtonGroup,
 };
