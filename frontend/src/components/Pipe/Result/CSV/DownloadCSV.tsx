@@ -17,8 +17,6 @@ export default function DownloadCSV(props: DownloadProps) {
 
   // const outputFiles = JSON.parse(props)
 
-  console.log(props)
-
   const [files, setFiles] = useState([])
 
   useEffect(() => {
@@ -26,9 +24,11 @@ export default function DownloadCSV(props: DownloadProps) {
       console.log(res.data)
       for (const microservice of res.data.microservices) {
         if (microservice.name == props.name) {
-          console.log("FILES", microservice.parameters.output_file_path.value.split(","))
-          setFiles(microservice.parameters.output_file_path.value.split(","))
-      
+          if (microservice.parameters.output_file_path.value != null) {
+            setFiles(microservice.parameters.output_file_path.value.split(","))
+          } else if (microservice.parameters.output_file_path.default != null) {
+            setFiles(microservice.parameters.output_file_path.default.split(","))
+          }
         }
       }
     })
