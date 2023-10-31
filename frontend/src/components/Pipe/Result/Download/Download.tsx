@@ -18,7 +18,7 @@ export default function Download(props: DownloadProps) {
 
   const [download, setDownload] = useState("")
 
-  console.log("PENIS", output);
+  // console.log("PENIS", output);
 
 
   const handleDownload = (filePath: string) => {
