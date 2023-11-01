@@ -44,28 +44,17 @@ def calculate_mfi(input_file_path: str ="stock_data.csv", output_file_path:str =
         except:
             print("close column must be the type of float")
             return
-            
-
-    # Calculate typical price
-    
+    df['PMF'] = float(0)
+    df['NMF'] = float(0)
     df['Typical Price'] = (df[high_column] + df[low_column] + df[close_column]) / 3
-    
-    # Calculate Money Flow (MF)
-    
     df['Money Flow'] = df['Typical Price'] * df[value_column]
+    for i in range(1, len(df)):
+        if df['Typical Price'][i] > df['Typical Price'][i-1]:
+            df.loc[i, 'PMF'] = df['Money Flow'][i]
+        elif df['Typical Price'][i] < df['Typical Price'][i-1]:
+            df.loc[i, 'NMF'] = df['Money Flow'][i]
     
-    # Calculate Positive Money Flow (PMF) and Negative Money Flow (NMF)
-    df['PMF'] = 0.0
-    df['NMF'] = 0.0
-    
-    df.loc[df['Typical Price'] > df['Typical Price'].shift(1), 'PMF'] = df['Money Flow']
-    df.loc[df['Typical Price'] < df['Typical Price'].shift(1), 'NMF'] = df['Money Flow']
-    
-    # Calculate Money Ratio (MR)
     df['MR'] = df['PMF'].rolling(window=window_size).sum() / df['NMF'].rolling(window=window_size).sum()
-    
-    # Calculate Money Flow Index (MFI)
     df['MFI'] = 100 - (100 / (1 + df['MR']))
-    
     df.to_csv(output_file_path)
     return df.to_json()
