@@ -24,7 +24,7 @@ def import_yahoo(ticker: str = 'msft',
 
     return f"{ticker} data succesfully retrieved and saved to {output_file_path}"
 
-def zdrop_column(input_file_path: str = 'stock_data.csv', output_file_path: str = 'stock_data_updated.csv', columns: str = ''):
+def table_drop_columns(input_file_path: str = 'stock_data.csv', output_file_path: str = 'stock_data_updated.csv', columns: str = ''):
     """Drops specified columns from csv
 
     Args:

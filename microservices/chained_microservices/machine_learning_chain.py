@@ -149,7 +149,7 @@ def time_prediction_future_stock_values(stock_input_file_path: str = 'stock_data
     return df.to_json()
 
 
-def ulot_to_graph(x_axis: str, y_axis: str, filenames: str):
+def wrtie_plot(x_axis: str, y_axis: str, filenames: str):
     """Plots the data from the csv file
 
     Args:
