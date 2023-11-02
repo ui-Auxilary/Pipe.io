@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/Button';
 // import Calendar from 'react-calendar';
 // import 'react-calendar/dist/Calendar.css';
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, ResponsiveContainer, AreaChart, Area} from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, ResponsiveContainer, AreaChart, Area, ComposedChart} from 'recharts';
 
 interface ChartProps {
   pipeId: string
@@ -37,6 +37,7 @@ export default function ChartComponent(props: ChartProps) {
     { value: 'line', label: 'Line' },
     { value: 'bar', label: 'Bar' },
     { value: 'area', label: 'Area'},
+    { value: 'composed', label: 'Composed'}
   ];
 
 
@@ -94,29 +95,35 @@ export default function ChartComponent(props: ChartProps) {
       const stockObj = Object.keys(output.Close).map((key) => {
 
         if (output.Date === undefined) {
-          return {
-            Date: parseInt(key),
-            Close: output.Close[key],
-            Dividends: output.Dividends[key],
-            "Stock Splits": output["Stock Splits"][key],
-            High: output.High[key],
-            Low: output.Low[key],
-            Open: output.Open[key],
-            Volume: output.Volume[key]
+          const temp = {Date: parseInt(key)}
+          for (const [key2, value] of Object.entries(output)) {
+            temp[key2] = value[key];
           }
+          return temp;
+
         } else if (typeof output.Date[key] === "string") {
           console.log("HELLO")
-          return {
-            Date: new Date(output.Date[key]).getTime(),
-            Close: output.Close[key],
-            Dividends: output.Dividends[key],
-            "Stock Splits": output["Stock Splits"][key],
-            High: output.High[key],
-            Low: output.Low[key],
-            Open: output.Open[key],
-            Volume: output.Volume[key]
+          const temp = {Date: new Date(output.Date[key]).getTime()}
+          for (const [key2, value] of Object.entries(output)) {
+            if (key2 != "Date") {
+              temp[key2] = value[key];
+            }
           }
-        } 
+          return temp;
+        } else if (typeof output.Date[key] === "number") {
+          const temp = {Date: output.Date[key]}
+          for (const [key2, value] of Object.entries(output)) {
+            if (key2 != "Date") {
+
+              if (typeof value[key] === "string") {
+                temp[key2] = parseInt(value[key].replace(/,/g, ''));
+              } else {
+                temp[key2] = value[key];
+              }
+            }
+          }
+          return temp;
+        }
       });
 
       setStock(stockObj);
@@ -195,9 +202,21 @@ export default function ChartComponent(props: ChartProps) {
   }
 
   // round to 2 decimal places
-  const roundPrice = (price: number) => {
+  const roundPrice = (price: number): number => {
 
     if (showVolume && stock.find((el) => el.Volume == price)) {
+      if (typeof price === "string") {
+        return parseInt(price.replace(/,/g, ''));
+      }
+
+      return price;
+    }
+
+    if (showRSI && stock.find((el) => el.RSI == price)) {
+      return Math.round(price*100)/ 100 + '%';
+    }
+
+    if (showMovingAverage && stock.find((el) => el.moving_average == price)) {
       return price;
     }
 
@@ -208,11 +227,59 @@ export default function ChartComponent(props: ChartProps) {
 
 
   const [showClose, setShowClose] = useState(true);
+  if (stock[0] && stock[0].Close == undefined) {
+    setShowClose(false);
+  }
+
   const [showOpen, setShowOpen] = useState(false);
   const [showHigh, setShowHigh] = useState(false);
   const [showLow, setShowLow] = useState(false);
   const [showVolume, setShowVolume] = useState(false);
-  const [showDividends, setShowDividends] = useState(false);
+  const [showMovingAverage, setShowMovingAverage] = useState(false);
+  const [showRSI, setShowRSI] = useState(false);
+
+
+  const isMovingAverage = () => {
+    if (stock[0] && stock[0].moving_average != undefined) {
+      return true;
+    }
+  }
+
+  const isRSI = () => {
+    if (stock[0] && stock[0].RSI != undefined) {
+      return true;
+    }
+  }
+
+  const isOpen = () => {
+    if (stock[0] && stock[0].Open != undefined) {
+      return true;
+    }
+  }
+
+  const isHigh = () => {
+    if (stock[0] && stock[0].High != undefined) {
+      return true;
+    }
+  }
+
+  const isLow = () => {
+    if (stock[0] && stock[0].Low != undefined) {
+      return true;
+    }
+  }
+
+  const isVolume = () => {
+    if (stock[0] && stock[0].Volume != undefined) {
+      return true;
+    }
+  }
+
+  const isClose = () => {
+    if (stock[0] && stock[0].Close != undefined) {
+      return true;
+    }
+  }
 
   return (
     <S.Container>
@@ -231,7 +298,8 @@ export default function ChartComponent(props: ChartProps) {
             {showHigh && <Bar dataKey="High" fill="#82ca9d"/>}
             {showLow && <Bar dataKey="Low" fill="#ffc658"/>}
             {showVolume && <Bar dataKey="Volume" fill="#ff0000"/>}
-            {showDividends && <Bar dataKey="Dividends" fill="#0000ff"/>}
+            {showMovingAverage && <Bar dataKey="moving_average" fill="#0000ff"/>}
+            {showRSI && <Bar dataKey="RSI" fill="#000000"/>}
           </BarChart>
           </ResponsiveContainer>
         }
@@ -244,7 +312,8 @@ export default function ChartComponent(props: ChartProps) {
               {showHigh && <Line type="monotone" dataKey="High" stroke="#82ca9d" strokeWidth={2}/>}
               {showLow && <Line type="monotone" dataKey="Low" stroke="#ffc658" strokeWidth={2}/>}
               {showVolume && <Line type="monotone" dataKey="Volume" stroke="#ff0000" strokeWidth={2}/> } 
-              {showDividends && <Line type="monotone" dataKey="Dividends" stroke="#0000ff" strokeWidth={2}/>}
+              {showMovingAverage && <Line type="monotone" dataKey="moving_average" stroke="#0000ff" strokeWidth={2}/>}
+              {showRSI && <Line type="monotone" dataKey="RSI" stroke="#000000" strokeWidth={2}/>}
               <CartesianGrid stroke="#ccc" />
               <XAxis dataKey="Date" scale="time" domain={['dataMin', 'dataMax']} type="number" tickFormatter={formatDate} />
               <YAxis width={80}/>
@@ -262,7 +331,8 @@ export default function ChartComponent(props: ChartProps) {
               {showHigh && <Area type="monotone" dataKey="High" stroke="#82ca9d" fill="#82ca9d" strokeWidth={2}/>}
               {showLow && <Area type="monotone" dataKey="Low" stroke="#ffc658" fill="#ffc658" strokeWidth={2}/>}
               {showVolume && <Area type="monotone" dataKey="Volume" stroke="#ff0000" fill="#ff0000" strokeWidth={2}/> } 
-              {showDividends && <Area type="monotone" dataKey="Dividends" stroke="#0000ff" fill="#0000ff" strokeWidth={2}/>}
+              {showMovingAverage && <Area type="monotone" dataKey="moving_average" stroke="#0000ff" fill="#0000ff" strokeWidth={2}/>}
+              {showRSI && <Area type="monotone" dataKey="RSI" stroke="#000000" fill="#000000" strokeWidth={2}/>}
               <CartesianGrid stroke="#ccc" />
               <XAxis dataKey="Date" scale="time" domain={['dataMin', 'dataMax']} type="number" tickFormatter={formatDate} />
               <YAxis width={80}/>
@@ -272,13 +342,37 @@ export default function ChartComponent(props: ChartProps) {
           </ResponsiveContainer>
         }
 
+        { chartType.value == 'composed' &&
+          <ResponsiveContainer width="95%" height={"90%"}>
+            <ComposedChart data={stock}>
+              {showClose && <Bar dataKey="Close" fill="#02b2af"/>}
+              {showOpen && <Bar dataKey="Open" fill="#8884d8"/>}
+              {showHigh && <Bar dataKey="High" fill="#82ca9d"/>}
+              {showLow && <Bar dataKey="Low" fill="#ffc658"/>}
+              {showLow && <Line type="monotone" dataKey="Low" stroke="#ffc658" strokeWidth={2}/>}
+              {showVolume && <Bar dataKey="Volume" fill="#ff0000"/>}
+              {showMovingAverage && <Line type="monotone" dataKey="moving_average" stroke="#0000ff" strokeWidth={2}/>}
+              {showRSI && <Line type="monotone" dataKey="RSI" stroke="#000000" strokeWidth={2}/>}
+              <CartesianGrid stroke="#ccc" />
+              <XAxis dataKey="Date" scale="time" domain={['dataMin', 'dataMax']} type="number" tickFormatter={formatDate} padding={{ right: 60, left: 60 }} />
+              <YAxis width={80}/>
+              <Tooltip labelFormatter={formatDate} formatter={roundPrice}/>
+              <Legend />
+            </ComposedChart>
+          </ResponsiveContainer>
+        }
+
+        
+
         <S.ButtonGroup>
-          <Button onClick={() => setShowClose(!showClose)} variant={showClose ? "primary" : "secondary"}>Close</Button>
-          <Button onClick={() => setShowOpen(!showOpen)} variant={showOpen ? "primary" : "secondary"}>Open</Button>
-          <Button onClick={() => setShowHigh(!showHigh)} variant={showHigh ? "primary" : "secondary"}>High</Button>
-          <Button onClick={() => setShowLow(!showLow)} variant={showLow ? "primary" : "secondary"}>Low</Button>
-          <Button onClick={() => setShowVolume(!showVolume)} variant={showVolume ? "primary" : "secondary"}>Volume</Button>
-          <Button onClick={() => setShowDividends(!showDividends)} variant={showDividends ? "primary" : "secondary"}>Dividends</Button>
+          {isClose() && <Button onClick={() => setShowClose(!showClose)} variant={showClose ? "primary" : "secondary"}>Close</Button>}
+          {isOpen() && <Button onClick={() => setShowOpen(!showOpen)} variant={showOpen ? "primary" : "secondary"}>Open</Button>}
+          {isHigh() && <Button onClick={() => setShowHigh(!showHigh)} variant={showHigh ? "primary" : "secondary"}>High</Button>}
+          {isLow() && <Button onClick={() => setShowLow(!showLow)} variant={showLow ? "primary" : "secondary"}>Low</Button>}
+          {isVolume() && <Button onClick={() => setShowVolume(!showVolume)} variant={showVolume ? "primary" : "secondary"}>Volume</Button>}
+          {isMovingAverage() && <Button onClick={() => setShowMovingAverage(!showMovingAverage)} variant={showMovingAverage ? "primary" : "secondary"}>Moving Average</Button>}
+          {isRSI() && <Button onClick={() => setShowRSI(!showRSI)} variant={showRSI ? "primary" : "secondary"}>RSI</Button>}
+          
         </S.ButtonGroup>
       </S.GraphContainer>
       <Form>
