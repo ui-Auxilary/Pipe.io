@@ -5,7 +5,7 @@ import MicroserviceList from 'components/MicroserviceList';
 import ViewMicroservice from 'components/MicroserviceList/ViewMicroservice';
 import { useAppData } from 'helper/AppProvider';
 import ValidatedInput from 'helper/validation';
-import React, { FormEvent, useEffect } from 'react';
+import { useEffect } from 'react';
 import Switch from 'react-switch';
 
 export interface Item {
@@ -69,7 +69,7 @@ export default function FormItem({ item }: Props) {
       console.log('POO', item)
 
       if (item.elType === 'bool') {
-        console.log(item,"BOOL");
+        console.log(item, "BOOL");
         console.log("8==D", edit[item.name]);
         return (
           <>
@@ -83,7 +83,7 @@ export default function FormItem({ item }: Props) {
           </>
         );
       }
-      
+
       return (
         <>
           <S.Label>{item.label}</S.Label>
