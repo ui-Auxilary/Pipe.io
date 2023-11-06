@@ -63,7 +63,7 @@
                 </Button>
               </s.ButtonContainer>
               <s.ButtonContainer>
-                <Button variant="secondary" type="submit">
+                <Button variant="secondary" onClick={() => window.location.href="/login"}>
                   Back
                 </Button>
               </s.ButtonContainer>
