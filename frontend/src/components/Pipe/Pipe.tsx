@@ -7,7 +7,7 @@ import Pencil from 'assets/pencil.svg'
 import Edit from 'components/Edit'
 import Delete from 'assets/trash.svg'
 import Overlay from 'react-bootstrap/Overlay';
-import { format} from 'date-fns';
+import { format } from 'date-fns';
 
 
 import Content from './Content'
@@ -17,6 +17,7 @@ import Result from './Result/Result'
 import Checkbox from 'components/Checkbox/Checkbox'
 import MicroserviceList from 'components/MicroserviceList';
 import ViewMicroserviceFromPipe from 'components/MicroserviceList/ViewMicroservice/ViewMicroserviceFromPipe';
+import { useFormData } from 'components/MultiStepForm/Form/FormProvider'
 
 export interface Props {
   pipeId: string
@@ -80,13 +81,13 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
   ]
 
   console.log('LIST', pipeList)
-
+  const { setMicroserviceData } = useFormData();
   let target = useRef(null);
 
   const handleOverlayShow = () => setShow(true);
   const handleOverlayClose = () => setShow(false);
   const handleViewOverlayShow = () => setShowView(true);
-  const handleViewOverlayClose = () => setShowView(false);
+  const handleViewOverlayClose = () => { setMicroserviceData([]); setShowView(false) }
   const handleDeleteClose = () => setDel(false);
   const handleChartClose = () => setChart(false);
   const handleChartShow = () => setChart(true);

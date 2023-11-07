@@ -2,11 +2,10 @@ import { useCallback, useEffect, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 
 import File from "assets/upload_file.svg";
-
 import S from "./style";
 import axios from "axios";
 import { useFormData } from "components/MultiStepForm/Form/FormProvider";
-
+import { useAppData } from "helper/AppProvider";
 
 export default function Dropzone({ filetype }) {
   const [files, setFiles] = useState<File[]>([]);
@@ -42,7 +41,8 @@ export default function Dropzone({ filetype }) {
     onDrop,
   });
 
-  const { setMicroserviceData } = useFormData()
+  const { setMicroserviceData, microserviceData } = useFormData()
+  const { appfiles, setAppFiles } = useAppData();
 
   const fileDisplay = files?.map((file) => {
     return (<S.FileBox key={window.crypto.randomUUID()}>
@@ -61,6 +61,7 @@ export default function Dropzone({ filetype }) {
   useEffect(() => {
     return () => {
       if (files) {
+        console.log('Final files', files)
         files?.map((file) => {
           console.log('FILE', file.name)
           if (filetype == "python") {
@@ -70,7 +71,8 @@ export default function Dropzone({ filetype }) {
               const base64data = reader.result;
 
               if (base64data) {
-                axios.post('http://localhost:8000/upload', { 'filename': file.name, 'content': base64data }).then((res) => setMicroserviceData(JSON.parse(res.data)))
+                console.log('Data found setting for', file.name, microserviceData)
+                setAppFiles([...files, filetype])
               }
             };
           }
@@ -82,7 +84,6 @@ export default function Dropzone({ filetype }) {
             reader.onload = () => {
               const base64data = reader.result;
 
-              console.log('POSTING', base64data)
               if (base64data) {
                 axios.post('http://localhost:8000/upload_csv', { 'filename': file.name, 'content': base64data })
               }

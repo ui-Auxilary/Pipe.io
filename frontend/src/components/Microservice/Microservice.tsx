@@ -32,15 +32,11 @@ export default function Microservice({ code, name, docstring, param, parent_file
     { value: 'value', label: 'Value' },
     // { value: 'ml', label: 'ML' },
     // { value: 'data_frame', label: 'Dataframe' },
-    { value: 'graph', label: 'Stock Graph'},
-    { value: 'csv', label: 'CSV'},
-    { value: 'plot', label: 'Plot File'}
+    { value: 'graph', label: 'Stock Graph' },
+    { value: 'csv', label: 'CSV' },
+    { value: 'plot', label: 'Plot File' }
   ];
 
-
-
-
-  
 
   const microserviceList = [
     {
@@ -60,18 +56,22 @@ export default function Microservice({ code, name, docstring, param, parent_file
   const handleTagChange = (e: any) => {
     setSelectedTags(e);
     data["output_type"] = e;
-    axios.put(`http://localhost:8000/pipes/${parent_pipe_id}/${name}?output_type=${e.value}`).then((res) => {
-      console.log(res)
-    }).catch((err) => {
-      console.log(err)
-    });
-    const newData = {...microserviceData};
-    newData["microservices"].filter((e) => e.name == name)[0]["output_type"] = e.value;
+    if (parent_pipe_id) {
+      axios.put(`http://localhost:8000/pipes/${parent_pipe_id}/${name}?output_type=${e.value}`).then((res) => {
+        console.log(res)
+      }).catch((err) => {
+        console.log(err)
+      });
+    }
+
+    const newData = microserviceData;
+    console.log('newData', newData)
+    newData.filter((e) => e.name == name)[0]["output_type"] = e.value;
     setMicroserviceData(newData);
   }
 
-  
-  
+
+
   const data = {
     parent_file: parent_file,
     name: name,
@@ -97,7 +97,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
                 value={selectedTags}
                 onChange={handleTagChange}
                 placeholder="Select Output Type"
-                style = {{minWidth: "200px", maxWidth: "200px"}}
+                style={{ minWidth: "200px", maxWidth: "200px" }}
               />
             </S.Tag>
           </div>
@@ -107,9 +107,9 @@ export default function Microservice({ code, name, docstring, param, parent_file
           {Object.keys(param).length > 0 && (<div><S.Button onClick={handleEditShow} style={{ display: "flex", width: "150px", gap: "10px", justifyContent: "center", alignItems: "center" }}>Input data <S.View src={view}></S.View></S.Button></div>)}
         </div>
       </S.Microservice>
-      
-      {!from_pipe&&<Edit id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />}
-      {from_pipe&&<EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} parent_pipe_id={parent_pipe_id}/>}
+
+      {!from_pipe && <Edit id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />}
+      {from_pipe && <EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} parent_pipe_id={parent_pipe_id} />}
       <Modal show={showCode} onHide={handleCodeClose}>
         <Modal.Header closeButton>
           <Modal.Title>Code</Modal.Title>

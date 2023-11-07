@@ -1,32 +1,4 @@
 {
-    "pipeline": "asd",
-    "microservices": [
-        {
-            "file": "another",
-            "name": "add_two",
-            "parameters": {
-                "number": "2"
-            }
-        },
-        {
-            "file": "another",
-            "name": "add_x",
-            "parameters": {
-                "number": "2",
-                "x": "5"
-            }
-        },
-        {
-            "file": "another",
-            "name": "print_hello_world",
-            "parameters": {}
-        },
-        {
-            "file": "another",
-            "name": "print_numpy_array",
-            "parameters": {
-                "list_ints": "[1,2,3]"
-            }
-        }
-    ]
+    "pipeline": "s",
+    "microservices": []
 }

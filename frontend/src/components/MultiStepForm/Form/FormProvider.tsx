@@ -8,17 +8,13 @@ interface UserData {
   [index: string]: NonNullable<unknown>;
 }
 
-interface MicroserviceData {
-  [index: string]: NonNullable<unknown>;
-}
-
 export interface FormContextType {
   currentStep: number,
   setStep: React.Dispatch<React.SetStateAction<number>>
   userData: Record<string, NonNullable<unknown>>
   setUserData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>
-  microserviceData: Record<string, NonNullable<unknown> | []>
-  setMicroserviceData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>,
+  microserviceData: object[]
+  setMicroserviceData: React.Dispatch<React.SetStateAction<object[]>>,
   submitData(func?: NonNullable<unknown>): void
 }
 
@@ -27,7 +23,7 @@ export const multiFormContext = createContext<FormContextType>({
   setStep: () => { },
   userData: {},
   setUserData: () => { },
-  microserviceData: {},
+  microserviceData: [],
   setMicroserviceData: () => { },
   submitData: () => { }
 });
@@ -44,13 +40,13 @@ interface FormProviderProps {
 export default function FormProvider({ children }: FormProviderProps) {
   const [currentStep, setStep] = useState<number>(1);
   const [userData, setUserData] = useState<UserData>({})
-  const [microserviceData, setMicroserviceData] = useState<MicroserviceData>({});
+  const [microserviceData, setMicroserviceData] = useState<object[]>([]);
 
   const { user, setPipeIds, pipeIds, setEdit } = useAppData()
 
   const submitData = (handleClose) => {
     console.log('USER', microserviceData)
-    axios.post('http://localhost:8000/pipes/create', Object.assign({ user_id: user, microservices: microserviceData.microservices }, userData), {
+    axios.post('http://localhost:8000/pipes/create', Object.assign({ user_id: user, microservices: microserviceData }, userData), {
       headers: {
         "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
       }
@@ -59,7 +55,7 @@ export default function FormProvider({ children }: FormProviderProps) {
     handleClose()
     setUserData({})
     setEdit({})
-    setMicroserviceData({})
+    setMicroserviceData([])
   }
 
   return (

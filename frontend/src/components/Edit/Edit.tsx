@@ -21,10 +21,10 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
 
     const findAndUpdate = (name: string, parameters) => {
 
-        const foundIndex = (microserviceData.microservices as []).findIndex(x => x.name == name);
+        const foundIndex = microserviceData.findIndex(x => x.name == name);
         // console.log('updating', foundIndex, edit, edit[name], name)
         // console.log('Microdata', microserviceData)
-        const updatedData = [...microserviceData.microservices as []]
+        const updatedData = microserviceData
         if (foundIndex >= 0) {
 
             console.log('Updated', updatedData[foundIndex]["parameters"], name, parameters, edit[name])
@@ -43,7 +43,7 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
         }
         console.log('Updated Data', updatedData)
         // updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: edit[name] })
-        setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
+        setMicroserviceData(prev => [...prev, ...updatedData])
 
         console.log('NEW', microserviceData)
     }
