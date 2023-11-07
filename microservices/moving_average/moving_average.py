@@ -14,12 +14,13 @@ def moving_avergae(input_file_path: str = 'stock_data.csv', output_file_path:str
         pd.DataFrame: Dataframe from the csv file
     """
     
+    input_file_path = os.path.join('/backend/data/', input_file_path)
     df = pd.read_csv(input_file_path)
     df = df.sort_values(by=[date_column])
     data_type = df[value_column].dtype
     if data_type == 'object':
         df[value_column] = df[value_column].str.replace(',', '').astype(float)
     df['moving_average'] = df[value_column].rolling(window=window_size).mean()
-    df.to_csv(output_file_path, index=False)
-    return df
-    
+
+    df.to_csv(output_file_path)
+    return df.to_json()
