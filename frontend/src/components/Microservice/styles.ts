@@ -35,11 +35,16 @@ const Button = styled.button`
     font-weight: 600;
 `
 
+const Tag = styled.div`
+    width: 200px;
+`
+
 export default {
     Button,
     Label,
     Edit,
     View,
     Left,
-    Microservice
+    Microservice,
+    Tag
 }

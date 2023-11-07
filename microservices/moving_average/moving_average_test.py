@@ -16,3 +16,4 @@ def test_moving_average():
     assert (output_df['RSI'].tolist() == [100.0, 150.0, 200.0, 300.0, 400.0])
     os.remove('sample_stock_data.csv')
     os.remove('sample_moving_average.csv')
+

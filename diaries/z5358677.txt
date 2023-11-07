@@ -17,4 +17,7 @@ Week 6
 Flex week. Wrote merge column microservice
 
 Week 7
-Currently attempting to enable editing of parameters on existing pipelines. Completed the frontend interface. Removed references to microservice collection on MongoDB.
+Currently attempting to enable editing of parameters on existing pipelines. Completed the frontend interface. Removed references to microservice collection on MongoDB. Completed editing parameters.
+
+Week 8
+Worked on completing the pipeline system, including modifying microservices to work with csv ouput. Created chained pipes that use data processing microservices

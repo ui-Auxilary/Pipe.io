@@ -1,9 +1,9 @@
 import os
 import importlib.util
 import sys
-
+import ast
 from typing import Annotated
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, HTTPException
 from server.models.microservices import Microservice, EditMicroservice
 from server.models.microservices import FileContent
 from server.database import microservices_collection
@@ -34,10 +34,26 @@ async def add_microservice(microservice: Microservice):
 @router.put("/microservice/{id}")
 async def edit_microservice(id: str, microservice: EditMicroservice):
     new_microservice = dict(microservice)
-    print("Test", new_microservice, new_microservice["parameters"])
-    microservices_collection.find_one_and_update(
-        {"_id": ObjectId(id)}, {"$set": {"parameters": new_microservice["parameters"]}})
-
+    #print(new_microservice["parameters"])
+    if new_microservice["parameters"] is None:
+        raise HTTPException(status_code=400, detail= "microservice is NoneType")
+    else:
+        for parameter in new_microservice["parameters"]:
+            #print(parameter)
+            print(new_microservice["parameters"][parameter])
+            
+            try:
+                # Attempt to parse the value with ast.literal_eval
+                new_microservice["parameters"][parameter]["default"] = ast.literal_eval(new_microservice["parameters"][parameter]["default"])
+                
+            except (ValueError, SyntaxError):
+                pass
+            if new_microservice["parameters"][parameter]["default"].__class__.__name__ != new_microservice["parameters"][parameter]["type"]:
+                raise HTTPException(status_code=404, detail=f"The parameter {new_microservice['parameters'][parameter]['default']} should be of type {new_microservice['parameters'][parameter]['type']}")
+            
+    #print("Test",new_microservice["parameters"])
+        microservices_collection.find_one_and_update(
+            {"_id": ObjectId(id)}, {"$set": {"parameters": new_microservice["parameters"]}})
 
 @router.delete("/microservice/{id}")
 async def delete_microservice(name: str):

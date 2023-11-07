@@ -1,11 +1,14 @@
 import S from './style'
 import dots from 'assets/dots.svg'
-import React, { forwardRef, useRef, useState } from 'react'
+import React, { forwardRef, useRef, useState, useEffect } from 'react'
 import { Button, Form, Modal, OverlayTrigger, Popover, Tooltip } from 'react-bootstrap'
 import View from 'assets/view.svg'
 import Pencil from 'assets/pencil.svg'
 import Edit from 'components/Edit'
 import Delete from 'assets/trash.svg'
+import Overlay from 'react-bootstrap/Overlay';
+import { format} from 'date-fns';
+
 
 import Content from './Content'
 import axios from 'axios'
@@ -21,7 +24,7 @@ export interface Props {
   name: string
   description?: string
   checked?: boolean
-  onCheck(pipeId: string): () => {}
+  onCheck: (pipeId: string, id: number) => void
   ref: React.MutableRefObject<never[]>
   idx: number
 }
@@ -33,7 +36,7 @@ export interface ExecuteProps {
 }
 
 
-const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck, idx } : Props, ref) => {
+const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck, idx }: Props, ref) => {
   const [show, setShow] = useState(false);
   const [showView, setShowView] = useState(false);
   const [del, setDel] = useState(false);
@@ -65,7 +68,7 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
 
 
   const items = Object.keys(data).map((el) => (
-    { label: el, "type": "edit_param", id: pipeId, value: "pipe" }
+    { label: el, "type": "edit_param", id: pipeId, name: pipeId }
   ))
 
 
@@ -84,29 +87,26 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
   const handleOverlayClose = () => setShow(false);
   const handleViewOverlayShow = () => setShowView(true);
   const handleViewOverlayClose = () => setShowView(false);
-  const handleEditClose = () => setShow(false);
-  const handleEditShow = () => setShow(false);
   const handleDeleteClose = () => setDel(false);
   const handleChartClose = () => setChart(false);
   const handleChartShow = () => setChart(true);
 
   const onPipeRun = () => {
     if (status === "Completed") {
-      handleChartShow()
-    }
-    else {
-      setStatus("Running")
+      handleChartShow();
+    } else {
+      setStatus("Running");
       axios.post('http://localhost:8000/pipes/execute/', null, { params: { id: pipeId } })
         .then(res => {
-          setStatus("Completed")
-          setExecuted({ "time": Date.now(), "result": res.data })
+          setStatus("Completed");
+          setExecuted({ "time": format(Date.now(), 'yyyy-MM-dd HH:mm:ss'), "result": res.data });
         })
-        .catch(e => {
+        .catch((e: any) => {
           setStatus("Error");
           console.log(e);
-        })
+        });
     }
-  }
+  };
 
   const onEditClick = () => {
     handleOverlayShow()
@@ -128,6 +128,14 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
 
     handleDeleteClose();
   }
+
+  useEffect(() => {
+    axios.get(`http://localhost:8000/pipes/${pipeId}`).then(res => {
+      // setStatus(res.data.status)
+      // setExecuted(res.data.executed.last_executed)
+      setExecuted(executed => ({ ...executed, "time": res.data.last_executed }))
+    })
+  }, []);
 
   const editPipeline = (
     <Popover>
@@ -152,17 +160,17 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
     </Popover>
   );
 
-  
+
   return (
     <>
-      <S.Pipe onClick={() =>  onCheck(pipeId, idx)}>
+      <S.Pipe>
         <OverlayTrigger trigger="click" placement="bottom" overlay={editPipeline} rootClose>
           <S.Edit ref={target} src={dots} />
         </OverlayTrigger>
         <S.Top>
           <S.Left>
             <S.CheckboxContainer>
-              <S.Checkbox  onClick={() =>  onCheck(pipeId, idx)} defaultChecked={ref.current[idx]?.checked || false} ref={(el) => ref.current[idx] = el}/>
+              <S.Checkbox onClick={() => onCheck(pipeId, idx)} defaultChecked={ref.current[idx]?.checked || false} ref={(el) => ref.current[idx] = el} />
             </S.CheckboxContainer>
             <span>
             </span>
@@ -194,7 +202,7 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
           <S.Button onClick={() => handleViewOverlayClose()}>Save</S.Button>
         </Modal.Footer>
       </Modal>
-      
+
       <Modal dialogClassName="form-modal" show={showChart} onHide={handleChartClose}>
         <Modal.Header closeButton>
           <Modal.Title>View Results</Modal.Title>

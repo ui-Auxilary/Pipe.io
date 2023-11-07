@@ -1,23 +1,10 @@
 import yfinance as yf
 import nltk
-from nltk.sentiment import SentimentIntensityAnalyzer
+import nltk.sentiment
+import pandas as pd
 
 UPWEIGHT = 1.5
 DOWNWEIGHT = 0.7
-
-
-def _get_news_titles_by_company(company):
-    """ Gets the titles of relevant news articles for the given company
-
-    Args:
-        company (str): Financial code for the company
-
-    Returns:
-        list[str]: List of titles of relevant news articles
-    """
-    ticker = yf.Ticker(company)
-    return ticker, [article['title'] for article in ticker.news]
-
 
 def _calculate_overall_sentiment(titles, transform):
     """ Calculates the overall sentiment of a company
@@ -30,7 +17,7 @@ def _calculate_overall_sentiment(titles, transform):
     Returns:
         int: Integer value of the overall sentiment
     """
-    sentiment_analyser = SentimentIntensityAnalyzer()
+    sentiment_analyser = nltk.sentiment.SentimentIntensityAnalyzer()
     sentiments = [sentiment_analyser.polarity_scores(
         title) for title in titles]
     return transform(sentiments)
@@ -80,36 +67,59 @@ def _determine_which_transform_to_use(transform_name):
         return _weighted_mean_transform
     else:
         raise ValueError('Invalid transform provided')
+    
+def _sentiment_value_to_analysed_value(sentiment_value, transform):
+    """Converts the sentiment value to whether it is a buy or sell sentiment
+
+    Args:
+        sentiment_value (float): sentiment value
+        transform (str): transform function used to resolve individual news sentiments
+
+    Returns:
+        str: description of the stock sentiment
+    """
+    if sentiment_value > 0.15:
+        sentiment = 'very positive'
+    elif sentiment_value > 0:
+        sentiment = 'positive'
+    elif sentiment_value == 0:
+        sentiment = 'neutral'
+    elif sentiment_value > -0.15:
+        sentiment = 'negative'
+    else:
+        sentiment = 'very negative'
+    return f'The sentiment of the stock is {sentiment} with a score of {sentiment_value:.2f} using the {transform} function for each news article.'
 
 
-def sentiment_analysis_microservice(stock='MSFT', transform='mean'):
+def sentiment_analysis_microservice(input_file_path: str = 'news_data.csv', transform='mean', output_file_path: str = 'sentiment_data.csv'):
     """ Calculates the sentiment of a company based on the news articles associated
     with it on the yfinance Ticker.news API
 
     Args:
-        stock (str, optional): Stock ticker symbol
-        (such as 'MSFT' for Microsoft). Defaults to 'MSFT'.
+        input_file_path (str, optional): path for the input csv.
+        Defaults to 'news_data.csv'.
         transform (str, optional): transformation function to take
         individual article sentiment and convert it to a single value.
         Can be `mean` for simplicity or `weighted_mean` to upweight positive
         sentiments. Defaults to 'mean'.
 
-    Raises:
-        ValueError: When an invalid stock is provided
-
     Returns:
         int: Integer value of the overall sentiment of the company
     """
-    nltk.download('vader_lexicon')
-    ticker, titles = _get_news_titles_by_company(stock)
-    transform = _determine_which_transform_to_use(transform)
+    # load the news data from input_file_path csv
+    titles = pd.read_csv(input_file_path, header=None)[0].tolist()
+    
+    # determine which transform function to use
+    transform_function = _determine_which_transform_to_use(transform)
 
-    if len(ticker.history()) == 0:
-        raise ValueError('Invalid stock provided')
-
-    return _calculate_overall_sentiment(titles, transform)
-
+    # calculate the sentiment value
+    sentiment_value = _calculate_overall_sentiment(titles, transform_function)
+    
+    # output to output_file_path as a number
+    with open(output_file_path, 'w') as f:
+        f.write(str(sentiment_value))
+    
+    return _sentiment_value_to_analysed_value(sentiment_value, transform)
 
 if __name__ == '__main__':
-    stock_name = input("Enter a stock: ")
-    print(sentiment_analysis_microservice(stock_name, 'weighted_mean'))
+    print(sentiment_analysis_microservice())
