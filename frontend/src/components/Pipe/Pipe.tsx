@@ -184,9 +184,8 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
           </S.Left>
           <div>
             <div style={{ marginRight: "15px" }}>
-              {status != "Completed" && <S.Execute disabled={status == "Running"} onClick={onPipeRun} status={status}>{handleStatus(status)}</S.Execute>}
               {status == "Completed" && <S.Execute onClick={executePipe} status={status + "rerun"}>{"Re-run"}</S.Execute>}
-              {status == "Completed" && <S.Execute onClick={onPipeRun} status={status}>{handleStatus(status)}</S.Execute>}
+              <S.Execute disabled={status == "Running"} onClick={onPipeRun} status={status}>{handleStatus(status)}</S.Execute>
             </div>
 
           </div>
