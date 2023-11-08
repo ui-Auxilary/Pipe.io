@@ -22,7 +22,6 @@ const Microservice = styled.li`
     height: 120px;
     margin: 10px;
     padding: 25px;
-    padding-right: 0;
     border-radius: 10px;
 `;
 

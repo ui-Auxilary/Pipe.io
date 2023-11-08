@@ -1,20 +1,18 @@
 import S from './styles'
 import view from 'assets/view.svg'
-import Form from 'components/MultiStepForm/Form';
 import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
 import Select from 'react-select';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Modal } from 'react-bootstrap';
 import Edit from 'components/Edit';
 import EditFromPipe from 'components/Edit/EditFromPipe';
 
 
-export default function Microservice({ code, name, docstring, param, parent_file, from_pipe, parent_pipe_id, output_type }) {
+export default function Microservice({ code, name, docstring, param, parent_file, from_pipe, parent_pipe_id, output_type, idx }) {
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);
   const [id, setId] = useState();
-  const [microservices, setMicroservices] = useState([]);
   const [selectedTags, setSelectedTags] = useState("");
   const { setMicroserviceData, microserviceData } = useFormData();
 
@@ -32,15 +30,15 @@ export default function Microservice({ code, name, docstring, param, parent_file
     { value: 'value', label: 'Value' },
     // { value: 'ml', label: 'ML' },
     // { value: 'data_frame', label: 'Dataframe' },
-    { value: 'graph', label: 'Stock Graph'},
-    { value: 'csv', label: 'CSV'},
-    { value: 'plot', label: 'Plot File'}
+    { value: 'graph', label: 'Stock Graph' },
+    { value: 'csv', label: 'CSV' },
+    { value: 'plot', label: 'Plot File' }
   ];
 
 
 
 
-  
+
 
   const microserviceList = [
     {
@@ -65,13 +63,13 @@ export default function Microservice({ code, name, docstring, param, parent_file
     }).catch((err) => {
       console.log(err)
     });
-    const newData = {...microserviceData};
+    const newData = { ...microserviceData };
     newData["microservices"].filter((e) => e.name == name)[0]["output_type"] = e.value;
     setMicroserviceData(newData);
   }
 
-  
-  
+
+
   const data = {
     parent_file: parent_file,
     name: name,
@@ -89,7 +87,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
           <div>
             <S.Label>
               <h5 style={{ flex: 1 }}>{name}</h5>
-              <span style={{ color: "#B6A4A4" }}>#001</span>
+              <span style={{ color: "#B6A4A4" }}>#{idx}</span>
             </S.Label>
             <S.Tag>
               <Select
@@ -97,7 +95,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
                 value={selectedTags}
                 onChange={handleTagChange}
                 placeholder="Select Output Type"
-                style = {{minWidth: "200px", maxWidth: "200px"}}
+                style={{ minWidth: "200px", maxWidth: "200px" }}
               />
             </S.Tag>
           </div>
@@ -107,9 +105,9 @@ export default function Microservice({ code, name, docstring, param, parent_file
           {Object.keys(param).length > 0 && (<div><S.Button onClick={handleEditShow} style={{ display: "flex", width: "150px", gap: "10px", justifyContent: "center", alignItems: "center" }}>Input data <S.View src={view}></S.View></S.Button></div>)}
         </div>
       </S.Microservice>
-      
-      {!from_pipe&&<Edit id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />}
-      {from_pipe&&<EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} parent_pipe_id={parent_pipe_id}/>}
+
+      {!from_pipe && <Edit id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />}
+      {from_pipe && <EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} parent_pipe_id={parent_pipe_id} />}
       <Modal show={showCode} onHide={handleCodeClose}>
         <Modal.Header closeButton>
           <Modal.Title>Code</Modal.Title>

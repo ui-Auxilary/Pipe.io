@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react"
 import S from 'components/MultiStepForm/FormItem/style'
-import { useFormData } from "components/MultiStepForm/Form/FormProvider"
 import { useAppData } from "./AppProvider"
 
 interface ValidationProps {
@@ -15,11 +14,11 @@ interface ValidationProps {
 export default function ValidatedInput({ item, customValidity, errorMessage, isEdit, ...downProps }: ValidationProps) {
     const ref = useRef(null);
     const { edit } = useAppData();
-    let stringTest = /^[a-zA-Z0-9_., -]*$/
-    let numTest = /^[0-9 ]{1,}$/
-    let objTest = /^(?!\s*:\s*)(?:\{[^}]*\})$/
-    let listTest = /^(?!\s*:\s*)(?:\[[^}]*\])$/
-    let boolTest = /^([Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee])$/
+    const stringTest = /^[a-zA-Z0-9_., -]*$/
+    const numTest = /^[0-9 ]{1,}$/
+    const objTest = /^(?!\s*:\s*)(?:\{[^}]*\})$/
+    const listTest = /^(?!\s*:\s*)(?:\[[^}]*\])$/
+    const boolTest = /^([Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee])$/
 
     const matchType = (value: any, type: string): boolean => {
         console.log('MATCHING Value', value, 'type', type)

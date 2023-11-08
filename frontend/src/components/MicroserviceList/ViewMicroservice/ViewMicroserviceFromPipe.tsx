@@ -18,7 +18,7 @@ export default function ViewMicroserviceFromPipe({ pipeId }: Props) {
         })
 
     }, [])
-    let len = microservices ? (microservices as []).length : 0
+    const len = microservices ? (microservices as []).length : 0
 
     useEffect(() => {
         console.log('###MICRO', microservices)

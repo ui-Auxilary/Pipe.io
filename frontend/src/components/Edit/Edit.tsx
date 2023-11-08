@@ -31,7 +31,7 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
             console.log('OLD', parameters)
             Object.keys(parameters).forEach(key => {
 
-                let newParams = edit[name] && parameters[key] ? Object.assign(parameters[key], { value: edit[name][key] }) : parameters[key] || edit[name]
+                const newParams = edit[name] && parameters[key] ? Object.assign(parameters[key], { value: edit[name][key] }) : parameters[key] || edit[name]
                 console.log('NEW para', newParams)
                 updatedData[foundIndex]["parameters"][key] = newParams
             })
