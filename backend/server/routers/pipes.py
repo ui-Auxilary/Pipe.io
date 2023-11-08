@@ -93,6 +93,9 @@ def execute_pipe(id: str):
 
     output_json = json.loads(pipe_output)
     if output_json["pipeline"]["success"] is False:
+        pipe["status"] = "Error"
+        pipes_collection.find_one_and_update(
+        {"_id": ObjectId(id)}, {"$set": dict(pipe)})
         raise HTTPException(
             status_code=400, detail=output_json["pipeline"]["error"])
 
