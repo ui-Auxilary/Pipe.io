@@ -138,7 +138,9 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
       // setStatus(res.data.status)
       // setExecuted(res.data.executed.last_executed)
       setExecuted(executed => ({ ...executed, "time": res.data.last_executed }))
-      if (res.data.last_executed) {
+      if (res.data.status == "Error") {
+        setStatus("Error")
+      } else if (res.data.last_executed) {
         setStatus("Completed")
       }
     })
