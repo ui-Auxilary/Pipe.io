@@ -31,8 +31,6 @@ export default function Reset() {
   }, []);
 
 
-
-
   const [values, setValues] = useState({
     password: '',
     password2: '',
@@ -65,7 +63,7 @@ export default function Reset() {
       return;
     } else { // If passwords match
       data.append('password', values.password);
-      data.append('reset_token', token);
+      data.append('reset_token', token as string);
     }
 
     axios.put("http://localhost:8000/users/reset_password", data)
