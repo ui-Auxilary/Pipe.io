@@ -18,20 +18,22 @@ const Logo = styled.img`
 
 const CardContainer = styled(Card)`
   background: #fff;
-  color: #fff;
-  width: 50%;
-  min-width: 250px;
+  width: 35%;
+  min-width: 300px;
+  min-height: 300px;
   `;
+
 const CardHeader = styled(Card.Header)`
-  background: #5a279b;
-  color: #fff;
   width: 100%;
+  display: flex;
   `;
+
 const CardBody = styled(Card.Body)`
-  background: #5a279b;
-  color: #fff;
   width: 100%;
+  display: flex;
+  flex-direction: column;
   `;
+
 const CardFooter = styled(Card.Footer)`
   background: #5a279b;
   color: #fff;
@@ -41,6 +43,14 @@ const CardFooter = styled(Card.Footer)`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
+  margin-top: 10px;
+  margin-bottom: 10px;
+`;
+
+const textContainer = styled.div`
+  display: flex;
+  align-items: center;
   width: 100%;
   flex-direction: column;
   margin-top: 10px;
@@ -56,5 +66,6 @@ export default {
   CardHeader,
   CardBody,
   CardFooter,
-  ButtonContainer
+  ButtonContainer,
+  textContainer
 };
