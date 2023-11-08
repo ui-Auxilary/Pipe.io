@@ -42,3 +42,8 @@ I completed the model and tuned the hyperparameters until the performance reache
 I added multiple stocks' data to the machine learning model to improve resilience and reduced the nnumber of neurons in the dense layer to increase bias and increase variance as it was overfitting the model. After doing this, the MAE fell to 4.3 which was less than a 1% error for most of the data.
 
 Then, I worked on bug testing. I manually made several chained pipelines and tested different functionality like editing the parameters of a pipeline and using more complex operations such as a weighted mean with sentiment. The pipeline performed really well despite this.
+
+Week 8:
+Started working on the report and changed the machine learning model so that its testing accuracy was not based on any of the training data as this would make the analysis of its performance more accurate. I was going to do the demo on my laptop so I spent some time with Keith and Christian working out the structure that we wanted to demo the presentation in and then I was able to identify some bugs with microservices and help Keith fix them. I participated in the retrospective meeting and communicated with most people in the group beforehand to understand whether there were any issues that needed to be handled going into sprint 3.
+
+After this meeting, I led the delegation of tasks for Sprint 3 and then emailed the client twice to follow up on the next meeting which is organised for Week 9 Thursday. I organised some meetings with the entire team to try and get the final demo practiced and started writing the report.

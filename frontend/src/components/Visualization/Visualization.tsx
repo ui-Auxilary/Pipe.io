@@ -110,16 +110,13 @@ export default function ChartComponent(props: ChartProps) {
             }
           }
           return temp;
+          
         } else if (typeof output.Date[key] === "number") {
           const temp = {Date: output.Date[key]}
           for (const [key2, value] of Object.entries(output)) {
+            console.log("HELLO", key2, value[key])
             if (key2 != "Date") {
-
-              if (typeof value[key] === "string") {
-                temp[key2] = parseInt(value[key].replace(/,/g, ''));
-              } else {
-                temp[key2] = value[key];
-              }
+              temp[key2] = value[key];
             }
           }
           return temp;
@@ -240,13 +237,13 @@ export default function ChartComponent(props: ChartProps) {
 
 
   const isMovingAverage = () => {
-    if (stock[0] && stock[0].moving_average != undefined) {
+    if (stock[0] && stock[stock.length -1].moving_average != undefined) {
       return true;
     }
   }
 
   const isRSI = () => {
-    if (stock[0] && stock[0].RSI != undefined) {
+    if (stock[0] && stock[stock.length -1].RSI != undefined) {
       return true;
     }
   }
