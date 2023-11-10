@@ -95,17 +95,21 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
     if (status === "Completed") {
       handleChartShow();
     } else {
-      setStatus("Running");
-      axios.post('http://localhost:8000/pipes/execute/', null, { params: { id: pipeId } })
-        .then(res => {
-          setStatus("Completed");
-          setExecuted({ "time": format(Date.now(), 'yyyy-MM-dd HH:mm:ss'), "result": res.data });
-        })
-        .catch((e: any) => {
-          setStatus("Error");
-          console.log(e);
-        });
+      executePipe();
     }
+  };
+
+  const executePipe = () => {
+    setStatus("Running");
+    axios.post('http://localhost:8000/pipes/execute/', null, { params: { id: pipeId } })
+      .then(res => {
+        setStatus("Completed");
+        setExecuted({ "time": format(Date.now(), 'yyyy-MM-dd HH:mm:ss'), "result": res.data });
+      })
+      .catch((e: any) => {
+        setStatus("Error");
+        console.log(e);
+      });
   };
 
   const onEditClick = () => {
@@ -134,6 +138,11 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
       // setStatus(res.data.status)
       // setExecuted(res.data.executed.last_executed)
       setExecuted(executed => ({ ...executed, "time": res.data.last_executed }))
+      if (res.data.status == "Error") {
+        setStatus("Error")
+      } else if (res.data.last_executed) {
+        setStatus("Completed")
+      }
     })
   }, []);
 
@@ -180,6 +189,7 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
           </S.Left>
           <div>
             <div style={{ marginRight: "15px" }}>
+              {status == "Completed" && <S.Execute onClick={executePipe} status={status + "rerun"}>{"Re-run"}</S.Execute>}
               <S.Execute disabled={status == "Running"} onClick={onPipeRun} status={status}>{handleStatus(status)}</S.Execute>
             </div>
 
