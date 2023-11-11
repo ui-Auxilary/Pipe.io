@@ -24,7 +24,3 @@ def serialise_microservice(microservice_obj) -> dict:
         "code": str(microservice_obj["code"]),
         "docstring": str(microservice_obj["docstring"]),
     }
-
-
-def list_microservices_serial(microservices) -> list:
-    return [serialise_microservice(microservice_obj) for microservice_obj in microservices]

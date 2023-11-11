@@ -13,7 +13,7 @@ import Content from './Content'
 import axios from 'axios'
 import { useAppData } from 'helper/AppProvider'
 import Result from './Result/Result'
-import ViewMicroserviceFromPipe from 'components/MicroserviceList/ViewMicroservice/ViewMicroserviceFromPipe';
+import ViewMicroserviceFromPipe from 'components/UploadMicroservices/ViewMicroservice/ViewMicroserviceFromPipe';
 export interface Props {
   pipeId: string
   id: string

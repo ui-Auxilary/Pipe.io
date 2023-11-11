@@ -46,10 +46,14 @@ export default function MultiStepForm({ show, handleClose }: Props) {
     {
       section: 2,
       items: [
+        // {
+        //   label: 'Upload microservice file(s)',
+        //   type: 'dropzone',
+        //   value: 'python'
+        // }
         {
           label: 'Upload microservice file(s)',
-          type: 'dropzone',
-          value: 'python'
+          type: 'upload_microservices',
         }
       ]
     },

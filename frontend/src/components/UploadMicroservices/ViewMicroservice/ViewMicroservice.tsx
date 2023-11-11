@@ -8,15 +8,24 @@ import { useAppData } from 'helper/AppProvider';
 
 export default function ViewMicroservice() {
     const [loading, setLoading] = useState(true);
-    const [microserviceList, setMicroserviceList] = useState([]);
     const { microserviceData, setMicroserviceData, setStep } = useFormData()
+    const [microserviceList, setMicroserviceList] = useState(microserviceData?.["microservices"] ? microserviceData["microservices"] as [] : []);
     const { appFiles } = useAppData();
 
 
     useEffect(() => {
+        console.log('PEEK', microserviceData, microserviceList)
         setMicroserviceData({ microservices: microserviceList })
     }, [microserviceList])
 
+    useEffect(() => {
+        console.log('PEE!', microserviceData)
+    }, [microserviceData])
+
+
+    useEffect(() => {
+        console.log('AHA')
+    }, [microserviceData])
     const reorder = (list, startIndex, endIndex) => {
         const result = Array.from(list);
         const [removed] = result.splice(startIndex, 1);
@@ -42,16 +51,19 @@ export default function ViewMicroservice() {
     }
 
     async function readFiles() {
+        console.log('READUBG', appFiles)
         appFiles?.map(file => {
-            const reader = new FileReader();
-            reader.readAsBinaryString(file)
-            reader.onload = () => {
-                const base64data = reader.result;
+            if (typeof file !== 'string') {
+                const reader = new FileReader();
+                reader.readAsBinaryString(file)
+                reader.onload = () => {
+                    const base64data = reader.result;
 
-                if (base64data) {
-                    axios.post('http://localhost:8000/upload', { 'filename': file.name, 'content': base64data }).then((res) => setMicroserviceList(prev => [...prev.concat(JSON.parse(res.data)['microservices'] as never)]))
-                }
-            };
+                    if (base64data) {
+                        axios.post('http://localhost:8000/upload', { 'filename': file.name, 'content': base64data }).then((res) => { console.log('LIST', microserviceList); setMicroserviceList(prev => [...prev.concat(JSON.parse(res.data)['microservices'] as [never])]) })
+                    }
+                };
+            }
         })
     }
 
@@ -60,6 +72,7 @@ export default function ViewMicroservice() {
     }, [appFiles])
 
     useEffect(() => {
+        console.log('PEEK', microserviceData)
         setMicroserviceData({ microservices: microserviceList })
         setLoading(false);
     }, [microserviceList])
