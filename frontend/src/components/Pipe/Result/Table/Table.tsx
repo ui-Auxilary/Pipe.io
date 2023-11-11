@@ -27,12 +27,12 @@ export default function Table(props: prop) {
   {console.log("poois", data)}
   return (
     <S.Container>
-      <table >
+      <table style={{border: "1px solid black", borderCollapse: "collapse"}}>
         {Object.keys(data).map(poo => {
 
           return (
             <>
-            <th style={{whiteSpace: "nowrap"}}>
+            <th style={{whiteSpace: "nowrap", width: "10000px"}}>
             {poo}
             {Object.entries(data[poo]).map((item, idx) => {
               const [key, value] = item;
@@ -41,7 +41,7 @@ export default function Table(props: prop) {
                 <tr style={{border: "1px solid black", borderCollapse: "collapse"}}>
                   {/* <td style={{border: "1px solid black"}}>{key}</td> */}
                   {/* <td style={{border: "1px solid black", borderCollapse: "collapse"}}>{(new Date(key*1000)).toUTCString()}</td> */}
-                  <td style={{border: "1px solid black", borderCollapse: "collapse"}}>{value}</td>
+                  <td style={{border: "1px solid black", borderCollapse: "collapse"}}>{(value > 166814280000) ? (new Date(value)).toUTCString() : value}</td>
                 </tr>
               
               );

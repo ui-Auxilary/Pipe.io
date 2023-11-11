@@ -8,7 +8,7 @@ const Body = styled.div`
 
 const Container = styled.div`
     margin-top: 20px;
-    display: flex;
+    display: block;
     flex-direction: row;
     justify-content: space-around;
     max-width: 750px;

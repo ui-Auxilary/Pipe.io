@@ -46,4 +46,4 @@ def table_drop_columns(input_file_path: str = 'stock_data.csv', output_file_path
             raise ValueError("Column(s) not found")
     
     df.to_csv(output_file_path)
-    return f"columns {columns} succesfully retrieved and saved to {output_file_path}"
+    return df.to_json()
