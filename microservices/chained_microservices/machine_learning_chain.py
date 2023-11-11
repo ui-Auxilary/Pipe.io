@@ -142,7 +142,7 @@ def time_prediction_future_stock_values(stock_input_file_path: str = 'stock_data
     df.reset_index(inplace=True)
     df=df.set_axis(["Date","Close"], axis=1)
 
-    start_date = stock_df["Datetime"].iloc[-1] - pd.Timedelta(days=num_existing_days)
+    start_date = pd.Timestamp(stock_df["Datetime"].iloc[-1]) - pd.Timedelta(days=num_existing_days)
     date_range = pd.date_range(start_date, periods=len(df))
     df["Date"] = date_range
 
