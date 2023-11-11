@@ -8,3 +8,4 @@ class Users(BaseModel):
     profile_img_url: str
     pipes: list
     tokens: list
+    reset_tokens: list
