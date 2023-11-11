@@ -1,5 +1,4 @@
-import axios from "axios"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import S from './Styles'
 import Button from 'react-bootstrap/Button';
 import fileImg from './file-svgrepo-com.svg'
@@ -26,7 +25,7 @@ export default function Download(props: DownloadProps) {
     link.href = downloadUrl;
 
     link.download = filePath;
-  
+
 
     link.click();
     link.remove();
@@ -38,9 +37,9 @@ export default function Download(props: DownloadProps) {
     <S.Container>
       {Object.keys(output).map((name, path) => (
         <S.Body>
-            <S.Img src={fileImg}/>
-            <h6>{output[name]}</h6>
-            <Button onClick={()=> handleDownload(output[name])}>Download</Button>
+          <S.Img src={fileImg} />
+          <h6>{output[name]}</h6>
+          <Button onClick={() => handleDownload(output[name])}>Download</Button>
         </S.Body>
       ))}
     </S.Container>

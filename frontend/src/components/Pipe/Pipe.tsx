@@ -1,23 +1,19 @@
 import S from './style'
 import dots from 'assets/dots.svg'
 import React, { forwardRef, useRef, useState, useEffect } from 'react'
-import { Button, Form, Modal, OverlayTrigger, Popover, Tooltip } from 'react-bootstrap'
+import { Button, Modal, OverlayTrigger, Popover } from 'react-bootstrap'
 import View from 'assets/view.svg'
 import Pencil from 'assets/pencil.svg'
 import Edit from 'components/Edit'
 import Delete from 'assets/trash.svg'
-import Overlay from 'react-bootstrap/Overlay';
-import { format} from 'date-fns';
+import { format } from 'date-fns';
 
 
 import Content from './Content'
 import axios from 'axios'
 import { useAppData } from 'helper/AppProvider'
 import Result from './Result/Result'
-import Checkbox from 'components/Checkbox/Checkbox'
-import MicroserviceList from 'components/MicroserviceList';
 import ViewMicroserviceFromPipe from 'components/MicroserviceList/ViewMicroservice/ViewMicroserviceFromPipe';
-
 export interface Props {
   pipeId: string
   id: string
@@ -36,16 +32,14 @@ export interface ExecuteProps {
 }
 
 
-const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck, idx }: Props, ref) => {
+const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props, ref) => {
   const [show, setShow] = useState(false);
   const [showView, setShowView] = useState(false);
   const [del, setDel] = useState(false);
   const [showChart, setChart] = useState(false);
   const [status, setStatus] = useState("Ready");
   const [executed, setExecuted] = useState<ExecuteProps>();
-  const { pipeIds, setPipeIds } = useAppData();
-
-  const [checked, setChecked] = useState(false);
+  const { pipeIds, setPipeIds, setAppFiles } = useAppData();
 
   const handleStatus = (status: string) => {
     switch (status) {
@@ -60,17 +54,14 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
     }
   }
 
-
   const data = {
     name: name,
     description: description
   }
 
-
   const items = Object.keys(data).map((el) => (
     { label: el, "type": "edit_param", id: pipeId, name: pipeId }
   ))
-
 
   const pipeList = [
     {
@@ -79,14 +70,12 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
     }
   ]
 
-  console.log('LIST', pipeList)
-
-  let target = useRef(null);
+  const target = useRef(null);
 
   const handleOverlayShow = () => setShow(true);
-  const handleOverlayClose = () => setShow(false);
+  const handleOverlayClose = () => { setShow(false); setAppFiles([]) }
   const handleViewOverlayShow = () => setShowView(true);
-  const handleViewOverlayClose = () => setShowView(false);
+  const handleViewOverlayClose = () => { setShowView(false); setAppFiles([]) }
   const handleDeleteClose = () => setDel(false);
   const handleChartClose = () => setChart(false);
   const handleChartShow = () => setChart(true);

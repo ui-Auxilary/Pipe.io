@@ -26,6 +26,8 @@ export default function PipeList() {
     const [numChecked, setNumChecked] = useState(0);
     const checkboxRef = useRef([]);
 
+
+
     const onHandleDelete = () => {
         let itemsChecked = numChecked
         Object.entries(refData).map(([pipeId, isChecked]) => {
@@ -40,7 +42,7 @@ export default function PipeList() {
     }
 
     const DeselectAll = () => {
-        let updatedRefData = refData;
+        const updatedRefData = refData;
         for (let i = 0; i < checkboxRef.current.length; i++) {
             if (checkboxRef.current[i]) {
                 checkboxRef.current[i].checked = false;
@@ -52,7 +54,7 @@ export default function PipeList() {
     }
 
     const SelectAll = () => {
-        let updatedRefData = refData;
+        const updatedRefData = refData;
         let setCheck = 0;
         for (let i = 0; i < checkboxRef.current.length; i++) {
             if (checkboxRef.current[i]) {
@@ -82,13 +84,13 @@ export default function PipeList() {
     }, [pipeIds])
 
     useEffect(() => {
-        let res = checkboxRef?.current?.filter(x => !!x).filter(x => x?.checked === true)
+        const res = checkboxRef?.current?.filter(x => !!x).filter(x => x?.checked === true)
         res.length ? setChecked(true) : setChecked(false)
         setNumChecked(res.length)
     }, [refData])
 
     return (
-        <S.Container>
+        <S.Container >
             {checked && (
                 <S.Row>
                     <S.Options>
@@ -104,5 +106,6 @@ export default function PipeList() {
                 <Pipe key={pipe_id} pipeId={pipe_id} id={`00${index + 1} `} name={name} description={description} onCheck={pipeChecked} ref={checkboxRef} idx={index} />
             ))}
         </S.Container>
+
     )
 }
