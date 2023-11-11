@@ -14,9 +14,14 @@ export default function ViewMicroservice() {
 
 
     useEffect(() => {
+        console.log('PEEK', microserviceData)
         setMicroserviceData({ microservices: microserviceList })
     }, [microserviceList])
 
+
+    useEffect(() => {
+        console.log('AHA')
+    }, [microserviceData])
     const reorder = (list, startIndex, endIndex) => {
         const result = Array.from(list);
         const [removed] = result.splice(startIndex, 1);
@@ -60,6 +65,7 @@ export default function ViewMicroservice() {
     }, [appFiles])
 
     useEffect(() => {
+        console.log('PEEK', microserviceData)
         setMicroserviceData({ microservices: microserviceList })
         setLoading(false);
     }, [microserviceList])

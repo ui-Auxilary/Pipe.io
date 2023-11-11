@@ -1,8 +1,8 @@
 import S from './style';
 import Dropzone from 'components/Dropzone';
 import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
-import MicroserviceList from 'components/MicroserviceList';
-import ViewMicroservice from 'components/MicroserviceList/ViewMicroservice';
+import UploadMicroservices from 'components/UploadMicroservices';
+import ViewMicroservice from 'components/UploadMicroservices/ViewMicroservice';
 import { useAppData } from 'helper/AppProvider';
 import ValidatedInput from 'helper/validation';
 import React, { FormEvent, useEffect } from 'react';
@@ -58,9 +58,9 @@ export default function FormItem({ item }: Props) {
           <Dropzone filetype={item.value} />
         </>
       );
-    case 'list_microservices':
+    case 'upload_microservices':
       return (
-        <MicroserviceList />
+        <UploadMicroservices />
       );
     case 'view_microservices':
       return (

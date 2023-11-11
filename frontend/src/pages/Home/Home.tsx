@@ -26,7 +26,6 @@ export default function Home() {
 
   useEffect(() => {
     getUser().then(({ user }) => {
-      console.log('FOUND USER', JSON.parse(user).id)
       setUser(JSON.parse(user).id)
     })
 
