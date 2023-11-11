@@ -18,7 +18,7 @@ export default function ViewMicroserviceFromPipe({ pipeId }: Props) {
         })
 
     }, [])
-    let len = microservices ? (microservices as []).length : 0
+    const len = microservices ? (microservices as []).length : 0
 
     useEffect(() => {
         console.log('###MICRO', microservices)
@@ -30,7 +30,8 @@ export default function ViewMicroserviceFromPipe({ pipeId }: Props) {
                 <span style={{ color: "#907F7F", fontWeight: 500 }}>Found {len} microservice(s)</span>
                 <S.Scrollbar length={len}>
                     {microservices && microservices.map(({ code, doc, name, parameters, parent_file, output_type }, index) => {
-                        return <Microservice code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file} from_pipe={true} parent_pipe_id={pipeId} output_type={output_type} />
+                        console.log('PARAMS from pipe', parameters)
+                        return <Microservice code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file} from_pipe={true} parent_pipe_id={pipeId} output_type={output_type} idx={index + 1} />
                     })}
                 </S.Scrollbar>
             </S.Container>

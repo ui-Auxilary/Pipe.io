@@ -9,6 +9,7 @@ import "./MultiStepForm.css"
 
 import { useFormData } from "components/MultiStepForm/Form/FormProvider";
 import { ModalFooter } from "react-bootstrap";
+import { useAppData } from "helper/AppProvider";
 
 export interface Props {
   show: boolean;
@@ -16,6 +17,7 @@ export interface Props {
 }
 
 export default function MultiStepForm({ show, handleClose }: Props) {
+  const { setAppFiles } = useAppData();
   const questionsList = [
     {
       section: 1,
