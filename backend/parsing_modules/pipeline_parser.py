@@ -28,7 +28,7 @@ def execute_pipeline(pipeline_json):
         shutil.rmtree(f'pipeline_{pipeline_json["pipeline"]}')
 
     os.mkdir(f'pipeline_{pipeline_json["pipeline"]}')
-
+    
     DATA_DIRECTORY = f'../parsing_modules/pipeline_{pipeline_json["pipeline"]}'
     MICROSERVICES_DIRECTORY = '../data/microservices'
 
@@ -39,6 +39,8 @@ def execute_pipeline(pipeline_json):
             os.chdir(MICROSERVICES_DIRECTORY)
             python_file = microservice['file']
             
+            # we do not want any file extensions on imported files
+            python_file = python_file.replace('.py', '')
             imported_module = importlib.import_module(python_file)
             os.chdir('..')
 
