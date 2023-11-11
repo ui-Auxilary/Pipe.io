@@ -101,7 +101,7 @@ def sentiment_analysis_microservice(input_file_path: str = 'news_data.csv', tran
     
     return _sentiment_value_to_analysed_value(sentiment_value, transform)
 
-def time_prediction_future_stock_values(stock_input_file_path: str = 'stock_data.csv', sentiment_input_file_path: str = 'sentiment_data.csv', number_of_days_to_predict: int = EXTRAPOLATE_DAYS, days_from_each_prediction: int = DAYS_TO_TAKE_FROM_EACH_PREDICTION, prepend_stock_data: bool = False):
+def time_prediction_future_stock_values(stock_input_file_path: str = 'stock_data.csv', sentiment_input_file_path: str = 'sentiment_data.csv', number_of_days_to_predict: int = EXTRAPOLATE_DAYS, days_from_each_prediction: int = DAYS_TO_TAKE_FROM_EACH_PREDICTION, prepend_stock_data: bool = False, output_file_path: str = 'stock_predictions.csv'):
     
     """ Predicts the future values of a stock based on a model trained on historical data.
     
@@ -111,15 +111,17 @@ def time_prediction_future_stock_values(stock_input_file_path: str = 'stock_data
         number_of_days_to_predict (int): Number of future days to predict.
         days_from_each_prediction (int): Number of days from each prediction used for the next prediction (do not change unless you know what you are doing).
         prepend_stock_data (bool): Whether past stock data will be prepended to the predictions. If False, only future predictions will be generated.
+        output_file_path (str): Specific csv path to output the predictions to.
 
     Returns:
-        : _description_
+        str: JSON containing comma separated values of the predicted stock values.
     """
 
     model = _load_model()
 
     # load stock dataframe
     stock_df = pd.read_csv(stock_input_file_path)
+    num_existing_days = len(stock_df)
 
     # load sentiment value
     with open(sentiment_input_file_path) as f:
@@ -140,11 +142,11 @@ def time_prediction_future_stock_values(stock_input_file_path: str = 'stock_data
     df.reset_index(inplace=True)
     df=df.set_axis(["Date","Close"], axis=1)
 
-    start_date = stock_df["Datetime"].iloc[-1]
+    start_date = stock_df["Datetime"].iloc[-1] - pd.Timedelta(days=num_existing_days)
     date_range = pd.date_range(start_date, periods=len(df))
     df["Date"] = date_range
 
-    df.to_csv("output.csv", header=True)
+    df.to_csv(output_file_path, header=True)
 
     return df.to_json()
 
