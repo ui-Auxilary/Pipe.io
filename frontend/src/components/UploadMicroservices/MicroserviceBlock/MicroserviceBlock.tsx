@@ -7,9 +7,13 @@ import { useAppData } from 'helper/AppProvider';
 export default function MicroserviceBlock({ name }) {
     const { microserviceData, setMicroserviceData } = useFormData();
     const { setAppFiles } = useAppData();
+
+
+
     const addMicroservice = (e) => {
         e.preventDefault();
-        axios.post(`http://localhost:8000/microservice/add/${name}`).then(res => { setAppFiles(prev => [...prev, name]); setMicroserviceData(JSON.parse(res.data)) })
+        const microserviceList: object[] = (microserviceData["microservices"] as []) || []
+        axios.post(`http://localhost:8000/microservice/add/${name}`).then(res => { setAppFiles(prev => [...prev, name]); setMicroserviceData({ "microservices": [...microserviceList.concat(...JSON.parse(res.data)["microservices"])] }) })
     };
 
     useEffect(() => {

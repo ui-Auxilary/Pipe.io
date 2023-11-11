@@ -11,7 +11,7 @@ import { useAppData } from "helper/AppProvider";
 
 export default function Dropzone({ filetype, type }) {
   const { appFiles } = useAppData()
-  const [files, setFiles] = useState<File[]>(appFiles);
+  const [files, setFiles] = useState<File[]>([]);
   const [rejectedfiles, setRejectedFiles] = useState<FileRejection[]>([]);
 
   const onDrop = useCallback(
