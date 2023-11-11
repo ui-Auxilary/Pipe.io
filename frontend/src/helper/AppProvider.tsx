@@ -5,7 +5,7 @@ export interface AppProviderType {
     setUser: React.Dispatch<React.SetStateAction<string>>
     pipeIds: string[]
     setPipeIds: React.Dispatch<React.SetStateAction<string[]>>
-    edit: Record<string, any>,
+    edit: Record<number, any>,
     setEdit: React.Dispatch<React.SetStateAction<any>>
     refData: Record<string, NonNullable<unknown>>,
     setRefData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>,

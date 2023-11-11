@@ -5,7 +5,7 @@ import { Modal } from "react-bootstrap"
 
 import { useAppData } from "helper/AppProvider";
 
-export default function EditFromPipe({ id, show, params, data, closeOverlay, type = "microservice", parent_pipe_id }) {
+export default function EditFromPipe({ id, show, params, data, closeOverlay, type = "microservice", parent_pipe_id, idx }) {
     console.log("IN COOl EDIT", show, params, data)
     const [microservice, setMicroservice] = useState([]);
     const { edit, setPipeIds } = useAppData();
@@ -22,21 +22,14 @@ export default function EditFromPipe({ id, show, params, data, closeOverlay, typ
 
 
     const findAndUpdate = (name: string, parameters) => {
-        // console.log('updating', foundIndex, edit, edit[name], name)
-        console.log('Microdata', microservice)
         const updatedData = { ...microservice }
 
-        // console.log('Updated', updatedData["parameters"], name, parameters, edit[name])
-        console.log('OLD', parameters)
         Object.keys(parameters).forEach(key => {
-            if (edit[name][key] != undefined) {
-                const newParams = edit[name] && parameters[key] ? Object.assign(parameters[key], { value: edit[name][key] }) : parameters[key] || edit[name]
-                console.log('NEW para', newParams)
+            if (edit?.[idx]?.[key]) {
+                const newParams = edit[idx] && parameters[key] ? Object.assign(parameters[key], { value: edit[idx][key] }) : parameters[key] || edit[idx]
                 updatedData["parameters"][key] = newParams
             }
         })
-        console.log('Updated Data', updatedData)
-        // updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: edit[name] })
         setMicroservice(prev => ({ ...prev, microservices: updatedData }))
 
         console.log('NEW', microservice)

@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "react"
 import S from 'components/MultiStepForm/FormItem/style'
 import { useAppData } from "./AppProvider"
+import { Item } from "components/MultiStepForm/FormItem/FormItem"
 
 interface ValidationProps {
     value?: any
-    item?: string
+    item?: Item
     customValidity?: any
     errorMessage?: string
     isEdit?: boolean
@@ -40,7 +41,7 @@ export default function ValidatedInput({ item, customValidity, errorMessage, isE
     }
 
     useEffect(() => {
-        console.log('Validating', isEdit, item, edit)
+        console.log('Varidating', isEdit, item, edit)
         if (customValidity !== undefined && ref.current !== null) {
             console.log('Ref', ref.current.value, customValidity, errorMessage)
 

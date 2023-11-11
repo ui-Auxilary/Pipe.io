@@ -23,7 +23,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
 
   param && console.log('ITEMS', param)
   const items = param && Object.keys(param).map((el) => (
-    { label: el, type: "edit_param", name: id, value: param[el]["value"] ? param[el]["value"] : param[el]["default"] || '', elType: param[el] ? param[el]["type"] : '' }
+    { label: el, type: "edit_param", name: idx, value: param[el]["value"] ? param[el]["value"] : param[el]["default"] || '', elType: param[el] ? param[el]["type"] : '' }
   ))
 
   const tagOptions = [
@@ -34,11 +34,6 @@ export default function Microservice({ code, name, docstring, param, parent_file
     { value: 'csv', label: 'CSV' },
     { value: 'plot', label: 'Plot File' }
   ];
-
-
-
-
-
 
   const microserviceList = [
     {
@@ -68,7 +63,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
     setMicroserviceData(newData);
   }
 
-
+  console.log('Microservice List', microserviceList)
 
   const data = {
     parent_file: parent_file,
@@ -107,7 +102,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
       </S.Microservice>
 
       {!from_pipe && <Edit id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} />}
-      {from_pipe && <EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} parent_pipe_id={parent_pipe_id} />}
+      {from_pipe && <EditFromPipe id={id} show={showEdit} params={microserviceList} data={data} closeOverlay={handleEditClose} parent_pipe_id={parent_pipe_id} idx={idx} />}
       <Modal show={showCode} onHide={handleCodeClose}>
         <Modal.Header closeButton>
           <Modal.Title>Code</Modal.Title>

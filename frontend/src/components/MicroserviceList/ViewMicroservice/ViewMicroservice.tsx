@@ -12,12 +12,8 @@ export default function ViewMicroservice() {
     const { microserviceData, setMicroserviceData, setStep } = useFormData()
     const { appFiles } = useAppData();
 
-    useEffect(() => {
-        console.log('App files', appFiles)
-    }, [])
 
     useEffect(() => {
-        console.log('Updated list', microserviceList, microserviceData)
         setMicroserviceData({ microservices: microserviceList })
     }, [microserviceList])
 
@@ -44,8 +40,6 @@ export default function ViewMicroservice() {
         setMicroserviceList(orderedMicroservices);
         setMicroserviceData({ microservices: orderedMicroservices });
     }
-
-
 
     async function readFiles() {
         appFiles?.map(file => {
@@ -88,7 +82,7 @@ export default function ViewMicroservice() {
                             <span style={{ color: "#907F7F", fontWeight: 500 }}>Found {len} microservice(s)</span>
                             <S.Scrollbar length={len}>
                                 {microserviceList && microserviceList.map(({ code, doc, name, parameters, parent_file, output_type }, idx) => {
-                                    console.log('hey loop')
+                                    console.log('hey loop', microserviceList)
                                     return (
                                         <Draggable draggableId={`id-${idx}`} index={idx}>
                                             {provided => (
