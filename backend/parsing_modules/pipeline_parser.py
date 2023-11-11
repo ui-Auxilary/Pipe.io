@@ -29,8 +29,8 @@ def execute_pipeline(pipeline_json):
 
     os.mkdir(f'pipeline_{pipeline_json["pipeline"]}')
 
-    DATA_DIRECTORY = f'parsing_modules/pipeline_{pipeline_json["pipeline"]}'
-    MICROSERVICES_DIRECTORY = '../data'
+    DATA_DIRECTORY = f'../parsing_modules/pipeline_{pipeline_json["pipeline"]}'
+    MICROSERVICES_DIRECTORY = '../data/microservices'
 
     print('Attempting execution...')
     try:
@@ -72,7 +72,7 @@ def execute_pipeline(pipeline_json):
             os.chdir('..')
     except Exception as e:
         pipeline_output['pipeline']['success'] = False
-        pipeline_output['pipeline']['error'] = f'Microservce failed to execute. Error is {e}'
+        pipeline_output['pipeline']['error'] = f'Microservce failed to execute. Error is {e} in directory {os.getcwd()} which has {os.listdir()}'
 
         # errors can only occur in the microservices directory
         os.chdir('..')
