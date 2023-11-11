@@ -2,8 +2,8 @@ import S from './styles'
 
 import { useFormData } from 'components/MultiStepForm/Form/FormProvider'
 
+
 export default function MicroserviceList() {
-    const { setStep } = useFormData();
     return (
         <S.Wrapper>
             <h5>Select microservice(s)</h5>

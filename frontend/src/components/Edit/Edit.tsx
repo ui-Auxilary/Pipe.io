@@ -8,41 +8,50 @@ import S from './styles'
 import { useAppData } from "helper/AppProvider";
 
 export default function Edit({ id, show, params, data, closeOverlay, type = "microservice" }) {
-    console.log("IN BETTER EDIT", show, params, data)
     const { setMicroserviceData, microserviceData } = useFormData();
-    const [microservices, setMicroservices] = useState([]);
-    const { edit, setPipeIds } = useAppData();
+    const [microservices, setMicroservices] = useState<object[]>([]);
+    const { edit, setEdit, setPipeIds } = useAppData();
 
 
     useEffect(() => {
-        console.log('New', edit)
-        setMicroservices(data)
-    }, [edit])
+        console.log('New POO', microserviceData, edit)
+        setMicroservices((microserviceData.microservices as []))
+    }, [microserviceData])
 
-    const findAndUpdate = (name: string, parameters) => {
+    const findAndUpdate = (name: string, parameters: any) => {
+        console.log('Updating findAndUpdate', microservices, edit)
 
-        const foundIndex = (microserviceData.microservices as []).findIndex(x => x.name == name);
+        const updatedData: { [key: string]: any } = [...microserviceData.microservices as []]
+
+        // Loop through edit to see what indexes need to be updated
+        Object.keys(edit).map(idx => {
+            let editIdx = parseInt(idx);
+            let updatedIdx = editIdx - 1;
+            if (updatedIdx >= 0 && updatedData[updatedIdx]) {
+
+                console.log('Updated', updatedData[updatedIdx]["parameters"], name, parameters, edit, editIdx)
+                console.log('OLD', parameters)
+                Object.keys(parameters).forEach(key => {
+
+                    const newParams = edit[editIdx] && parameters[key] ? Object.assign(parameters[key], { value: edit[editIdx][key] }) : parameters[key] || edit[editIdx]
+                    console.log('NEW para', newParams, updatedData, name, key)
+                    updatedData[updatedIdx]["parameters"][key] = newParams
+                })
+
+                console.log('OUTPUT_TYPE', data);
+                console.log(updatedData, updatedIdx)
+                updatedData[updatedIdx] = Object.assign(updatedData[updatedIdx], { output_type: data.output_type })
+
+            }
+        })
+        // const foundIndex = (microservices).findIndex(x => x.name == name);
         // console.log('updating', foundIndex, edit, edit[name], name)
         // console.log('Microdata', microserviceData)
-        const updatedData = [...microserviceData.microservices as []]
-        if (foundIndex >= 0) {
 
-            console.log('Updated', updatedData[foundIndex]["parameters"], name, parameters, edit[name])
-            console.log('OLD', parameters)
-            Object.keys(parameters).forEach(key => {
 
-                let newParams = edit[name] && parameters[key] ? Object.assign(parameters[key], { value: edit[name][key] }) : parameters[key] || edit[name]
-                console.log('NEW para', newParams)
-                updatedData[foundIndex]["parameters"][key] = newParams
-            })
-
-            console.log('OUTPUT_TYPE', data);
-
-            updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { output_type: data.output_type })
-
-        }
         console.log('Updated Data', updatedData)
         // updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: edit[name] })
+        setEdit({})
         setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
 
         console.log('NEW', microserviceData)

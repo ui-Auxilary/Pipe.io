@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login/";
 import Register from "./pages/Register";
 import Graph from "./pages/Graph";
+import { Recovery, Reset } from "pages/Recovery";
 
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet} from "react-router-dom";
 
@@ -15,7 +16,8 @@ export default function App() {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="graph" element={<Graph />} />
-
+        <Route path="recovery" element={<Recovery />} />
+        <Route path="reset" element={<Reset />} />
       </Route>
     )
   );

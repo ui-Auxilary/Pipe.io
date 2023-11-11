@@ -97,6 +97,7 @@ export default function Login() {
                   onChange={handlePasswordInput}
                 />
               </Form.Group>
+              <a href="/recovery">Forgot password?</a>
               <s.ButtonContainer>
                 <Button variant="primary" type="submit">
                   Login

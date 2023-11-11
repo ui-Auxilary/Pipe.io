@@ -12,7 +12,7 @@ export interface Item {
   label: string
   type: string
   value: string
-  name: string
+  name: number
   validation?: string
   errorMessage?: string
   elType?: string
@@ -41,7 +41,8 @@ export default function FormItem({ item }: Props) {
         <>
           <S.Label>{item.label}</S.Label>
           <ValidatedInput
-            item={item} customValidity={item.validation}
+            item={item}
+            customValidity={item.validation}
             errorMessage={item.errorMessage}
             value={userData[item.label.toLocaleLowerCase()]}
             onChange={(e) => setUserData({ ...userData, [item.label.toLocaleLowerCase()]: e.target.value })}
@@ -66,10 +67,10 @@ export default function FormItem({ item }: Props) {
         <ViewMicroservice />
       );
     case 'edit_param':
-      console.log('POO', item)
+      console.log('POO', item, edit)
 
       if (item.elType === 'bool') {
-        console.log(item,"BOOL");
+        console.log(item, "BOOL");
         console.log("8==D", edit[item.name]);
         return (
           <>
@@ -83,14 +84,14 @@ export default function FormItem({ item }: Props) {
           </>
         );
       }
-      
+
       return (
         <>
           <S.Label>{item.label}</S.Label>
           <ValidatedInput
             value={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}
             item={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}
-            onChange={(e) => setEdit({ ...edit, [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e.target.value } })}
+            onChange={(e) => { console.log('EDITING LABEL', item.label, item.name); setEdit({ [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e.target.value } }) }}
             customValidity={item.elType}
             isEdit={true}
           />
