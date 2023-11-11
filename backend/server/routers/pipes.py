@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from typing import Annotated
 from fastapi import APIRouter, UploadFile, File, Header, HTTPException
@@ -57,6 +58,22 @@ async def create_pipe(pipe: Pipes, Authorization: str = Header(...)):
     user_pipes.append(_id.inserted_id)
     users_collection.update_one(
         {"_id": userid}, {"$set": {"pipes": user_pipes}})
+    
+    # file copying code taken from https://pynative.com/python-copy-files-and-directories/
+    source_folder = "data/data_files/"
+    destination_folder = f"parsing_modules/pipeline_{pipe.name}_data/"
+    os.makedirs(os.path.dirname(destination_folder), exist_ok=True)
+
+    for file_name in os.listdir(source_folder):
+        # construct full file path
+        source = source_folder + file_name
+        destination = destination_folder + file_name
+        # copy only files
+        if os.path.isfile(source):
+            shutil.copy(source, destination)
+
+        # then delete files in data_files
+        shutil.rmtree(source_folder)
 
     return {"pipeId": _id.inserted_id.__str__()}
 

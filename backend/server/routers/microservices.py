@@ -82,7 +82,7 @@ async def upload_microservice(file: FileContent):
 
 @router.post("/upload_csv")
 async def upload_CSV(file: FileContent):
-    filepath = f"data/{file.filename}"
+    filepath = f"data/data_files/{file.filename}"
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
     # Need to test with empty/invalid files error handling

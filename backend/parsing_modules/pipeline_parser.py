@@ -33,6 +33,18 @@ def execute_pipeline(pipeline_json):
     DATA_DIRECTORY = f'parsing_modules/pipeline_{pipeline_json["pipeline"]}'
     MICROSERVICES_DIRECTORY = '../data'
 
+    # file copying code taken from https://pynative.com/python-copy-files-and-directories/
+    source_folder = f'pipeline_{pipeline_json["pipeline"]}_data/'
+    destination_folder = f'pipeline_{pipeline_json["pipeline"]}/'
+
+    for file_name in os.listdir(source_folder):
+        # construct full file path
+        source = source_folder + file_name
+        destination = destination_folder + file_name
+        # copy only files
+        if os.path.isfile(source):
+            shutil.copy(source, destination)
+
     try:
         for microservice in pipeline_json['microservices']:
             # load the microservice needed
