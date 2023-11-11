@@ -22,7 +22,7 @@ def import_yahoo(ticker: str = 'msft',
     # Save the dataframe to our storage location
     df.to_csv(output_file_path)
 
-    return f"{ticker} data succesfully retrieved and saved to {output_file_path}"
+    return df.to_json()
 
 def table_drop_columns(input_file_path: str = 'stock_data.csv', output_file_path: str = 'stock_data_updated.csv', columns: str = ''):
     """Drops specified columns from csv
