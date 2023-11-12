@@ -8,7 +8,6 @@ import { Modal } from 'react-bootstrap';
 import Edit from 'components/Edit';
 import EditFromPipe from 'components/Edit/EditFromPipe';
 
-
 export default function Microservice({ code, name, docstring, param, parent_file, from_pipe, parent_pipe_id, output_type, idx }) {
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);

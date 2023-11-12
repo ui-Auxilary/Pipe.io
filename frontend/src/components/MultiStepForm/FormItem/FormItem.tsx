@@ -5,26 +5,11 @@ import UploadMicroservices from 'components/UploadMicroservices';
 import ViewMicroservice from 'components/UploadMicroservices/ViewMicroservice';
 import { useAppData } from 'helper/AppProvider';
 import ValidatedInput from 'helper/validation';
-import React, { FormEvent, useEffect } from 'react';
+import { useEffect } from 'react';
 import Switch from 'react-switch';
+import { Item } from 'types/multiForm';
 
-export interface Item {
-  label: string
-  type: string
-  value: string
-  name: number
-  validation?: string
-  errorMessage?: string
-  elType?: string
-  id?: string
-}
-
-export interface Props {
-  item: Item
-}
-
-// Update based on question list to render specific component
-export default function FormItem({ item }: Props) {
+export default function FormItem({ item }: { item: Item }) {
   const { edit, setEdit } = useAppData();
   const { userData, setUserData } = useFormData();
 
@@ -45,7 +30,7 @@ export default function FormItem({ item }: Props) {
             customValidity={item.validation}
             errorMessage={item.errorMessage}
             value={userData[item.label.toLocaleLowerCase()]}
-            onChange={(e) => setUserData({ ...userData, [item.label.toLocaleLowerCase()]: e.target.value })}
+            onChange={(e: InputEvent) => setUserData({ ...userData, [item.label.toLocaleLowerCase()]: (e?.target as HTMLTextAreaElement).value })}
           />
         </>
       );

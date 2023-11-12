@@ -9,8 +9,8 @@ export interface AppProviderType {
     setEdit: React.Dispatch<React.SetStateAction<any>>
     refData: Record<string, NonNullable<unknown>>,
     setRefData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>,
-    appFiles: File[],
-    setAppFiles: React.Dispatch<React.SetStateAction<File[]>>
+    appFiles: (File | string)[],
+    setAppFiles: React.Dispatch<React.SetStateAction<(File | string)[]>>
 }
 
 export const AppProviderContext = createContext<AppProviderType>({
@@ -39,7 +39,7 @@ export default function AppProvider({ children }: ChildrenProps) {
     const [edit, setEdit] = useState<any>({});
     const [refData, setRefData] = useState({});
     const [pipeIds, setPipeIds] = useState<string[]>([]);
-    const [appFiles, setAppFiles] = useState<File[]>([])
+    const [appFiles, setAppFiles] = useState<(File | string)[]>([])
 
     return (
         <AppProviderContext.Provider value={{ user, setUser, pipeIds, setPipeIds, edit, setEdit, refData, setRefData, appFiles, setAppFiles }}>

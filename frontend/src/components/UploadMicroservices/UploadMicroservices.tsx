@@ -20,7 +20,7 @@ export default function UploadMicroservices() {
         <S.Wrapper>
             <div>
                 <S.Label>Upload microservice file(s)</S.Label>
-                <Dropzone type={'upload'} filetype={'python'} />
+                <Dropzone upload={true} filetype={'python'} />
             </div>
             <div>
                 <S.Label>Add previously uploaded file(s)</S.Label>

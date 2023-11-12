@@ -5,14 +5,18 @@ import File from "assets/upload_file.svg";
 
 import S from "./style";
 import axios from "axios";
-import { useFormData } from "components/MultiStepForm/Form/FormProvider";
 import { useAppData } from "helper/AppProvider";
+import { DropzoneProps } from "types/dropzone";
 
 
-export default function Dropzone({ filetype, type }) {
+export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
   const { appFiles, setAppFiles } = useAppData()
   const [files, setFiles] = useState<File[]>([]);
   const [rejectedfiles, setRejectedFiles] = useState<FileRejection[]>([]);
+
+  useEffect(() => {
+    setAppFiles([]);
+  }, [])
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -44,13 +48,8 @@ export default function Dropzone({ filetype, type }) {
     onDrop,
   });
 
-  const { setMicroserviceData } = useFormData()
-
-
-  const mapFiles = type === 'upload' ? appFiles : files;
-  console.log('PRE', mapFiles)
+  const mapFiles = upload ? appFiles : files;
   const fileDisplay = mapFiles?.map((file) => {
-    console.log('FILE', file)
     return (<S.FileBox key={window.crypto.randomUUID()}>
       <S.FileIcon
         style={{ width: "12%", marginRight: "5px", marginTop: "-10px" }}
@@ -77,12 +76,10 @@ export default function Dropzone({ filetype, type }) {
     </S.FileBox>)
   });
 
-
   useEffect(() => {
     return () => {
       if (files) {
         if (filetype == "python") {
-          console.log('SETTING')
           setAppFiles(prev => [...prev, ...files]);
         } else {
           files?.map((file) => {
@@ -100,12 +97,6 @@ export default function Dropzone({ filetype, type }) {
       }
     }
   }, [files])
-
-  useEffect(() => {
-    console.log('Reset')
-    setAppFiles([]);
-  }, [])
-
 
   return (
     <>
@@ -132,8 +123,12 @@ export default function Dropzone({ filetype, type }) {
       </S.Container>
       <aside style={{ width: "500px" }}>
         {fileDisplay.length > 0 ? (
-          <S.ScrollableDiv style={{ maxHeight: type === 'upload' ? '320px' : '120px' }}>{fileDisplay}</S.ScrollableDiv>
-        ) : null}
+          <S.ScrollableDiv style={{ maxHeight: upload ? '320px' : '120px' }}>
+            {fileDisplay}
+          </S.ScrollableDiv>
+        ) :
+          null
+        }
 
         {rejectedfiles &&
           rejectedfiles.map((file) =>
