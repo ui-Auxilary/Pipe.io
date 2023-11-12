@@ -12,6 +12,8 @@ def execute_pipeline(pipeline_json):
     pprint.pprint(pipeline_json)
     if os.getcwd().endswith('parsing_modules'):
         os.chdir('..')
+    if not os.getcwd().endswith('backend'):
+        os.chdir('backend')
     os.chdir('parsing_modules')
 
     pipeline_output = {
