@@ -6,6 +6,7 @@ import File from "assets/upload_file.svg";
 import S from "./style";
 import axios from "axios";
 import { useFormData } from "components/MultiStepForm/Form/FormProvider";
+import { useAppData } from "helper/AppProvider";
 
 
 export default function Dropzone({ filetype }) {
@@ -58,41 +59,34 @@ export default function Dropzone({ filetype }) {
     </S.FileBox>)
   });
 
+  const { setAppFiles } = useAppData();
+
   useEffect(() => {
     return () => {
       if (files) {
-        files?.map((file) => {
-          console.log('FILE', file.name)
-          if (filetype == "python") {
-            const reader = new FileReader();
-            reader.readAsBinaryString(file)
-            reader.onload = () => {
-              const base64data = reader.result;
-
-              if (base64data) {
-                axios.post('http://localhost:8000/upload', { 'filename': file.name, 'content': base64data }).then((res) => setMicroserviceData(JSON.parse(res.data)))
-              }
-            };
-          }
-
-          if (filetype == "csv") {
-
+        if (filetype == "python") {
+          console.log('SETTING')
+          setAppFiles(prev => [...prev, ...files]);
+        } else {
+          files?.map((file) => {
             const reader = new FileReader();
             reader.readAsText(file)
             reader.onload = () => {
               const base64data = reader.result;
 
-              console.log('POSTING', base64data)
               if (base64data) {
                 axios.post('http://localhost:8000/upload_csv', { 'filename': file.name, 'content': base64data })
               }
             };
-          }
-
-        })
+          })
+        }
       }
     }
   }, [files])
+
+  useEffect(() => {
+    setAppFiles([]);
+  }, [])
 
   return (
     <>

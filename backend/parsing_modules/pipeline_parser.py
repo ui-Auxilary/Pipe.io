@@ -3,10 +3,13 @@ import json
 import os
 import shutil
 import ast
+import pprint
 
 
 def execute_pipeline(pipeline_json):
     # change to the correct directory
+    print('INPUT')
+    pprint.pprint(pipeline_json)
     if os.getcwd().endswith('parsing_modules'):
         os.chdir('..')
     os.chdir('parsing_modules')
@@ -35,30 +38,30 @@ def execute_pipeline(pipeline_json):
             # load the microservice needed
             os.chdir(MICROSERVICES_DIRECTORY)
             python_file = microservice['file']
+            
             imported_module = importlib.import_module(python_file)
             os.chdir('..')
 
             # call the microservices in series
             os.chdir(DATA_DIRECTORY)
             microservice_name = microservice['name']
-            microservice_parameters = microservice['parameters']
+            microservice_parameters = dict(microservice['parameters'])
+
             # parameters are in the form of variable: value, convert them into a list of variable=eval(value)
 
-            # before
-            # microservice_parameters = {
-            #     key: ast.literal_eval(value) for key, value in microservice_parameters.items()}
-
-            # after
-            for key, value in microservice_parameters.items():
+            for key, value_dict in microservice_parameters.items():
+                print('PRE', key, value_dict['default'])
                 try:
+                    value = value_dict['value'] if 'value' in value_dict else value_dict['default']
                     # Attempt to parse the value with ast.literal_eval
                     parsed_value = ast.literal_eval(value)
                     microservice_parameters[key] = parsed_value
                 except (ValueError, SyntaxError):
                     # Handle the case where ast.literal_eval fails
-                    microservice_parameters[key] = value
+                    microservice_parameters[key] = value_dict['value'] if 'value' in value_dict else value_dict['default']
 
             microservice_function = getattr(imported_module, microservice_name)
+
 
             microservice_output = microservice_function(
                 **microservice_parameters)

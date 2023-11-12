@@ -1,4 +1,5 @@
 import pytest
+<<<<<<< HEAD
 import pandas as pd
 import os
 from moving_average import moving_avergae
@@ -48,3 +49,10 @@ def test_large_window_size():
         moving_avergae(input_file_path=input_file_path, output_file_path=output_file_path, window_size=100, date_column='Date', value_column='Volume')
     assert str(exc_info.value) == "Window size cannot be greater than the number of rows in the dataframe"
         
+=======
+import os
+from microservices.moving_average.moving_average import moving_avergae
+def test_moving_average():
+    moving_avergae("data/stock_data.csv", "data/moving_avergae.csv", 5, "Date", "Volume")
+    assert os.path.exists("data/moving_avergae.csv") == True
+>>>>>>> f00a41a83a413eb83ade9c985f4d029a9e4bf923

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-  height: 550px;
+  height: 100%;
   width: 700px;
   background: #FAECEC;
   border-radius: 20px;
@@ -36,9 +36,8 @@ const Wrapper = styled.div`
   flex-direction: column;
 `
 
-const Scrollbar = styled.div`
-  overflow-y: scroll;
-  height: 480px;
+const Scrollbar = styled.div<{ length: number }>`
+  height: fit-content;
 
   &::-webkit-scrollbar {
     width: 8px;
@@ -53,10 +52,16 @@ const Scrollbar = styled.div`
   }
 `
 
+const Heading = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
 export default {
   Button,
   Container,
   Header,
+  Heading,
   Wrapper,
   Scrollbar
 }

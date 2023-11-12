@@ -9,6 +9,7 @@ import "./MultiStepForm.css"
 
 import { useFormData } from "components/MultiStepForm/Form/FormProvider";
 import { ModalFooter } from "react-bootstrap";
+import { useAppData } from "helper/AppProvider";
 
 export interface Props {
   show: boolean;
@@ -16,6 +17,7 @@ export interface Props {
 }
 
 export default function MultiStepForm({ show, handleClose }: Props) {
+  const { setAppFiles } = useAppData();
   const questionsList = [
     {
       section: 1,
@@ -23,12 +25,16 @@ export default function MultiStepForm({ show, handleClose }: Props) {
         {
           label: 'Name',
           type: 'text',
-          value: 'name'
+          value: 'name',
+          validation: /^[a-zA-Z0-9_. ]{1,25}$/,
+          errorMessage: 'Name must not exceed 25 characters'
         },
         {
           label: 'Description',
           type: 'text',
-          value: 'description'
+          value: 'description',
+          validation: /^[a-zA-Z_ ]{1,250}$/,
+          errorMessage: 'Description must not exceed 250 characters'
         },
         {
           label: 'Data source',
@@ -41,14 +47,6 @@ export default function MultiStepForm({ show, handleClose }: Props) {
       section: 2,
       items: [
         {
-          type: 'list_microservices',
-        },
-      ]
-    },
-    {
-      section: 3,
-      items: [
-        {
           label: 'Upload microservice file(s)',
           type: 'dropzone',
           value: 'python'
@@ -56,7 +54,7 @@ export default function MultiStepForm({ show, handleClose }: Props) {
       ]
     },
     {
-      section: 4,
+      section: 3,
       items: [
         {
           type: 'view_microservices',
@@ -74,11 +72,6 @@ export default function MultiStepForm({ show, handleClose }: Props) {
 
   const { currentStep, submitData, setStep } = useFormData();
 
-  const onNext = () => {
-    if (currentStep < totalPagesCount) {
-      setStep(prevIndex => prevIndex + 1)
-    }
-  }
 
   const onHandleClose = () => {
     handleClose()
@@ -92,13 +85,10 @@ export default function MultiStepForm({ show, handleClose }: Props) {
       </Modal.Header>
       <S.Wrapper>
         <Modal.Body>
-          <Form questions={questionsList} step={currentStep - 1} onFormUpdate={onFormUpdate} pageAnswers={formAnswers} />
+          <Form questions={questionsList} step={currentStep - 1} onFormUpdate={onFormUpdate} pageAnswers={formAnswers} onHandleClose={onHandleClose} />
         </Modal.Body>
       </S.Wrapper>
-      <ModalFooter>
-        {currentStep == totalPagesCount ? (<Button onClick={() => submitData(onHandleClose)} variant="secondary">Submit</Button>) : (<Button onClick={onNext}>Next</Button>)}
-
-      </ModalFooter>
+      <ModalFooter />
     </Modal>
   );
 }
