@@ -16,3 +16,35 @@ def test_moving_average():
     assert (output_df['RSI'].tolist() == [100.0, 150.0, 200.0, 300.0, 400.0])
     os.remove('sample_stock_data.csv')
     os.remove('sample_moving_average.csv')
+    
+def test_invalid_file_extension():
+    with pytest.raises(ValueError) as exc_info:
+        moving_avergae(input_file_path='invalid_input.txt', output_file_path='invalid_output.txt', window_size=3, date_column='Date', value_column='Volume')
+    assert str(exc_info.value) == "Input and output file paths must have .csv extension"
+    
+def test_nonexistent_file():
+    with pytest.raises(FileNotFoundError) as exc_info:
+        moving_avergae(input_file_path='nonexistent_file.csv', output_file_path='nonexistent_output.csv', window_size=3, date_column='Date', value_column='Volume')
+    assert str(exc_info.value) == f"Input file not found: nonexistent_file.csv"
+
+def test_missing_columns():
+    # Test the function with missing columns in the input dataframe
+    input_file_path, output_file_path = "stock_data.csv"
+    with pytest.raises(ValueError) as exc_info:
+        moving_avergae(input_file_path=input_file_path, output_file_path=output_file_path, window_size=3, date_column='Date', value_column='InvalidColumn')
+    assert str(exc_info.value) == "InvalidColumn"
+    
+def test_non_integer_window_size():
+    # Test the function with a non-integer window size
+    input_file_path, output_file_path = "stock_data.csv"
+    with pytest.raises(ValueError) as exc_info:
+        moving_avergae(input_file_path=input_file_path, output_file_path=output_file_path, window_size=3.5, date_column='Date', value_column='Volume')
+    assert str(exc_info.value) == "Window size must be an integer"
+    
+def test_large_window_size():
+    # Test the function with a window size larger than the number of rows
+    input_file_path, output_file_path = "stock_data.csv"
+    with pytest.raises(ValueError) as exc_info:
+        moving_avergae(input_file_path=input_file_path, output_file_path=output_file_path, window_size=100, date_column='Date', value_column='Volume')
+    assert str(exc_info.value) == "Window size cannot be greater than the number of rows in the dataframe"
+        
