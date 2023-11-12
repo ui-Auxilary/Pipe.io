@@ -57,6 +57,9 @@ const textContainer = styled.div`
   margin-bottom: 10px;
 `;
 
+const ErrorContainer = styled.div`
+  color: red;
+`;
 
 
 export default {
@@ -67,5 +70,6 @@ export default {
   CardBody,
   CardFooter,
   ButtonContainer,
-  textContainer
+  textContainer,
+  ErrorContainer
 };
