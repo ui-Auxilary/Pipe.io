@@ -40,19 +40,16 @@ def test_nonexistent_file():
         calculate_rsi(input_file_path='nonexistent_file.csv', output_file_path='nonexistent_output.csv', window_size=3, date_column='Date', value_column='Open')
     assert str(exc_info.value) == f"Input file not found: nonexistent_file.csv"
 def test_missing_columns():
-    # Test the function with missing columns in the input dataframe
     input_file_path, output_file_path = "stock_data.csv"
     with pytest.raises(ValueError) as exc_info:
         calculate_rsi(input_file_path=input_file_path, output_file_path=output_file_path, window_size=3, date_column='Date', value_column='InvalidColumn')
     assert str(exc_info.value) == "InvalidColumn" 
 def test_non_integer_window_size():
-    # Test the function with a non-integer window size
     input_file_path, output_file_path = "stock_data.csv"
     with pytest.raises(ValueError) as exc_info:
         calculate_rsi(input_file_path=input_file_path, output_file_path=output_file_path, window_size=3.5, date_column='Date', value_column='Open')
     assert str(exc_info.value) == "Window size must be an integer"
 def test_large_window_size():
-    # Test the function with a window size larger than the number of rows
     input_file_path, output_file_path = "stock_data.csv"
     with pytest.raises(ValueError) as exc_info:
         calculate_rsi(input_file_path=input_file_path, output_file_path=output_file_path, window_size=100, date_column='Date', value_column='Open')
