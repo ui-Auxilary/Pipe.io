@@ -68,8 +68,9 @@ export default function ViewMicroservice() {
     }
 
     useEffect(() => {
-        readFiles();
-    }, [appFiles])
+        console.log('INIT', appFiles)
+        appFiles && readFiles();
+    }, [])
 
     useEffect(() => {
         console.log('PEEK', microserviceData)

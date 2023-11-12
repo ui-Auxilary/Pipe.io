@@ -16,22 +16,19 @@ export default function Result({ pipeId }: { pipeId: string }) {
     useEffect(() => {
         axios.get(`http://localhost:8000/pipes/${pipeId}`).then(res => {
             setResult(res.data)
+
             const output = Object.entries(res.data.output)[page - 1]
+            console.log('OUTPUT RES for Page', output, res.data, page - 1, result, output[1]?.name)
             const outputType = res.data.microservices[page - 1].output_type
-            setPageContent({ ["name"]: output[0], ["output"]: output[1], ["output_type"]: outputType })
+            setPageContent({ ["name"]: output[1]?.name, ["output"]: output[1]?.output, ["output_type"]: outputType })
         })
 
     }, [page])
 
+
     useEffect(() => {
-        if (result?.output) {
-            const output = Object.entries(result.output)[page - 1]
-            const outputType = result.microservices[page - 1].output_type
-            setPageContent({ ["name"]: output[0], ["output"]: output[1], ["output_type"]: outputType })
-        }
-
-    }, [page])
-
+        console.log('CONTENt', pageContent)
+    }, [pageContent])
     useEffect(() => {
         console.log('RES', result)
     }, [result])

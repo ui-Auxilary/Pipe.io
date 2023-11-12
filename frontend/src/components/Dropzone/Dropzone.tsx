@@ -10,7 +10,7 @@ import { useAppData } from "helper/AppProvider";
 
 
 export default function Dropzone({ filetype, type }) {
-  const { appFiles } = useAppData()
+  const { appFiles, setAppFiles } = useAppData()
   const [files, setFiles] = useState<File[]>([]);
   const [rejectedfiles, setRejectedFiles] = useState<FileRejection[]>([]);
 
@@ -18,7 +18,7 @@ export default function Dropzone({ filetype, type }) {
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
       if (acceptedFiles?.length) {
         setFiles((previousFiles) => [...previousFiles, ...acceptedFiles]);
-
+        setAppFiles([...acceptedFiles]);
       }
 
       if (fileRejections?.length) {
@@ -47,7 +47,7 @@ export default function Dropzone({ filetype, type }) {
   const { setMicroserviceData } = useFormData()
 
 
-  const mapFiles = type === 'upload' ? files.concat(appFiles) : files;
+  const mapFiles = type === 'upload' ? appFiles : files;
   console.log('PRE', mapFiles)
   const fileDisplay = mapFiles?.map((file) => {
     console.log('FILE', file)
@@ -77,8 +77,6 @@ export default function Dropzone({ filetype, type }) {
     </S.FileBox>)
   });
 
-
-  const { setAppFiles } = useAppData();
 
   useEffect(() => {
     return () => {

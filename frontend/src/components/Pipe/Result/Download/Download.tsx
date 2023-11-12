@@ -13,7 +13,9 @@ interface DownloadProps {
 
 export default function Download(props: DownloadProps) {
 
-  const output = JSON.parse(JSON.parse(props.output))
+
+  const output = JSON.parse(props.output)
+
 
   const [download, setDownload] = useState("")
 
