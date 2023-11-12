@@ -13,6 +13,7 @@ def moving_average(input_file_path: str = 'stock_data.csv', output_file_path:str
     Returns:
         pd.DataFrame: Dataframe from the csv file
     """
+    input_file_path = os.path.join('/backend/data/', input_file_path)
     
     if not input_file_path.lower().endswith('.csv') or not output_file_path.lower().endswith('.csv'):
         raise ValueError("Input and output file paths must have .csv extension")
@@ -20,12 +21,11 @@ def moving_average(input_file_path: str = 'stock_data.csv', output_file_path:str
     if not os.path.exists(input_file_path):
         raise FileNotFoundError(f"Input file not found: {input_file_path}")
 
+    df = pd.read_csv(input_file_path)
+    
     if date_column not in df.columns or value_column not in df.columns:
         raise ValueError(f"Columns {date_column} and {value_column} must exist in the input dataframe")
-
     
-    input_file_path = os.path.join('/backend/data/', input_file_path)
-    df = pd.read_csv(input_file_path)
     if not isinstance(window_size, int):
         raise ValueError("Window size must be an integer")
     if window_size > len(df):
@@ -34,4 +34,3 @@ def moving_average(input_file_path: str = 'stock_data.csv', output_file_path:str
     df['moving_average'] = df[value_column].rolling(window=window_size).mean()
     df.to_csv(output_file_path)
     return df.to_json()
-
