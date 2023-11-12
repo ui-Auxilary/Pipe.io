@@ -73,7 +73,7 @@ const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props,
   const target = useRef(null);
 
   const handleOverlayShow = () => setShow(true);
-  const handleOverlayClose = () => { setShow(false); setAppFiles([]) }
+  const handleOverlayClose = (e) => { setShow(false); setAppFiles([]) }
   const handleViewOverlayShow = () => setShowView(true);
   const handleViewOverlayClose = () => { setShowView(false); setAppFiles([]) }
   const handleDeleteClose = () => setDel(false);

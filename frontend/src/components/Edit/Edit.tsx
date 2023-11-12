@@ -2,7 +2,7 @@ import axios from "axios";
 import Form from "components/MultiStepForm/Form";
 import { useFormData } from "components/MultiStepForm/Form/FormProvider";
 import { useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap"
+import { Button, Modal, CloseButton } from "react-bootstrap"
 
 import S from './styles'
 import { useAppData } from "helper/AppProvider";
@@ -77,8 +77,12 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
         closeOverlay();
     }
 
+    const checkSaved = () => {
+
+    }
+
     return (
-        <Modal show={show} onHide={closeOverlay}>
+        <Modal show={show} onHide={() => { setEdit({}); closeOverlay() }}>
             <Modal.Header closeButton>
                 <Modal.Title>Edit</Modal.Title>
             </Modal.Header>
