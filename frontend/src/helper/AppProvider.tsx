@@ -1,17 +1,5 @@
-import React, { ReactNode, createContext, useContext, useState } from "react"
-
-export interface AppProviderType {
-    user: string
-    setUser: React.Dispatch<React.SetStateAction<string>>
-    pipeIds: string[]
-    setPipeIds: React.Dispatch<React.SetStateAction<string[]>>
-    edit: Record<number, any>,
-    setEdit: React.Dispatch<React.SetStateAction<any>>
-    refData: Record<string, NonNullable<unknown>>,
-    setRefData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>,
-    appFiles: File[],
-    setAppFiles: React.Dispatch<React.SetStateAction<File[]>>
-}
+import { createContext, useContext, useState } from "react"
+import { AppProviderType, ChildrenProps } from "types/HelperTypes"
 
 export const AppProviderContext = createContext<AppProviderType>({
     user: "",
@@ -31,9 +19,7 @@ export function useAppData() {
     return useContext(AppProviderContext);
 }
 
-interface ChildrenProps {
-    children?: ReactNode
-}
+
 export default function AppProvider({ children }: ChildrenProps) {
     const [user, setUser] = useState("");
     const [edit, setEdit] = useState<any>({});

@@ -7,24 +7,10 @@ import { useAppData } from 'helper/AppProvider';
 import ValidatedInput from 'helper/validation';
 import React, { FormEvent, useEffect } from 'react';
 import Switch from 'react-switch';
-
-export interface Item {
-  label: string
-  type: string
-  value: string
-  name: number
-  validation?: string
-  errorMessage?: string
-  elType?: string
-  id?: string
-}
-
-export interface Props {
-  item: Item
-}
+import { FormItemProps } from 'types/MultistepFormTypes';
 
 // Update based on question list to render specific component
-export default function FormItem({ item }: Props) {
+export default function FormItem({ item }: FormItemProps) {
   const { edit, setEdit } = useAppData();
   const { userData, setUserData } = useFormData();
 
@@ -67,11 +53,7 @@ export default function FormItem({ item }: Props) {
         <ViewMicroservice />
       );
     case 'edit_param':
-      console.log('POO', item, edit)
-
       if (item.elType === 'bool') {
-        console.log(item, "BOOL");
-        console.log("8==D", edit[item.name]);
         return (
           <>
             <S.Label>{item.label}</S.Label>
@@ -91,7 +73,7 @@ export default function FormItem({ item }: Props) {
           <ValidatedInput
             value={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}
             item={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}
-            onChange={(e) => { console.log('EDITING LABEL', item.label, item.name); setEdit({ [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e.target.value } }) }}
+            onChange={(e: { target: { value: any; }; }) => {setEdit({ [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e.target.value } }) }}
             customValidity={item.elType}
             isEdit={true}
           />

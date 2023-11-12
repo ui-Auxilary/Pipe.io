@@ -7,21 +7,22 @@ import S from "./style";
 import axios from "axios";
 import { useFormData } from "components/MultiStepForm/Form/FormProvider";
 import { useAppData } from "helper/AppProvider";
+import { DropzoneProps } from "types/DropzoneTypes";
 
 
-export default function Dropzone({ filetype }) {
+export default function Dropzone({ filetype }: DropzoneProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [rejectedfiles, setRejectedFiles] = useState<FileRejection[]>([]);
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
       if (acceptedFiles?.length) {
-        setFiles((previousFiles) => [...previousFiles, ...acceptedFiles]);
+        setFiles((previousFiles: any) => [...previousFiles, ...acceptedFiles]);
 
       }
 
       if (fileRejections?.length) {
-        setRejectedFiles((previousFiles) => [
+        setRejectedFiles((previousFiles: any) => [
           ...previousFiles,
           ...fileRejections,
         ]);
@@ -45,7 +46,7 @@ export default function Dropzone({ filetype }) {
 
   const { setMicroserviceData } = useFormData()
 
-  const fileDisplay = files?.map((file) => {
+  const fileDisplay = files?.map((file: { name: any; size: any; }) => {
     return (<S.FileBox key={window.crypto.randomUUID()}>
       <S.FileIcon
         style={{ width: "12%", marginRight: "5px", marginTop: "-10px" }}
@@ -64,11 +65,10 @@ export default function Dropzone({ filetype }) {
   useEffect(() => {
     return () => {
       if (files) {
-        if (filetype == "python") {
-          console.log('SETTING')
-          setAppFiles(prev => [...prev, ...files]);
+        if (filetype === "python") {
+          setAppFiles((prev: any) => [...prev, ...files]);
         } else {
-          files?.map((file) => {
+          files?.map((file: File) => {
             const reader = new FileReader();
             reader.readAsText(file)
             reader.onload = () => {

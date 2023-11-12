@@ -10,13 +10,9 @@ import "./MultiStepForm.css"
 import { useFormData } from "components/MultiStepForm/Form/FormProvider";
 import { ModalFooter } from "react-bootstrap";
 import { useAppData } from "helper/AppProvider";
+import { MultiStepFormProps } from "types/MultistepFormTypes";
 
-export interface Props {
-  show: boolean;
-  handleClose: () => void;
-}
-
-export default function MultiStepForm({ show, handleClose }: Props) {
+export default function MultiStepForm({ show, handleClose }: MultiStepFormProps) {
   const { setAppFiles } = useAppData();
   const questionsList = [
     {
@@ -65,8 +61,7 @@ export default function MultiStepForm({ show, handleClose }: Props) {
   const totalPagesCount = questionsList.length
   const [formAnswers, setFormAnswers] = useState({})
 
-  const onFormUpdate = (step, answerObj) => {
-    console.log('Form update', step, answerObj)
+  const onFormUpdate = (step: any, answerObj: any) => {
     setFormAnswers({ ...formAnswers, [step]: answerObj })
   }
 

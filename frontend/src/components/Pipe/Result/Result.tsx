@@ -32,9 +32,6 @@ export default function Result({ pipeId }: { pipeId: string }) {
 
     }, [page])
 
-    useEffect(() => {
-        console.log('RES', result)
-    }, [result])
     return (
         <S.Container>
             <h5>{pageContent && <p>{pageContent["name"]} </p>}</h5>
@@ -62,7 +59,7 @@ export default function Result({ pipeId }: { pipeId: string }) {
     )
 }
 
-// will need to generalise this later
+
 function checkForStockData(result: any, pageContent: any) {
     if (result.output && pageContent.output_type == "graph") {
         return true;
@@ -70,7 +67,6 @@ function checkForStockData(result: any, pageContent: any) {
     return false;
 }
 
-// check for plot download
 function checkForPlot(result: any, pageContent: any) {
     if (result.output && pageContent.output_type == "plot") {
         return true;

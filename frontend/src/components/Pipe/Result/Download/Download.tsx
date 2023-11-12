@@ -1,22 +1,13 @@
 import { useState } from "react"
 import S from './Styles'
 import Button from 'react-bootstrap/Button';
-import fileImg from './file-svgrepo-com.svg'
-
-
-
-interface DownloadProps {
-  pipeId: string
-  output: string
-}
+import fileImg from './file-svgrepo-com.svg';
+import { DownloadProps } from "types/PipeTypes"
 
 
 export default function Download(props: DownloadProps) {
 
   const output = JSON.parse(JSON.parse(props.output))
-
-  const [download, setDownload] = useState("")
-
 
   const handleDownload = (filePath: string) => {
     const link = document.createElement('a');
@@ -35,7 +26,7 @@ export default function Download(props: DownloadProps) {
 
   return (
     <S.Container>
-      {Object.keys(output).map((name, path) => (
+      {Object.keys(output).map((name) => (
         <S.Body>
           <S.Img src={fileImg} />
           <h6>{output[name]}</h6>

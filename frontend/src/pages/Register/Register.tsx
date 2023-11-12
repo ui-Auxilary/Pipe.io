@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Form, Button, Card } from "react-bootstrap";
+import { useHistory } from 'react-router-dom';
 import Logo from "assets/logo.svg";
 import axios from "axios";
 import React from "react";
-import { RegisterResponse } from "types";
+import { RegisterResponse, ErrorResponse } from "types/AuthTypes";
 
 import s from "./style";
 
@@ -42,15 +43,11 @@ export default function Register() {
           "Content-type": "application/x-www-form-urlencoded",
         },
       }).then((response: RegisterResponse) => {
-        if (response.data.detail) {
-          setValid(false);
-          setErrorMsg({ message: response.data.detail });
-        } else {
-          sessionStorage.setItem("token", response.data.token);
-          window.location.href = "/";
-        }
-      }).catch((error) => {
-        console.log(error);
+        sessionStorage.setItem("token", response.data.token);
+        window.location.href = "/";
+      }).catch((error: ErrorResponse) => {
+        setValid(false);
+        setErrorMsg({ message: error.response.data.detail });
       });
   }
 
