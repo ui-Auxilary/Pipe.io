@@ -4,7 +4,7 @@ import { ChartProps } from 'types/VisualizationTypes';
 
 
 export default function BarChartComponent(props: ChartProps) {
-  const {stock, showClose, showOpen, showHigh, showLow, showVolume, showMovingAverage, showRSI} = props.chartData;
+  const {stock, showClose, showOpen, showHigh, showLow, showVolume, showMovingAverage, showRSI, showFuture} = props.chartData;
   const roundValue = (price: number) => {
     return roundPrice(showVolume, showRSI, showMovingAverage, price, stock);
   }
@@ -24,6 +24,8 @@ export default function BarChartComponent(props: ChartProps) {
         {showVolume && <Bar dataKey="Volume" fill="#ff0000"/>}
         {showMovingAverage && <Bar dataKey="moving_average" fill="#0000ff"/>}
         {showRSI && <Bar dataKey="RSI" fill="#000000"/>}
+        {showFuture && <Bar dataKey="Future" fill="#828282"/>}
+
       </BarChart>
     </ResponsiveContainer>
   );
