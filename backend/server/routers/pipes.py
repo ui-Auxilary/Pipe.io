@@ -62,7 +62,6 @@ async def create_pipe(pipe: Pipes, Authorization: str = Header(...)):
     # file copying code taken from https://pynative.com/python-copy-files-and-directories/
     source_folder = "data/data_files/"
     destination_folder = f"parsing_modules/pipeline_{pipe.name}_data/"
-    print(os.getcwd(), "Hi Dhruvv")
     os.makedirs(os.path.dirname(destination_folder), exist_ok=True)
 
     for file_name in os.listdir(source_folder):
@@ -72,10 +71,8 @@ async def create_pipe(pipe: Pipes, Authorization: str = Header(...)):
         # copy only files
         if os.path.isfile(source):
             shutil.copy(source, destination)
-
-        # then delete files in data_files
-        shutil.rmtree(source_folder)
-
+            os.remove(source)
+        
     return {"pipeId": _id.inserted_id.__str__()}
 
 
