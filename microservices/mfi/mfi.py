@@ -16,8 +16,6 @@ def calculate_mfi(input_file_path: str ="stock_data.csv", output_file_path:str =
     Returns:
         pd.DataFrame: Dataframe from the csv file
     """
-    
-    input_file_path = os.path.join('/backend/data/', input_file_path)
     df = pd.read_csv(input_file_path)
     df = df.sort_values(by=[date_column])
     data_type = df[value_column].dtype
