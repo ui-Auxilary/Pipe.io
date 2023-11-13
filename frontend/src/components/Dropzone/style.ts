@@ -34,7 +34,6 @@ const FileBox = styled.div`
 const ScrollableDiv = styled.div`
   margin: 5px;
   padding: 5px;
-  max-height: 120px;
   overflow: auto;
   text-align: justify;
 

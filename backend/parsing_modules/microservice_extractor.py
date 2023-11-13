@@ -6,7 +6,7 @@ import json
 import sys
 import pprint
 
-sys.path.append("./data")
+sys.path.append("./data/microservices")
 print(sys.path)
 
 

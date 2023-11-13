@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/Button';
 // import Calendar from 'react-calendar';
 // import 'react-calendar/dist/Calendar.css';
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, ResponsiveContainer, AreaChart, Area, ComposedChart} from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, ResponsiveContainer, AreaChart, Area, ComposedChart } from 'recharts';
 
 interface ChartProps {
   pipeId: string
@@ -36,12 +36,9 @@ export default function ChartComponent(props: ChartProps) {
   const chartOptions = [
     { value: 'line', label: 'Line' },
     { value: 'bar', label: 'Bar' },
-    { value: 'area', label: 'Area'},
-    { value: 'composed', label: 'Composed'}
+    { value: 'area', label: 'Area' },
+    { value: 'composed', label: 'Composed' }
   ];
-
-
-
 
   const [ticker, setTicker] = useState("");
   const [enableTicker, setEnableTicker] = useState(false);
@@ -58,7 +55,6 @@ export default function ChartComponent(props: ChartProps) {
 
 
 
-
   useEffect(() => {
 
     setTicker("");
@@ -68,10 +64,10 @@ export default function ChartComponent(props: ChartProps) {
     setEndDate("");
     setEnableEndDate(false);
 
-    axios.get(`http://localhost:8000/pipes/${pipeId}`).then((res:any) => {
+    axios.get(`http://localhost:8000/pipes/${pipeId}`).then((res: any) => {
       if (res.data.microservices[props.index].parameters.ticker != undefined) {
-        setTicker(res.data.microservices[props.index].parameters.ticker.value ? 
-          res.data.microservices[props.index].parameters.ticker.value : 
+        setTicker(res.data.microservices[props.index].parameters.ticker.value ?
+          res.data.microservices[props.index].parameters.ticker.value :
           res.data.microservices[props.index].parameters.ticker.default);
         setEnableTicker(true);
 
@@ -85,17 +81,19 @@ export default function ChartComponent(props: ChartProps) {
         setEnableEndDate(true);
       }
 
+      console.log("OUTPUT VIS", res.data, props.name)
 
-      const output = JSON.parse(JSON.parse(res.data.output[props.name]));
+      const outputIdx = res.data.microservices.findIndex(x => x.name === props.name)
+      console.log('FOUND idx', outputIdx, res.data.output[outputIdx].output)
+
+      const output = JSON.parse(res.data.output[outputIdx]?.output) || {};
 
       setMicroserviceData(res.data.microservices[props.index].parameters);
-
-      console.log("OUTPUT", output)
 
       const stockObj = Object.keys(output.Close).map((key) => {
 
         if (output.Date === undefined) {
-          const temp = {Date: parseInt(key)}
+          const temp = { Date: parseInt(key) }
           for (const [key2, value] of Object.entries(output)) {
             temp[key2] = value[key];
           }
@@ -103,23 +101,20 @@ export default function ChartComponent(props: ChartProps) {
 
         } else if (typeof output.Date[key] === "string") {
           console.log("HELLO")
-          const temp = {Date: new Date(output.Date[key]).getTime()}
+          const temp = { Date: new Date(output.Date[key]).getTime() }
           for (const [key2, value] of Object.entries(output)) {
             if (key2 != "Date") {
               temp[key2] = value[key];
             }
           }
           return temp;
-        } else if (typeof output.Date[key] === "number") {
-          const temp = {Date: output.Date[key]}
-          for (const [key2, value] of Object.entries(output)) {
-            if (key2 != "Date") {
 
-              if (typeof value[key] === "string") {
-                temp[key2] = parseInt(value[key].replace(/,/g, ''));
-              } else {
-                temp[key2] = value[key];
-              }
+        } else if (typeof output.Date[key] === "number") {
+          const temp = { Date: output.Date[key] }
+          for (const [key2, value] of Object.entries(output)) {
+            console.log("HELLO", key2, value[key])
+            if (key2 != "Date") {
+              temp[key2] = value[key];
             }
           }
           return temp;
@@ -128,7 +123,7 @@ export default function ChartComponent(props: ChartProps) {
 
       setStock(stockObj);
       console.log("RES", stockObj)
-      
+
 
       if (stockObj[0].Date != undefined) {
         const start = new Date(stockObj[0].Date);
@@ -173,17 +168,17 @@ export default function ChartComponent(props: ChartProps) {
 
   const handleSave = (e) => {
     e.preventDefault();
-    const updatedParams = {...microserviceData}
+    const updatedParams = { ...microserviceData }
 
-    updatedParams["ticker"] = {...updatedParams["ticker"], value: ticker};
-    
+    updatedParams["ticker"] = { ...updatedParams["ticker"], value: ticker };
+
     if (enableStartDate && enableEndDate) {
-      updatedParams["start_date"] = {...updatedParams["start_date"], value: startDate};
-      updatedParams["end_date"] = {...updatedParams["end_date"], value: endDate};
+      updatedParams["start_date"] = { ...updatedParams["start_date"], value: startDate };
+      updatedParams["end_date"] = { ...updatedParams["end_date"], value: endDate };
     }
 
 
-    axios.put(`http://localhost:8000/pipes/${pipeId}/microservices`, {"name":props.name , "parameters": updatedParams}).then((res) => {
+    axios.put(`http://localhost:8000/pipes/${pipeId}/microservices`, { "name": props.name, "parameters": updatedParams }).then((res) => {
       console.log(res)
       updateStock();
     }).catch((err) => {
@@ -193,7 +188,7 @@ export default function ChartComponent(props: ChartProps) {
 
 
   const updateStock = () => {
-    axios.post(`http://localhost:8000/pipes/execute`, null,  { params: { id: pipeId } }).then((res) => {
+    axios.post(`http://localhost:8000/pipes/execute`, null, { params: { id: pipeId } }).then((res) => {
       console.log(res)
       setRefresh(!refresh);
     }).catch((err) => {
@@ -213,7 +208,7 @@ export default function ChartComponent(props: ChartProps) {
     }
 
     if (showRSI && stock.find((el) => el.RSI == price)) {
-      return Math.round(price*100)/ 100 + '%';
+      return Math.round(price * 100) / 100 + '%';
     }
 
     if (showMovingAverage && stock.find((el) => el.moving_average == price)) {
@@ -240,13 +235,13 @@ export default function ChartComponent(props: ChartProps) {
 
 
   const isMovingAverage = () => {
-    if (stock[0] && stock[0].moving_average != undefined) {
+    if (stock[0] && stock[stock.length - 1].moving_average != undefined) {
       return true;
     }
   }
 
   const isRSI = () => {
-    if (stock[0] && stock[0].RSI != undefined) {
+    if (stock[0] && stock[stock.length - 1].RSI != undefined) {
       return true;
     }
   }
@@ -284,85 +279,85 @@ export default function ChartComponent(props: ChartProps) {
   return (
     <S.Container>
       <S.GraphContainer>
-        
-        { chartType.value == 'bar' &&
+
+        {chartType.value == 'bar' &&
           <ResponsiveContainer width="95%" height={"90%"}>
-          <BarChart data={stock}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="Date" domain={['dataMin', 'dataMax']} tickFormatter={formatDate} />
-            <YAxis width={80}/>
-            <Tooltip labelFormatter={formatDate} formatter={roundPrice}/>
-            <Legend />
-            {showClose && <Bar dataKey="Close" fill="#02b2af"/>}
-            {showOpen && <Bar dataKey="Open" fill="#8884d8"/>}
-            {showHigh && <Bar dataKey="High" fill="#82ca9d"/>}
-            {showLow && <Bar dataKey="Low" fill="#ffc658"/>}
-            {showVolume && <Bar dataKey="Volume" fill="#ff0000"/>}
-            {showMovingAverage && <Bar dataKey="moving_average" fill="#0000ff"/>}
-            {showRSI && <Bar dataKey="RSI" fill="#000000"/>}
-          </BarChart>
+            <BarChart data={stock}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="Date" domain={['dataMin', 'dataMax']} tickFormatter={formatDate} />
+              <YAxis width={80} />
+              <Tooltip labelFormatter={formatDate} formatter={roundPrice} />
+              <Legend />
+              {showClose && <Bar dataKey="Close" fill="#02b2af" />}
+              {showOpen && <Bar dataKey="Open" fill="#8884d8" />}
+              {showHigh && <Bar dataKey="High" fill="#82ca9d" />}
+              {showLow && <Bar dataKey="Low" fill="#ffc658" />}
+              {showVolume && <Bar dataKey="Volume" fill="#ff0000" />}
+              {showMovingAverage && <Bar dataKey="moving_average" fill="#0000ff" />}
+              {showRSI && <Bar dataKey="RSI" fill="#000000" />}
+            </BarChart>
           </ResponsiveContainer>
         }
 
-        { chartType.value == 'line' &&
+        {chartType.value == 'line' &&
           <ResponsiveContainer width="95%" height={"90%"}>
             <LineChart data={stock}>
-              {showClose && <Line type="monotone" dataKey="Close" stroke="#02b2af" strokeWidth={2}/>}
-              {showOpen && <Line type="monotone" dataKey="Open" stroke="#8884d8" strokeWidth={2}/>}
-              {showHigh && <Line type="monotone" dataKey="High" stroke="#82ca9d" strokeWidth={2}/>}
-              {showLow && <Line type="monotone" dataKey="Low" stroke="#ffc658" strokeWidth={2}/>}
-              {showVolume && <Line type="monotone" dataKey="Volume" stroke="#ff0000" strokeWidth={2}/> } 
-              {showMovingAverage && <Line type="monotone" dataKey="moving_average" stroke="#0000ff" strokeWidth={2}/>}
-              {showRSI && <Line type="monotone" dataKey="RSI" stroke="#000000" strokeWidth={2}/>}
+              {showClose && <Line type="monotone" dataKey="Close" stroke="#02b2af" strokeWidth={2} />}
+              {showOpen && <Line type="monotone" dataKey="Open" stroke="#8884d8" strokeWidth={2} />}
+              {showHigh && <Line type="monotone" dataKey="High" stroke="#82ca9d" strokeWidth={2} />}
+              {showLow && <Line type="monotone" dataKey="Low" stroke="#ffc658" strokeWidth={2} />}
+              {showVolume && <Line type="monotone" dataKey="Volume" stroke="#ff0000" strokeWidth={2} />}
+              {showMovingAverage && <Line type="monotone" dataKey="moving_average" stroke="#0000ff" strokeWidth={2} />}
+              {showRSI && <Line type="monotone" dataKey="RSI" stroke="#000000" strokeWidth={2} />}
               <CartesianGrid stroke="#ccc" />
               <XAxis dataKey="Date" scale="time" domain={['dataMin', 'dataMax']} type="number" tickFormatter={formatDate} />
-              <YAxis width={80}/>
-              <Tooltip labelFormatter={formatDate} formatter={roundPrice}/>
+              <YAxis width={80} />
+              <Tooltip labelFormatter={formatDate} formatter={roundPrice} />
               <Legend />
             </LineChart>
           </ResponsiveContainer>
         }
 
-        { chartType.value == 'area' &&
+        {chartType.value == 'area' &&
           <ResponsiveContainer width="95%" height={"90%"}>
             <AreaChart data={stock}>
-              {showClose && <Area type="monotone" dataKey="Close" stroke="#02b2af" fill="#02b2af" strokeWidth={2}/>}
-              {showOpen && <Area type="monotone" dataKey="Open" stroke="#8884d8" fill="#8884d8" strokeWidth={2}/>}
-              {showHigh && <Area type="monotone" dataKey="High" stroke="#82ca9d" fill="#82ca9d" strokeWidth={2}/>}
-              {showLow && <Area type="monotone" dataKey="Low" stroke="#ffc658" fill="#ffc658" strokeWidth={2}/>}
-              {showVolume && <Area type="monotone" dataKey="Volume" stroke="#ff0000" fill="#ff0000" strokeWidth={2}/> } 
-              {showMovingAverage && <Area type="monotone" dataKey="moving_average" stroke="#0000ff" fill="#0000ff" strokeWidth={2}/>}
-              {showRSI && <Area type="monotone" dataKey="RSI" stroke="#000000" fill="#000000" strokeWidth={2}/>}
+              {showClose && <Area type="monotone" dataKey="Close" stroke="#02b2af" fill="#02b2af" strokeWidth={2} />}
+              {showOpen && <Area type="monotone" dataKey="Open" stroke="#8884d8" fill="#8884d8" strokeWidth={2} />}
+              {showHigh && <Area type="monotone" dataKey="High" stroke="#82ca9d" fill="#82ca9d" strokeWidth={2} />}
+              {showLow && <Area type="monotone" dataKey="Low" stroke="#ffc658" fill="#ffc658" strokeWidth={2} />}
+              {showVolume && <Area type="monotone" dataKey="Volume" stroke="#ff0000" fill="#ff0000" strokeWidth={2} />}
+              {showMovingAverage && <Area type="monotone" dataKey="moving_average" stroke="#0000ff" fill="#0000ff" strokeWidth={2} />}
+              {showRSI && <Area type="monotone" dataKey="RSI" stroke="#000000" fill="#000000" strokeWidth={2} />}
               <CartesianGrid stroke="#ccc" />
               <XAxis dataKey="Date" scale="time" domain={['dataMin', 'dataMax']} type="number" tickFormatter={formatDate} />
-              <YAxis width={80}/>
-              <Tooltip labelFormatter={formatDate} formatter={roundPrice}/>
+              <YAxis width={80} />
+              <Tooltip labelFormatter={formatDate} formatter={roundPrice} />
               <Legend />
             </AreaChart>
           </ResponsiveContainer>
         }
 
-        { chartType.value == 'composed' &&
+        {chartType.value == 'composed' &&
           <ResponsiveContainer width="95%" height={"90%"}>
             <ComposedChart data={stock}>
-              {showClose && <Bar dataKey="Close" fill="#02b2af"/>}
-              {showOpen && <Bar dataKey="Open" fill="#8884d8"/>}
-              {showHigh && <Bar dataKey="High" fill="#82ca9d"/>}
-              {showLow && <Bar dataKey="Low" fill="#ffc658"/>}
-              {showLow && <Line type="monotone" dataKey="Low" stroke="#ffc658" strokeWidth={2}/>}
-              {showVolume && <Bar dataKey="Volume" fill="#ff0000"/>}
-              {showMovingAverage && <Line type="monotone" dataKey="moving_average" stroke="#0000ff" strokeWidth={2}/>}
-              {showRSI && <Line type="monotone" dataKey="RSI" stroke="#000000" strokeWidth={2}/>}
+              {showClose && <Bar dataKey="Close" fill="#02b2af" />}
+              {showOpen && <Bar dataKey="Open" fill="#8884d8" />}
+              {showHigh && <Bar dataKey="High" fill="#82ca9d" />}
+              {showLow && <Bar dataKey="Low" fill="#ffc658" />}
+              {showLow && <Line type="monotone" dataKey="Low" stroke="#ffc658" strokeWidth={2} />}
+              {showVolume && <Bar dataKey="Volume" fill="#ff0000" />}
+              {showMovingAverage && <Line type="monotone" dataKey="moving_average" stroke="#0000ff" strokeWidth={2} />}
+              {showRSI && <Line type="monotone" dataKey="RSI" stroke="#000000" strokeWidth={2} />}
               <CartesianGrid stroke="#ccc" />
               <XAxis dataKey="Date" scale="time" domain={['dataMin', 'dataMax']} type="number" tickFormatter={formatDate} padding={{ right: 60, left: 60 }} />
-              <YAxis width={80}/>
-              <Tooltip labelFormatter={formatDate} formatter={roundPrice}/>
+              <YAxis width={80} />
+              <Tooltip labelFormatter={formatDate} formatter={roundPrice} />
               <Legend />
             </ComposedChart>
           </ResponsiveContainer>
         }
 
-        
+
 
         <S.ButtonGroup>
           {isClose() && <Button onClick={() => setShowClose(!showClose)} variant={showClose ? "primary" : "secondary"}>Close</Button>}
@@ -372,17 +367,17 @@ export default function ChartComponent(props: ChartProps) {
           {isVolume() && <Button onClick={() => setShowVolume(!showVolume)} variant={showVolume ? "primary" : "secondary"}>Volume</Button>}
           {isMovingAverage() && <Button onClick={() => setShowMovingAverage(!showMovingAverage)} variant={showMovingAverage ? "primary" : "secondary"}>Moving Average</Button>}
           {isRSI() && <Button onClick={() => setShowRSI(!showRSI)} variant={showRSI ? "primary" : "secondary"}>RSI</Button>}
-          
+
         </S.ButtonGroup>
       </S.GraphContainer>
       <Form>
         <Form.Group className="mb-3">
           <Form.Label>Chart Type</Form.Label>
           <Select
-              options={chartOptions}
-              value={chartType}
-              onChange={setChartType}
-            >
+            options={chartOptions}
+            value={chartType}
+            onChange={setChartType}
+          >
           </Select>
           <Form.Text className="text-muted">
             Select Chart Type
@@ -390,15 +385,15 @@ export default function ChartComponent(props: ChartProps) {
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Stock Name</Form.Label>
-          <Form.Control type="text" value={ticker ? ticker : ""} onChange={handleStockChange} disabled={!enableTicker}/>
+          <Form.Control type="text" value={ticker ? ticker : ""} onChange={handleStockChange} disabled={!enableTicker} />
           <Form.Text className="text-muted">
             Choose which stock to visualize
           </Form.Text>
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Start Date</Form.Label>
-          <Form.Control type="text" value={startDate ? startDate : ""} onChange={handleStartDateChange} onClick={() => setShowStartCalendar(!showStartCalendar)} disabled={!enableStartDate}/>
-{/*           
+          <Form.Control type="text" value={startDate ? startDate : ""} onChange={handleStartDateChange} onClick={() => setShowStartCalendar(!showStartCalendar)} disabled={!enableStartDate} />
+          {/*           
           {showStartCalendar && <S.CalendarContainer>
           <Calendar onChange={setStartDate} value={new Date(startDate)}/>
           </S.CalendarContainer>
@@ -411,7 +406,7 @@ export default function ChartComponent(props: ChartProps) {
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>End Date</Form.Label>
-          <Form.Control type="text" value={endDate ? endDate : ""} onChange={handleEndDateChange} disabled={!enableEndDate}/>
+          <Form.Control type="text" value={endDate ? endDate : ""} onChange={handleEndDateChange} disabled={!enableEndDate} />
           <Form.Text className="text-muted">
             Choose the end date
           </Form.Text>
