@@ -6,7 +6,7 @@ import S from './style';
 import Select from 'react-select';
 import Button from 'react-bootstrap/Button';
 import { ChartComponentProps } from 'types/VisualizationTypes';
-import { isClose, isHigh, isLow, isMovingAverage, isOpen, isRSI, isVolume, isFuture } from './Charts/chartHelper';
+import { isClose, isHigh, isLow, isMovingAverage, isOpen, isRSI, isVolume, isFuture, isMFI } from './Charts/chartHelper';
 
 import LineChartComponent from './Charts/LineChart';
 import BarChartComponent from './Charts/BarChart';
@@ -56,6 +56,7 @@ export default function ChartComponent(props: ChartComponentProps) {
   const [showMovingAverage, setShowMovingAverage] = useState(false);
   const [showRSI, setShowRSI] = useState(false);
   const [showFutureStock, setShowFutureStock] = useState(false);
+  const [showMFI, setShowMFI] = useState(false);
 
   
   let daysPrediction = 0;
@@ -73,6 +74,7 @@ export default function ChartComponent(props: ChartComponentProps) {
     setShowMovingAverage(false);
     setShowRSI(false);
     setShowFutureStock(false);
+    setShowMFI(false);
   }, [props.name])
 
 
@@ -203,15 +205,16 @@ export default function ChartComponent(props: ChartComponentProps) {
 
 
   const chartData = {
-    stock : stock,
-    showClose : showClose,
-    showOpen : showOpen,
-    showHigh : showHigh,
-    showLow : showLow,
-    showVolume : showVolume,
-    showMovingAverage : showMovingAverage,
-    showRSI : showRSI,
-    showFuture: showFutureStock
+    stock: stock,
+    showClose: showClose,
+    showOpen: showOpen,
+    showHigh: showHigh,
+    showLow: showLow,
+    showVolume: showVolume,
+    showMovingAverage: showMovingAverage,
+    showRSI: showRSI,
+    showFuture: showFutureStock,
+    showMFI: showMFI,
   }
 
   return (
@@ -230,6 +233,7 @@ export default function ChartComponent(props: ChartComponentProps) {
           {isMovingAverage(stock) && <Button onClick={() => setShowMovingAverage(!showMovingAverage)} variant={showMovingAverage ? "primary" : "secondary"}>Moving Average</Button>}
           {isRSI(stock) && <Button onClick={() => setShowRSI(!showRSI)} variant={showRSI ? "primary" : "secondary"}>RSI</Button>}
           {isFuture(stock) && <Button onClick={() => setShowFutureStock(!showFutureStock)} variant={showFutureStock ? "primary" : "secondary"}>Future</Button>}
+          {isMFI(stock) && <Button onClick={() => setShowMFI(!showMFI)} variant={showMFI ? "primary" : "secondary"}>MFI</Button>}
         </S.ButtonGroup>
       </S.GraphContainer>
       <Form>

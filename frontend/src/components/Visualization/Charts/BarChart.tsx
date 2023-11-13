@@ -4,9 +4,9 @@ import { ChartProps } from 'types/VisualizationTypes';
 
 
 export default function BarChartComponent(props: ChartProps) {
-  const {stock, showClose, showOpen, showHigh, showLow, showVolume, showMovingAverage, showRSI, showFuture} = props.chartData;
+  const {stock, showClose, showOpen, showHigh, showLow, showVolume, showMovingAverage, showRSI, showFuture, showMFI} = props.chartData;
   const roundValue = (price: number) => {
-    return roundPrice(showVolume, showRSI, showMovingAverage, price, stock);
+    return roundPrice(showMFI, showVolume, showRSI, showMovingAverage, price, stock);
   }
 
   return(
@@ -22,10 +22,10 @@ export default function BarChartComponent(props: ChartProps) {
         {showHigh && <Bar dataKey="High" fill="#82ca9d"/>}
         {showLow && <Bar dataKey="Low" fill="#ffc658"/>}
         {showVolume && <Bar dataKey="Volume" fill="#ff0000"/>}
-        {showMovingAverage && <Bar dataKey="moving_average" fill="#0000ff"/>}
+        {showMovingAverage && <Bar dataKey="Moving Average" fill="#0000ff"/>}
         {showRSI && <Bar dataKey="RSI" fill="#000000"/>}
         {showFuture && <Bar dataKey="Future" fill="#828282"/>}
-
+        {showMFI && <Bar dataKey="MFI" fill="#ff00ff"/>}
       </BarChart>
     </ResponsiveContainer>
   );
