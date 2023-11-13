@@ -15,7 +15,6 @@ def moving_average(input_file_path: str = 'stock_data.csv', output_file_path:str
         pd.DataFrame: Dataframe from the csv file
     """
     
-    input_file_path = os.path.join('/backend/data/', input_file_path)
     df = pd.read_csv(input_file_path)
     df = df.sort_values(by=[date_column])
     df['moving_average'] = df[value_column].rolling(window=window_size).mean()

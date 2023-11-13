@@ -22,7 +22,7 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
       if (acceptedFiles?.length) {
         setFiles((previousFiles) => [...previousFiles, ...acceptedFiles]);
-        setAppFiles([...acceptedFiles]);
+        setAppFiles(prev => [...prev, ...acceptedFiles]);
       }
 
       if (fileRejections?.length) {
@@ -80,20 +80,26 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
     return () => {
       if (files) {
         if (filetype == "python") {
-          setAppFiles(prev => [...prev, ...files]);
-        } else {
-          files?.map((file) => {
-            const reader = new FileReader();
-            reader.readAsText(file)
-            reader.onload = () => {
-              const base64data = reader.result;
-
-              if (base64data) {
-                axios.post('http://localhost:8000/upload_csv', { 'filename': file.name, 'content': base64data })
-              }
-            };
-          })
+          setAppFiles([...files]);
         }
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      if (files && filetype == "csv") {
+        files?.map((file) => {
+          const reader = new FileReader();
+          reader.readAsText(file)
+          reader.onload = () => {
+            const base64data = reader.result;
+
+            if (base64data) {
+              axios.post('http://localhost:8000/upload_csv', { 'filename': file.name, 'content': base64data })
+            }
+          };
+        })
       }
     }
   }, [files])

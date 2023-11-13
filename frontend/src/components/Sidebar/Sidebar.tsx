@@ -1,6 +1,5 @@
 import S from "./style";
 import { Button } from "react-bootstrap";
-
 import Process from 'assets/process.svg'
 import Logo from "assets/logo.svg";
 import { useState } from "react";
@@ -35,16 +34,13 @@ function handleLogOut() {
       "Content-type": "application/x-www-form-urlencoded",
       "Authorization": "Bearer " + sessionStorage.getItem("token"),
     },
-  })
-    .then((res) => {
-      if (res.status === 200) {
+    }).then((res: Response) => {
+        if (res.status === 200) {
+          window.location.href = "/login";
+          sessionStorage.removeItem("token");
+        }
+      }).catch(() => {
         window.location.href = "/login";
-        sessionStorage.removeItem("token");
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      window.location.href = "/login";
     });
 
 }

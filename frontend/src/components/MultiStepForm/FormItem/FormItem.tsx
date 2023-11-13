@@ -7,7 +7,7 @@ import { useAppData } from 'helper/AppProvider';
 import ValidatedInput from 'helper/validation';
 import { useEffect } from 'react';
 import Switch from 'react-switch';
-import { Item } from 'types/multiForm';
+import { Item } from 'types/MultistepFormTypes';
 
 export default function FormItem({ item }: { item: Item }) {
   const { edit, setEdit } = useAppData();
@@ -52,11 +52,7 @@ export default function FormItem({ item }: { item: Item }) {
         <ViewMicroservice />
       );
     case 'edit_param':
-      console.log('POO', item, edit)
-
       if (item.elType === 'bool') {
-        console.log(item, "BOOL");
-        console.log("8==D", edit[item.name]);
         return (
           <>
             <S.Label>{item.label}</S.Label>
@@ -76,7 +72,7 @@ export default function FormItem({ item }: { item: Item }) {
           <ValidatedInput
             value={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}
             item={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}
-            onChange={(e) => { console.log('EDITING LABEL', item.label, item.name); setEdit({ [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e.target.value } }) }}
+            onChange={(e: { target: { value: any; }; }) => {setEdit({ [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e.target.value } }) }}
             customValidity={item.elType}
             isEdit={true}
           />

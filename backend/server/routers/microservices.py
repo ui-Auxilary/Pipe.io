@@ -73,6 +73,8 @@ async def clear_all_microservices():
 
 @router.post("/upload")
 async def upload_microservice(file: FileContent):
+    if not os.getcwd().endswith("/backend"):
+        os.chdir("..")
     filepath = f"data/microservices/{file.filename}"
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
@@ -87,7 +89,9 @@ async def upload_microservice(file: FileContent):
 
 @router.post("/upload_csv")
 async def upload_CSV(file: FileContent):
-    filepath = f"data/csv/{file.filename}"
+    if not os.getcwd().endswith("/backend"):
+        os.chdir("..")
+    filepath = f"data/data_files/{file.filename}"
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
     # Need to test with empty/invalid files error handling
