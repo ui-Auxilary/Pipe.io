@@ -3,13 +3,13 @@ import json
 import plotly.graph_objects as go
 import os
 
-def write_plot(x_axis: str, y_axis: str, filenames: str):
+def write_plot(x_axis: str, y_axis: str, input_file_paths: str):
     """Plots the data from the csv file
 
     Args:
         x_axis (str): The column name for the x-axis
         y_axis (str): The column name for the y-axis
-        filenames (str): The name of the csv files comma separated
+        input_file_paths (str): The name of the csv files comma separated
 
     Returns:
         str: JSON filename for plotly.graph_objects.Figure which is a
@@ -22,10 +22,10 @@ def write_plot(x_axis: str, y_axis: str, filenames: str):
 
     # remove whitespace
     csv_files = []
-    filenames = filenames.replace(" ", "")
-    filenames = filenames.split(",")
+    input_file_paths = input_file_paths.replace(" ", "")
+    input_file_paths = input_file_paths.split(",")
 
-    for filename in filenames:
+    for filename in input_file_paths:
         if filename in files:
             csv_files.append(filename)
 
