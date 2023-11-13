@@ -6,10 +6,7 @@ import Logo from "assets/logo.svg";
 import { useState } from "react";
 import getUser from "helper/functions";
 
-
-
 export default function Sidebar() {
-
   const [user, setUser] = useState('')
   getUser().then(({ user }) => {
     setUser(JSON.parse(user).username)
@@ -21,7 +18,7 @@ export default function Sidebar() {
       <S.FeatureBlock>
         <S.Feature><S.Pipelines src={Process}></S.Pipelines>PIPELINES</S.Feature>
         <S.Feature>
-             {user}  
+          {user}
           <S.ButtonContainer>
             <Button variant="outline-light" onClick={() => handleLogOut()}>Log Out</Button>
           </S.ButtonContainer>
@@ -30,8 +27,6 @@ export default function Sidebar() {
     </S.Container>
   );
 }
-
-
 
 function handleLogOut() {
   fetch(`http://localhost:8000/users/logout`, {

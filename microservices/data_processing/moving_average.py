@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import datetime
 def moving_average(input_file_path: str = 'stock_data.csv', output_file_path:str = 'moving_average.csv', window_size: int = 5, date_column:str = 'Date', value_column:str = 'Volume'):
+
     """get csv file path, output file path and window size
 
     Args:

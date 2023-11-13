@@ -64,7 +64,7 @@ export default function EditFromPipe({ id, show, params, data, closeOverlay, typ
                 <Modal.Title>Edit</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form questions={params} step={0} edit={true} onHandleClose={handleSave} />
+                <Form itemList={params} step={0} edit={true} onHandleClose={handleSave} />
             </Modal.Body>
         </Modal>
     )

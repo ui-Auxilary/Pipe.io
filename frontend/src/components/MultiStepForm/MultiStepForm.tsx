@@ -1,24 +1,16 @@
-import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "components/MultiStepForm/Form";
 
 import S from "./style";
-import { useState } from "react";
 
 import "./MultiStepForm.css"
 
 import { useFormData } from "components/MultiStepForm/Form/FormProvider";
 import { ModalFooter } from "react-bootstrap";
-import { useAppData } from "helper/AppProvider";
+import { MultiFormProps } from "types/multiForm";
 
-export interface Props {
-  show: boolean;
-  handleClose: () => void;
-}
-
-export default function MultiStepForm({ show, handleClose }: Props) {
-  const { setAppFiles } = useAppData();
-  const questionsList = [
+export default function MultiStepForm({ show, handleClose }: MultiFormProps) {
+  const itemList = [
     {
       section: 1,
       items: [
@@ -48,8 +40,7 @@ export default function MultiStepForm({ show, handleClose }: Props) {
       items: [
         {
           label: 'Upload microservice file(s)',
-          type: 'dropzone',
-          value: 'python'
+          type: 'upload_microservices',
         }
       ]
     },
@@ -62,16 +53,8 @@ export default function MultiStepForm({ show, handleClose }: Props) {
       ]
     },
   ]
-  const totalPagesCount = questionsList.length
-  const [formAnswers, setFormAnswers] = useState({})
 
-  const onFormUpdate = (step, answerObj) => {
-    console.log('Form update', step, answerObj)
-    setFormAnswers({ ...formAnswers, [step]: answerObj })
-  }
-
-  const { currentStep, submitData, setStep } = useFormData();
-
+  const { currentStep, setStep } = useFormData();
 
   const onHandleClose = () => {
     handleClose()
@@ -85,7 +68,7 @@ export default function MultiStepForm({ show, handleClose }: Props) {
       </Modal.Header>
       <S.Wrapper>
         <Modal.Body>
-          <Form questions={questionsList} step={currentStep - 1} onFormUpdate={onFormUpdate} pageAnswers={formAnswers} onHandleClose={onHandleClose} />
+          <Form itemList={itemList} step={currentStep - 1} onHandleClose={onHandleClose} />
         </Modal.Body>
       </S.Wrapper>
       <ModalFooter />
