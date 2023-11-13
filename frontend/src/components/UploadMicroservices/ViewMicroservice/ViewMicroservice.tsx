@@ -16,11 +16,9 @@ export default function ViewMicroservice() {
     useEffect(() => {
         console.log('PEEK', microserviceData, microserviceList)
         setMicroserviceData({ microservices: microserviceList })
+        setLoading(false);
     }, [microserviceList])
 
-    useEffect(() => {
-        console.log('PEE!', microserviceData)
-    }, [microserviceData])
 
 
     useEffect(() => {
@@ -72,11 +70,11 @@ export default function ViewMicroservice() {
         readFiles();
     }, [appFiles])
 
-    useEffect(() => {
-        console.log('PEEK', microserviceData)
-        setMicroserviceData({ microservices: microserviceList })
-        setLoading(false);
-    }, [microserviceList])
+    // useEffect(() => {
+    //     console.log('PEEK', microserviceData)
+    //     setMicroserviceData({ microservices: microserviceList })
+    //     setLoading(false);
+    // }, [microserviceList])
 
 
     const len = microserviceList ? microserviceList.length : 0

@@ -80,7 +80,7 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
     return () => {
       if (files) {
         if (filetype == "python") {
-          setAppFiles(prev => [...prev, ...files]);
+          setAppFiles([...files]);
         } else {
           files?.map((file) => {
             const reader = new FileReader();
@@ -96,7 +96,7 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
         }
       }
     }
-  }, [files])
+  }, [])
 
   return (
     <>
