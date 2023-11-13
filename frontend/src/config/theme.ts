@@ -8,6 +8,10 @@ export const lightTheme: DefaultTheme = {
     },
     sidebar: {
         backgroundColor: '#5a279b'
+    },
+    pipe: {
+        backgroundColor: '#FFF',
+        highlightColor: '#F9FAFF'
     }
 };
 
@@ -19,5 +23,9 @@ export const darkTheme: DefaultTheme = {
     },
     sidebar: {
         backgroundColor: '#16111d'
+    },
+    pipe: {
+        backgroundColor: '#16111d',
+        highlightColor: '#1f2233'
     }
 };

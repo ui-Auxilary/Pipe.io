@@ -30,7 +30,7 @@ const Left = styled.div`
 
 const Pipe = styled.li`
     position: relative;
-    background: #fff;
+    background: ${({ theme }) => theme.pipe.backgroundColor};
     justify-content: space-between;
     width: 75%;
     height: 150px;
@@ -38,6 +38,7 @@ const Pipe = styled.li`
     border-radius: 10px;
     flex-direction: column;
     list-style: none;
+    color: ${({ theme }) => theme.text};
 `;
 
 const Button = styled.button`
@@ -77,7 +78,7 @@ const Top = styled.div`
 const Bottom = styled.div`
     display: flex;
     width: 100%;
-    background: #F9FAFF;
+    background: ${({ theme }) => theme.pipe.highlightColor};
     border-radius: 0px 0px 10px 10px;
     height: 50px;
     padding: 10px 25px;

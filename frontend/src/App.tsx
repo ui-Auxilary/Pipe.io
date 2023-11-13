@@ -23,12 +23,12 @@ export default function App() {
 
   const { darkMode } = useAppData();
 
-  <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-    <div className="App">
-      <RouterProvider router={router} />
-    </div>
-  </ThemeProvider>
-
+  return (
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+      <div className="App">
+        <RouterProvider router={router} />
+      </div>
+    </ThemeProvider>
   );
 }
 
