@@ -72,4 +72,10 @@ const isClose = (stock: StockInterface[]) => {
   }
 }
 
-export { isMovingAverage, isRSI, isOpen, isHigh, isLow, isVolume, isClose };
+const isFuture = (stock: StockInterface[]) => {
+  if (stock[0] && stock[stock.length -1].Future != undefined) {
+    return true;
+  }
+}
+
+export { isMovingAverage, isRSI, isOpen, isHigh, isLow, isVolume, isClose, isFuture };
