@@ -9,7 +9,8 @@ export interface ChartData {
   showVolume: boolean;
   showMovingAverage: boolean;
   showRSI: boolean;
-  }
+  showFuture: boolean;
+}
   
 export interface ChartProps {
   chartData: ChartData;
@@ -19,6 +20,8 @@ export interface ChartComponentProps {
   pipeId: string;
   name: string;
   index: number;
+  params: any;
+  data: any;
   children?: ReactNode;
 
 }
@@ -32,4 +35,5 @@ export interface StockInterface {
   Volume?: number;
   moving_average?: number;
   RSI?: number;
+  Future?: number;
 }

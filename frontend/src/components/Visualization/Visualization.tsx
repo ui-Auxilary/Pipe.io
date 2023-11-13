@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { ReactNode, useEffect, useState } from "react";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import Form from 'react-bootstrap/Form';
 import S from './style';
 import Select from 'react-select';
 import Button from 'react-bootstrap/Button';
 import { ChartComponentProps } from 'types/VisualizationTypes';
-import { isClose, isHigh, isLow, isMovingAverage, isOpen, isRSI, isVolume } from './Charts/chartHelper';
+import { isClose, isHigh, isLow, isMovingAverage, isOpen, isRSI, isVolume, isFuture } from './Charts/chartHelper';
 
 import LineChartComponent from './Charts/LineChart';
 import BarChartComponent from './Charts/BarChart';
@@ -16,6 +16,7 @@ import ComposedChartComponent from './Charts/ComposedChart';
 
 export default function ChartComponent(props: ChartComponentProps) {
   const pipeId = props.pipeId;
+  const params = props.params;
 
   const [stock, setStock] = useState({
     "Date": ["2023-09-07T00:00:00-04:00"],
@@ -25,7 +26,8 @@ export default function ChartComponent(props: ChartComponentProps) {
     "Close": [0],
     "Volume": [0],
     "Dividends": [0],
-    '"Stock Splits"': [0]
+    '"Stock Splits"': [0],
+    "Future": [0],
   });
 
   const chartOptions = [
@@ -46,6 +48,32 @@ export default function ChartComponent(props: ChartComponentProps) {
   const [refresh, setRefresh] = useState(false);
   const [chartType, setChartType] = useState(chartOptions[0]);
   const [microserviceData, setMicroserviceData] = useState({});
+
+  const [showOpen, setShowOpen] = useState(false);
+  const [showHigh, setShowHigh] = useState(false);
+  const [showLow, setShowLow] = useState(false);
+  const [showVolume, setShowVolume] = useState(false);
+  const [showMovingAverage, setShowMovingAverage] = useState(false);
+  const [showRSI, setShowRSI] = useState(false);
+  const [showFutureStock, setShowFutureStock] = useState(false);
+
+  
+  let daysPrediction = 0;
+  for (const param in params) {
+    if (params[param][0] == "number_of_days_to_predict") {
+      daysPrediction = params[param][1]["value"];
+    }
+  }
+
+  useEffect(() => {
+    setShowOpen(false);
+    setShowHigh(false);
+    setShowLow(false);
+    setShowVolume(false);
+    setShowMovingAverage(false);
+    setShowRSI(false);
+    setShowFutureStock(false);
+  }, [props.name])
 
 
 
@@ -76,8 +104,10 @@ export default function ChartComponent(props: ChartComponentProps) {
       const output = JSON.parse(res.data.output[outputIdx]?.output) || {};
 
       setMicroserviceData(res.data.microservices[props.index].parameters);
-
+    
+      let index = 0;
       const stockObj = Object.keys(output.Close).map((key) => {
+        index++;
         if (output.Date === undefined) {
           const temp = { Date: parseInt(key) }
           for (const [key2, value] of Object.entries(output)) {
@@ -94,7 +124,13 @@ export default function ChartComponent(props: ChartComponentProps) {
           return temp;
         } else if (typeof output.Date[key] === "number") {
           const temp = { Date: output.Date[key] }
+          const entries =  Object.keys(Object.entries(output)[0][1]).length;
           for (const [key2, value] of Object.entries(output)) {
+            if (daysPrediction != 0 && key2 == "Close" && index >= entries - daysPrediction) {
+              setShowFutureStock(true);
+              temp["Future"] = value[key];
+              continue;
+            }
             if (key2 != "Date") {
               temp[key2] = value[key];
             }
@@ -163,12 +199,7 @@ export default function ChartComponent(props: ChartComponentProps) {
     setShowClose(false);
   }
 
-  const [showOpen, setShowOpen] = useState(false);
-  const [showHigh, setShowHigh] = useState(false);
-  const [showLow, setShowLow] = useState(false);
-  const [showVolume, setShowVolume] = useState(false);
-  const [showMovingAverage, setShowMovingAverage] = useState(false);
-  const [showRSI, setShowRSI] = useState(false);
+
 
 
   const chartData = {
@@ -179,7 +210,8 @@ export default function ChartComponent(props: ChartComponentProps) {
     showLow : showLow,
     showVolume : showVolume,
     showMovingAverage : showMovingAverage,
-    showRSI : showRSI
+    showRSI : showRSI,
+    showFuture: showFutureStock
   }
 
   return (
@@ -197,6 +229,7 @@ export default function ChartComponent(props: ChartComponentProps) {
           {isVolume(stock) && <Button onClick={() => setShowVolume(!showVolume)} variant={showVolume ? "primary" : "secondary"}>Volume</Button>}
           {isMovingAverage(stock) && <Button onClick={() => setShowMovingAverage(!showMovingAverage)} variant={showMovingAverage ? "primary" : "secondary"}>Moving Average</Button>}
           {isRSI(stock) && <Button onClick={() => setShowRSI(!showRSI)} variant={showRSI ? "primary" : "secondary"}>RSI</Button>}
+          {isFuture(stock) && <Button onClick={() => setShowFutureStock(!showFutureStock)} variant={showFutureStock ? "primary" : "secondary"}>Future</Button>}
         </S.ButtonGroup>
       </S.GraphContainer>
       <Form>

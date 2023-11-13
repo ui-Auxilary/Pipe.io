@@ -4,7 +4,7 @@ import { ChartProps } from 'types/VisualizationTypes';
 
 
 export default function AreaChartComponent(props: ChartProps) {
-  const {stock, showClose, showOpen, showHigh, showLow, showVolume, showMovingAverage, showRSI} = props.chartData;
+  const {stock, showClose, showOpen, showHigh, showLow, showVolume, showMovingAverage, showRSI, showFuture} = props.chartData;
 
   const roundValue = (price: number) => {
     return roundPrice(showVolume, showRSI, showMovingAverage, price, stock);
@@ -20,6 +20,8 @@ export default function AreaChartComponent(props: ChartProps) {
         {showVolume && <Area type="monotone" dataKey="Volume" stroke="#ff0000" fill="#ff0000" strokeWidth={2}/> } 
         {showMovingAverage && <Area type="monotone" dataKey="moving_average" stroke="#0000ff" fill="#0000ff" strokeWidth={2}/>}
         {showRSI && <Area type="monotone" dataKey="RSI" stroke="#000000" fill="#000000" strokeWidth={2}/>}
+        {showFuture && <Area type="monotone" dataKey="Future" stroke="#828282" fill="#000000" strokeWidth={2}/>}
+
         <CartesianGrid stroke="#ccc" />
         <XAxis dataKey="Date" scale="time" domain={['dataMin', 'dataMax']} type="number" tickFormatter={formatDate} />
         <YAxis width={80}/>

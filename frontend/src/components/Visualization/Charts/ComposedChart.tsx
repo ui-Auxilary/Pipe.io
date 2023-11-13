@@ -5,7 +5,7 @@ import { ChartProps } from 'types/VisualizationTypes';
 
 
 export default function ComposedChartComponent(props: ChartProps) {
-  const {stock, showClose, showOpen, showHigh, showLow, showVolume, showMovingAverage, showRSI} = props.chartData;
+  const {stock, showClose, showOpen, showHigh, showLow, showVolume, showMovingAverage, showRSI, showFuture} = props.chartData;
   const roundValue = (price: number) => {
     return roundPrice(showVolume, showRSI, showMovingAverage, price, stock);
   }
@@ -20,6 +20,7 @@ export default function ComposedChartComponent(props: ChartProps) {
         {showVolume && <Bar dataKey="Volume" fill="#ff0000"/>}
         {showMovingAverage && <Line type="monotone" dataKey="moving_average" stroke="#0000ff" strokeWidth={2}/>}
         {showRSI && <Line type="monotone" dataKey="RSI" stroke="#000000" strokeWidth={2}/>}
+        {showFuture && <Bar dataKey="Future" fill="#828282"/>}
         <CartesianGrid stroke="#ccc" />
         <XAxis dataKey="Date" scale="time" domain={['dataMin', 'dataMax']} type="number" tickFormatter={formatDate} padding={{ right: 60, left: 60 }} />
         <YAxis width={80}/>
