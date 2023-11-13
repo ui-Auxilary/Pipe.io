@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Form, Button, Card } from "react-bootstrap";
 import Logo from "assets/logo.svg";
-import Sent from "./components/Sent";
+import Sent from "./Secondary/Sent";
 import s from "./Style";
 import axios from "axios";
 
@@ -29,6 +29,14 @@ export default function Recovery() {
     return re.test(email);
   }
 
+
+  const requestResetLink = async () => {
+    const data = new URLSearchParams();
+    data.append('email', values.email);
+    axios.post(`http://localhost:8000/users/forgot-password`, data)
+  }
+
+
   // Handle form submission
   const handleSubmit = (event: Event) => {
     event.preventDefault();
@@ -39,17 +47,7 @@ export default function Recovery() {
       setValid(false)
       return;
     }
-    // If email is valid
-    const data = new URLSearchParams();
-    data.append('email', values.email);
-    axios.post(`http://localhost:8000/users/forgot-password`, data)
-      .then(res => {
-        if (res.status === 200) {
-          setIsSubmit(true);
-        }
-      }).catch(err => {
-        console.error(err);
-      })
+    requestResetLink();
   }
 
   return (
@@ -61,7 +59,7 @@ export default function Recovery() {
         <s.CardHeader><h5>Forgot Password</h5></s.CardHeader>
         <s.CardBody>
           <Form className="register-form" onSubmit={handleSubmit}>
-            {!valid ? <div style={{ color: 'red' }}>{errorMsg.message}</div> : null}
+            {!valid ? <s.ErrorContainer>{errorMsg.message}</s.ErrorContainer> : null}
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
               <Form.Control

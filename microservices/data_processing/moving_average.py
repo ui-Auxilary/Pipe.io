@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import datetime
 def moving_average(input_file_path: str = 'stock_data.csv', output_file_path:str = 'moving_average.csv', window_size: int = 5, date_column:str = 'Date', value_column:str = 'Volume'):
+
     """get csv file path, output file path and window size
 
     Args:
@@ -13,7 +14,6 @@ def moving_average(input_file_path: str = 'stock_data.csv', output_file_path:str
     Returns:
         pd.DataFrame: Dataframe from the csv file
     """
-    input_file_path = os.path.join('/backend/data/', input_file_path)
     
     if not input_file_path.lower().endswith('.csv') or not output_file_path.lower().endswith('.csv'):
         raise ValueError("Input and output file paths must have .csv extension")

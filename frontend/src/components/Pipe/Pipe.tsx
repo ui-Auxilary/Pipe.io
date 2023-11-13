@@ -13,26 +13,11 @@ import Content from './Content'
 import axios from 'axios'
 import { useAppData } from 'helper/AppProvider'
 import Result from './Result/Result'
-import ViewMicroserviceFromPipe from 'components/MicroserviceList/ViewMicroservice/ViewMicroserviceFromPipe';
-export interface Props {
-  pipeId: string
-  id: string
-  name: string
-  description?: string
-  checked?: boolean
-  onCheck: (pipeId: string, id: number) => void
-  ref: React.MutableRefObject<never[]>
-  idx: number
-}
+import ViewMicroserviceFromPipe from 'components/UploadMicroservices/ViewMicroservice/ViewMicroserviceFromPipe';
+import { Props, ExecuteProps, PipeResponse } from 'types/PipeTypes';
 
 
-export interface ExecuteProps {
-  time: number,
-  result: object
-}
-
-
-const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props, ref) => {
+const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props, ref: { current: any[] }) => {
   const [show, setShow] = useState(false);
   const [showView, setShowView] = useState(false);
   const [del, setDel] = useState(false);
@@ -73,7 +58,7 @@ const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props,
   const target = useRef(null);
 
   const handleOverlayShow = () => setShow(true);
-  const handleOverlayClose = () => { setShow(false); setAppFiles([]) }
+  const handleOverlayClose = (e) => { setShow(false); setAppFiles([]) }
   const handleViewOverlayShow = () => setShowView(true);
   const handleViewOverlayClose = () => { setShowView(false); setAppFiles([]) }
   const handleDeleteClose = () => setDel(false);
@@ -91,13 +76,12 @@ const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props,
   const executePipe = () => {
     setStatus("Running");
     axios.post('http://localhost:8000/pipes/execute/', null, { params: { id: pipeId } })
-      .then(res => {
+      .then((res: any) => {
         setStatus("Completed");
         setExecuted({ "time": format(Date.now(), 'yyyy-MM-dd HH:mm:ss'), "result": res.data });
       })
-      .catch((e: any) => {
+      .catch(() => {
         setStatus("Error");
-        console.log(e);
       });
   };
 
@@ -117,16 +101,14 @@ const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props,
   }
 
   const handleDelete = () => {
-    axios.delete(`http://localhost:8000/pipes/${pipeId}`, { params: { id: pipeId } }).then(() => setPipeIds(pipeIds.filter(pipe => pipe !== pipeId)))
+    axios.delete(`http://localhost:8000/pipes/${pipeId}`, { params: { id: pipeId } }).then(() => setPipeIds(pipeIds.filter((pipe:string) => pipe !== pipeId)))
 
     handleDeleteClose();
   }
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/pipes/${pipeId}`).then(res => {
-      // setStatus(res.data.status)
-      // setExecuted(res.data.executed.last_executed)
-      setExecuted(executed => ({ ...executed, "time": res.data.last_executed }))
+    axios.get(`http://localhost:8000/pipes/${pipeId}`).then((res: PipeResponse) => {
+      setExecuted((executed: any) => ({ ...executed, "time": res.data.last_executed }))
       if (res.data.status == "Error") {
         setStatus("Error")
       } else if (res.data.last_executed) {

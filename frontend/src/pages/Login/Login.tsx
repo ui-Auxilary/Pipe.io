@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Form, Button, Card } from "react-bootstrap";
 import Logo from "assets/logo.svg";
+import React from "react";
+import axios from "axios";
+import { RegisterResponse, ErrorResponse } from "types/AuthTypes";
 
 import s from "./style";
 
@@ -20,13 +23,10 @@ export default function Login() {
   // State to check form validity
   const [valid, setValid] = useState(true)
 
-  const handleEmailInput = (event: Event) => {
-    setValues({ ...values, email: event.target.value })
-  }
-
-  const handlePasswordInput = (event: Event) => {
-    setValues({ ...values, password: event.target.value })
-  }
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setValues({ ...values, [name]: value });
+  };
 
   const validateEmail = (email: string) => {
     // Regex for email validation
@@ -34,38 +34,33 @@ export default function Login() {
     return re.test(email);
   }
 
+
+  const requestRegister = async () => {
+    const data = new URLSearchParams();
+    data.append('email', values.email);
+    data.append('password', values.password);
+    axios.post(`http://localhost:8000/users/login`, data, {
+      headers: {
+        'Content-type': 'application/x-www-form-urlencoded',
+      }
+    }).then((response: RegisterResponse) => {
+      sessionStorage.setItem('token', response.data.token);
+      window.location.href = '/';
+    }).catch((error: ErrorResponse) => {
+      seterrorMsg({ ...errorMsg, message: error.response.data.detail });
+      setValid(false);
+    });
+  }
+
+
   // Handle form submission
   const handleSubmit = (event: Event) => {
     event.preventDefault();
     if (!validateEmail(values.email)) {
       seterrorMsg({ ...errorMsg, message: 'Invalid email address' })
       setValid(false)
-    } else { // If email is valid
-      const data = new URLSearchParams();
-      data.append('email', values.email);
-      data.append('password', values.password);
-
-      fetch(`http://localhost:8000/users/login`, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/x-www-form-urlencoded',
-        },
-        body: data.toString(),
-      }).then((res) => {
-        return res.json()
-      }).then(function (response) {
-        // If there is an error, set the error message
-        if (response.detail) {
-          setValid(false)
-          seterrorMsg({ message: response.detail })
-          // If there is no error, set the token and redirect to home
-        } else {
-          sessionStorage.setItem('token', response.token)
-          window.location.href = '/'
-        }
-      }).catch(function (error) {
-        console.log(error)
-      })
+    } else { 
+      requestRegister();
     }
   }
 
@@ -76,7 +71,7 @@ export default function Login() {
         <Card className="register-card">
           <Card.Body>
             <Form className="register-form" onSubmit={handleSubmit}>
-              {!valid ? <div style={{ color: 'red' }}>{errorMsg.message}</div> : null}
+              {!valid ? <s.ErrorContainer>{errorMsg.message}</s.ErrorContainer> : null}
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
                 <Form.Control
@@ -84,7 +79,7 @@ export default function Login() {
                   placeholder="Enter email"
                   name="email"
                   value={values.email}
-                  onChange={handleEmailInput}
+                  onChange={handleInputChange}
                 />
               </Form.Group>
 
@@ -94,7 +89,7 @@ export default function Login() {
                   type="password"
                   name="password"
                   value={values.password}
-                  onChange={handlePasswordInput}
+                  onChange={handleInputChange}
                 />
               </Form.Group>
               <a href="/recovery">Forgot password?</a>

@@ -15,9 +15,7 @@ def calculate_rsi(input_file_path:str = 'stock_data.csv', output_file_path:str =
     Returns:
         pd.DataFrame: Dataframe with RSI values.
     """
-    
-
-    input_file_path = os.path.join('/backend/data/', input_file_path)
+    # Read the input CSV file
     if not input_file_path.lower().endswith('.csv') or not output_file_path.lower().endswith('.csv'):
         raise ValueError("Input and output file paths must have .csv extension")
     
@@ -35,15 +33,24 @@ def calculate_rsi(input_file_path:str = 'stock_data.csv', output_file_path:str =
     df[date_column] = pd.to_datetime(df[date_column])
     df = df.sort_values(by=[date_column])
 
+    # Calculate daily price changes
     df['Price Change'] = df[value_column].diff()
+
+    # Separate gains and losses
     df['Gain'] = df['Price Change'].where(df['Price Change'] > 0, 0)
     df['Loss'] = -df['Price Change'].where(df['Price Change'] < 0, 0)
+
+    # Calculate average gains and average losses over the specified window
     df['Average Gain'] = df['Gain'].rolling(window=window_size).mean()
     df['Average Loss'] = df['Loss'].rolling(window=window_size).mean()
 
-
+    # Calculate Relative Strength (RS)
     df['RS'] = df['Average Gain'] / df['Average Loss']
+
+    # Calculate RSI
     df['RSI'] = 100 - (100 / (1 + df['RS']))
+
+    # Save the dataframe to the output file path
     df.to_csv(output_file_path)
 
     return df.to_json()

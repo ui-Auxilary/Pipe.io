@@ -4,19 +4,7 @@ import axios from 'axios';
 import S from './style'
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAppData } from "helper/AppProvider";
-export interface Microservice {
-    microserviceId: string
-    content: string
-    userId: string
-    pipeId: string
-}
-
-export interface Pipe {
-    name: string
-    description: string
-    userId: string
-    microservices: Microservice[]
-}
+import { PipeListResponse, PipeInterface, Checked } from "types/PipeListTypes";
 
 export default function PipeList() {
     const [pipes, setPipes] = useState([]);
@@ -34,7 +22,7 @@ export default function PipeList() {
             if (isChecked) {
                 itemsChecked > 0 ? itemsChecked -= 1 : null;
                 axios.delete(`http://localhost:8000/pipes/${pipeId}`, { params: { id: pipeId } }).then(() => { setPipeIds([...pipeIds]) })
-                setPipes(pipes.filter(pipe => pipe.pipe_id != pipeId));
+                setPipes(pipes.filter((pipe: PipeInterface) => pipe.pipe_id != pipeId));
             }
         })
         setNumChecked(0)
@@ -63,13 +51,12 @@ export default function PipeList() {
                 Object.assign(updatedRefData, { [pipes[i]["pipe_id"]]: true })
             }
         }
-        console.log('Confirm', updatedRefData, setCheck, checkboxRef.current.length)
         setRefData(updatedRefData)
         setNumChecked(setCheck);
     }
 
     const pipeChecked = useCallback((pipeId: string, id: number) => {
-        setRefData(prev => ({ ...prev, [pipeId]: checkboxRef.current[id].checked }))
+        setRefData((prev: PipeInterface) => ({ ...prev, [pipeId]: checkboxRef.current[id].checked }))
     }, [])
 
     useEffect(() => {
@@ -77,14 +64,13 @@ export default function PipeList() {
             headers: {
                 "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
             }
-        }).then(res => {
-            console.log("PIPES", res.data)
+        }).then((res: PipeListResponse) => {
             setPipes(res.data)
-        }).catch(err => console.log(err))
+        }).catch()
     }, [pipeIds])
 
     useEffect(() => {
-        const res = checkboxRef?.current?.filter(x => !!x).filter(x => x?.checked === true)
+        const res = checkboxRef?.current?.filter((x: any) => !!x).filter((x: Checked) => x?.checked === true)
         res.length ? setChecked(true) : setChecked(false)
         setNumChecked(res.length)
     }, [refData])

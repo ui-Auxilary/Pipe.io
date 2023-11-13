@@ -7,9 +7,10 @@ import axios from 'axios';
 import { Modal } from 'react-bootstrap';
 import Edit from 'components/Edit';
 import EditFromPipe from 'components/Edit/EditFromPipe';
+import { MicroserviceProps } from 'types/MicroserviceTypes';
 
 
-export default function Microservice({ code, name, docstring, param, parent_file, from_pipe, parent_pipe_id, output_type, idx }) {
+export default function Microservice({ code, name, docstring, param, parent_file, from_pipe, parent_pipe_id, output_type, idx }: MicroserviceProps) {
   const [showEdit, setEdit] = useState(false);
   const [showCode, setCode] = useState(false);
   const [id, setId] = useState();
@@ -21,18 +22,16 @@ export default function Microservice({ code, name, docstring, param, parent_file
   const handleCodeClose = () => { setCode(false) };
   const handleCodeShow = (e: React.SyntheticEvent<EventTarget>) => { e.preventDefault(); setCode(true) };
 
-  param && console.log('ITEMS', param)
   const items = param && Object.keys(param).map((el) => (
     { label: el, type: "edit_param", name: idx, value: param[el]["value"] ? param[el]["value"] : param[el]["default"] || '', elType: param[el] ? param[el]["type"] : '' }
   ))
 
   const tagOptions = [
     { value: 'value', label: 'Value' },
-    // { value: 'ml', label: 'ML' },
-    // { value: 'data_frame', label: 'Dataframe' },
-    { value: 'graph', label: 'Stock Graph' },
-    { value: 'csv', label: 'CSV' },
-    { value: 'plot', label: 'Plot File' }
+    { value: 'graph', label: 'Stock Graph'},
+    { value: 'csv', label: 'CSV'},
+    { value: 'plot', label: 'Plot File'},
+    { value: 'table', label: 'Table'}
   ];
 
   const microserviceList = [
@@ -53,17 +52,14 @@ export default function Microservice({ code, name, docstring, param, parent_file
   const handleTagChange = (e: any) => {
     setSelectedTags(e);
     data["output_type"] = e;
-    axios.put(`http://localhost:8000/pipes/${parent_pipe_id}/${name}?output_type=${e.value}`).then((res) => {
-      console.log(res)
-    }).catch((err) => {
-      console.log(err)
-    });
+    if (parent_pipe_id != undefined) {
+      axios.put(`http://localhost:8000/pipes/${parent_pipe_id}/${name}?output_type=${e.value}`)
+    }
     const newData = { ...microserviceData };
-    newData["microservices"].filter((e) => e.name == name)[0]["output_type"] = e.value;
+    newData["microservices"].filter((e:any) => e.name == name)[0]["output_type"] = e.value;
     setMicroserviceData(newData);
   }
 
-  console.log('Microservice List', microserviceList)
 
   const data = {
     parent_file: parent_file,
