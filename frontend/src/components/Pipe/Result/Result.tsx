@@ -5,6 +5,7 @@ import S from './styles'
 import ChartComponent from "components/Visualization/Visualization";
 import Download from "./Download/Download";
 import DownloadCSV from "./CSV/DownloadCSV";
+import Table from "./Table/Table";
 
 
 
@@ -18,7 +19,6 @@ export default function Result({ pipeId }: { pipeId: string }) {
       setResult(res.data)
 
       const output = Object.entries(res.data.output)[page - 1]
-      console.log('OUTPUT RES for Page', output, res.data, page - 1, result, output[1]?.name)
       const outputType = res.data.microservices[page - 1].output_type
       setPageContent({ ["name"]: output[1]?.name, ["output"]: output[1]?.output, ["output_type"]: outputType })
     })
@@ -34,6 +34,7 @@ export default function Result({ pipeId }: { pipeId: string }) {
         {pageContent && checkForValue(result, pageContent) && pageContent["output"]}
         {checkForPlot(result, pageContent) && <Download pipeId={pipeId} output={pageContent["output"]} />}
         {checkForCSV(result, pageContent) && <DownloadCSV pipeId={pipeId} output={pageContent["output"]} name={pageContent["name"]} />}
+        {checkForTable(result, pageContent) && <Table pipeId={pipeId} output={pageContent["output"]} name={pageContent["name"]} />}
       </S.Body>
 
       {result?.output &&
@@ -79,4 +80,11 @@ function checkForCSV(result: any, pageContent: any) {
     return true;
   }
   return false;
+}
+
+function checkForTable(result: any, pageContent: any) {
+    if (result.output && pageContent.output_type == "table") {
+        return true;
+    }
+    return false;
 }
