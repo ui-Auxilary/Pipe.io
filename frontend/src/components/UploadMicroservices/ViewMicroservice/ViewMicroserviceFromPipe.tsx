@@ -17,7 +17,10 @@ export default function ViewMicroserviceFromPipe({ pipeId }: ViewMicroserviceFro
 
   return (
     <S.Wrapper>
-      <h5>Edit microservices</h5>
+      <div style={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
+        <h5>Edit microservices</h5>
+        <S.Button onClick={() => setStep(2)}>+ Add Microservice</S.Button>
+      </div>
       <S.Container>
         <span style={{ color: "#907F7F", fontWeight: 500 }}>Found {len} microservice(s)</span>
         <S.Scrollbar length={len}>
