@@ -22,7 +22,7 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
       if (acceptedFiles?.length) {
         setFiles((previousFiles) => [...previousFiles, ...acceptedFiles]);
-        setAppFiles([...acceptedFiles]);
+        setAppFiles(prev => [...prev, ...acceptedFiles]);
       }
 
       if (fileRejections?.length) {
