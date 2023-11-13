@@ -87,7 +87,7 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
                 <Modal.Title>Edit</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form questions={params} step={0} edit={true} onHandleClose={handleSave} />
+                <Form itemList={params} step={0} edit={true} onHandleClose={handleSave} />
             </Modal.Body>
         </Modal>
     )

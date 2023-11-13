@@ -10,7 +10,7 @@ import { ModalFooter } from "react-bootstrap";
 import { MultiFormProps } from "types/multiForm";
 
 export default function MultiStepForm({ show, handleClose }: MultiFormProps) {
-  const questionsList = [
+  const itemListList = [
     {
       section: 1,
       items: [
@@ -68,7 +68,7 @@ export default function MultiStepForm({ show, handleClose }: MultiFormProps) {
       </Modal.Header>
       <S.Wrapper>
         <Modal.Body>
-          <Form questions={questionsList} step={currentStep - 1} onHandleClose={onHandleClose} />
+          <Form itemList={itemListList} step={currentStep - 1} onHandleClose={onHandleClose} />
         </Modal.Body>
       </S.Wrapper>
       <ModalFooter />
