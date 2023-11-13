@@ -14,10 +14,17 @@ export default function ViewMicroservice() {
 
 
   useEffect(() => {
+    console.log('PEEK', microserviceData, microserviceList)
     setMicroserviceData({ microservices: microserviceList })
+    setLoading(false);
   }, [microserviceList])
 
-  const reorder = (list: any[], startIndex: number, endIndex: number) => {
+
+
+  useEffect(() => {
+    console.log('AHA')
+  }, [microserviceData])
+  const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
@@ -25,7 +32,7 @@ export default function ViewMicroservice() {
     return result;
   };
 
-  function onDragEnd(result: any) {
+  function onDragEnd(result) {
     if (!result.destination ||
       result.destination.index === result.source.index) {
       return;
@@ -38,17 +45,18 @@ export default function ViewMicroservice() {
     );
 
     setMicroserviceList(orderedMicroservices);
-    setMicroserviceData({ microservices: orderedMicroservices as never[] });
     setMicroserviceData({ microservices: orderedMicroservices });
   }
 
   async function readFiles() {
+    console.log('READUBG', appFiles)
     appFiles?.map(file => {
       if (typeof file !== 'string') {
         const reader = new FileReader();
         reader.readAsBinaryString(file)
         reader.onload = () => {
           const base64data = reader.result;
+
           if (base64data) {
             axios.post('http://localhost:8000/upload', { 'filename': file.name, 'content': base64data }).then((res) => { console.log('LIST', microserviceList); setMicroserviceList(prev => [...prev.concat(JSON.parse(res.data)['microservices'] as [never])]) })
           }
@@ -58,13 +66,15 @@ export default function ViewMicroservice() {
   }
 
   useEffect(() => {
+    console.log('INIT', appFiles)
     readFiles();
   }, [appFiles])
 
-  useEffect(() => {
-    setMicroserviceData({ microservices: microserviceList })
-    setLoading(false);
-  }, [microserviceList])
+  // useEffect(() => {
+  //     console.log('PEEK', microserviceData)
+  //     setMicroserviceData({ microservices: microserviceList })
+  //     setLoading(false);
+  // }, [microserviceList])
 
 
   const len = microserviceList ? microserviceList.length : 0
@@ -84,13 +94,14 @@ export default function ViewMicroservice() {
               <span style={{ color: "#907F7F", fontWeight: 500 }}>Found {len} microservice(s)</span>
               <S.Scrollbar length={len}>
                 {microserviceList && microserviceList.map(({ code, doc, name, parameters, parent_file, output_type }, idx) => {
+                  console.log('hey loop', microserviceList)
                   return (
                     <Draggable draggableId={`id-${idx}`} index={idx}>
                       {provided => (
                         <div ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps} >
-                          <Microservice code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file} from_pipe={false} output_type={output_type} idx={idx + 1} parent_pipe_id={''} />
+                          <Microservice code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file} from_pipe={false} output_type={output_type} idx={idx + 1} />
                         </div>
                       )}
                     </Draggable>
