@@ -22,6 +22,7 @@ const Body = styled.div`
       width: 8px;
       border: 1px solid #5a5a5a;
       border-radius: 20px;
+      left:-100px
   }
   &::-webkit-scrollbar-thumb {
       width: 5px;

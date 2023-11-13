@@ -1,5 +1,5 @@
 
-export default function Content({ id, name, description }) {
+export default function Content({ id, name, description }: { id: number, name: string, description: string }) {
     return (
         <>
             <div style={{ display: "flex", gap: "2rem" }}>

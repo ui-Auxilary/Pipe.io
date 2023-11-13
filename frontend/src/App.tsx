@@ -7,6 +7,7 @@ import { toggleDarkMode } from "helper/signals";
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet } from "react-router-dom";
 import { lightTheme, darkTheme } from "config/theme";
 import { ThemeProvider } from "styled-components";
+import { Recovery, Reset } from "pages/Recovery";
 
 export default function App() {
 
@@ -16,8 +17,8 @@ export default function App() {
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
-        <Route path="graph" element={<Graph />} />
-
+        <Route path="recovery" element={<Recovery />} />
+        <Route path="reset" element={<Reset />} />
       </Route>
     )
   );

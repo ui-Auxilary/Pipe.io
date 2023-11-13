@@ -1,30 +1,15 @@
 import S from './style';
 import Dropzone from 'components/Dropzone';
 import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
-import MicroserviceList from 'components/MicroserviceList';
-import ViewMicroservice from 'components/MicroserviceList/ViewMicroservice';
+import UploadMicroservices from 'components/UploadMicroservices';
+import ViewMicroservice from 'components/UploadMicroservices/ViewMicroservice';
 import { useAppData } from 'helper/AppProvider';
 import ValidatedInput from 'helper/validation';
 import { useEffect } from 'react';
 import Switch from 'react-switch';
+import { Item } from 'types/MultistepFormTypes';
 
-export interface Item {
-  label: string
-  type: string
-  value: string
-  name: string
-  validation?: string
-  errorMessage?: string
-  elType?: string
-  id?: string
-}
-
-export interface Props {
-  item: Item
-}
-
-// Update based on question list to render specific component
-export default function FormItem({ item }: Props) {
+export default function FormItem({ item }: { item: Item }) {
   const { edit, setEdit } = useAppData();
   const { userData, setUserData } = useFormData();
 
@@ -41,10 +26,11 @@ export default function FormItem({ item }: Props) {
         <>
           <S.Label>{item.label}</S.Label>
           <ValidatedInput
-            item={item} customValidity={item.validation}
+            item={item}
+            customValidity={item.validation}
             errorMessage={item.errorMessage}
             value={userData[item.label.toLocaleLowerCase()]}
-            onChange={(e) => setUserData({ ...userData, [item.label.toLocaleLowerCase()]: e.target.value })}
+            onChange={(e: InputEvent) => setUserData({ ...userData, [item.label.toLocaleLowerCase()]: (e?.target as HTMLTextAreaElement).value })}
           />
         </>
       );
@@ -57,20 +43,16 @@ export default function FormItem({ item }: Props) {
           <Dropzone filetype={item.value} />
         </>
       );
-    case 'list_microservices':
+    case 'upload_microservices':
       return (
-        <MicroserviceList />
+        <UploadMicroservices />
       );
     case 'view_microservices':
       return (
         <ViewMicroservice />
       );
     case 'edit_param':
-      console.log('POO', item)
-
       if (item.elType === 'bool') {
-        console.log(item, "BOOL");
-        console.log("8==D", edit[item.name]);
         return (
           <>
             <S.Label>{item.label}</S.Label>
@@ -90,7 +72,7 @@ export default function FormItem({ item }: Props) {
           <ValidatedInput
             value={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}
             item={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}
-            onChange={(e) => setEdit({ ...edit, [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e.target.value } })}
+            onChange={(e: { target: { value: any; }; }) => { setEdit({ [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e.target.value } }) }}
             customValidity={item.elType}
             isEdit={true}
           />

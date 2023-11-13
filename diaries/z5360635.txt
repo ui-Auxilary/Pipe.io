@@ -22,3 +22,9 @@ Worked on output tags and provided stock graphs on the front end which can take 
 
 Week 7
 Refactored x charts to recharts, fixed some bugs from changes in main. Fixed code so it works the edit refactor stuff.
+
+Week 8
+Bug fixes for moving average and RSI and some last minute changes before the demo. 
+
+Week 9
+Worked on account recovery and refactored front-end code. Did some typing for typescript files.

@@ -1,51 +1,30 @@
 import S from './style'
 import dots from 'assets/dots.svg'
 import React, { forwardRef, useRef, useState, useEffect } from 'react'
-import { Button, Form, Modal, OverlayTrigger, Popover, Tooltip } from 'react-bootstrap'
+import { Button, Modal, OverlayTrigger, Popover } from 'react-bootstrap'
 import View from 'assets/view.svg'
 import Pencil from 'assets/pencil.svg'
 import Edit from 'components/Edit'
 import Delete from 'assets/trash.svg'
-import Overlay from 'react-bootstrap/Overlay';
-import { format} from 'date-fns';
+import { format } from 'date-fns';
 
 
 import Content from './Content'
 import axios from 'axios'
 import { useAppData } from 'helper/AppProvider'
 import Result from './Result/Result'
-import Checkbox from 'components/Checkbox/Checkbox'
-import MicroserviceList from 'components/MicroserviceList';
-import ViewMicroserviceFromPipe from 'components/MicroserviceList/ViewMicroservice/ViewMicroserviceFromPipe';
-
-export interface Props {
-  pipeId: string
-  id: string
-  name: string
-  description?: string
-  checked?: boolean
-  onCheck: (pipeId: string, id: number) => void
-  ref: React.MutableRefObject<never[]>
-  idx: number
-}
+import ViewMicroserviceFromPipe from 'components/UploadMicroservices/ViewMicroservice/ViewMicroserviceFromPipe';
+import { Props, ExecuteProps, PipeResponse } from 'types/PipeTypes';
 
 
-export interface ExecuteProps {
-  time: number,
-  result: object
-}
-
-
-const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck, idx }: Props, ref) => {
+const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props, ref: { current: any[] }) => {
   const [show, setShow] = useState(false);
   const [showView, setShowView] = useState(false);
   const [del, setDel] = useState(false);
   const [showChart, setChart] = useState(false);
   const [status, setStatus] = useState("Ready");
   const [executed, setExecuted] = useState<ExecuteProps>();
-  const { pipeIds, setPipeIds } = useAppData();
-
-  const [checked, setChecked] = useState(false);
+  const { pipeIds, setPipeIds, setAppFiles } = useAppData();
 
   const handleStatus = (status: string) => {
     switch (status) {
@@ -60,17 +39,14 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
     }
   }
 
-
   const data = {
     name: name,
     description: description
   }
 
-
   const items = Object.keys(data).map((el) => (
     { label: el, "type": "edit_param", id: pipeId, name: pipeId }
   ))
-
 
   const pipeList = [
     {
@@ -79,14 +55,12 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
     }
   ]
 
-  console.log('LIST', pipeList)
-
-  let target = useRef(null);
+  const target = useRef(null);
 
   const handleOverlayShow = () => setShow(true);
-  const handleOverlayClose = () => setShow(false);
+  const handleOverlayClose = (e) => { setShow(false); setAppFiles([]) }
   const handleViewOverlayShow = () => setShowView(true);
-  const handleViewOverlayClose = () => setShowView(false);
+  const handleViewOverlayClose = () => { setShowView(false); setAppFiles([]) }
   const handleDeleteClose = () => setDel(false);
   const handleChartClose = () => setChart(false);
   const handleChartShow = () => setChart(true);
@@ -95,17 +69,20 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
     if (status === "Completed") {
       handleChartShow();
     } else {
-      setStatus("Running");
-      axios.post('http://localhost:8000/pipes/execute/', null, { params: { id: pipeId } })
-        .then(res => {
-          setStatus("Completed");
-          setExecuted({ "time": format(Date.now(), 'yyyy-MM-dd HH:mm:ss'), "result": res.data });
-        })
-        .catch((e: any) => {
-          setStatus("Error");
-          console.log(e);
-        });
+      executePipe();
     }
+  };
+
+  const executePipe = () => {
+    setStatus("Running");
+    axios.post('http://localhost:8000/pipes/execute/', null, { params: { id: pipeId } })
+      .then((res: any) => {
+        setStatus("Completed");
+        setExecuted({ "time": format(Date.now(), 'yyyy-MM-dd HH:mm:ss'), "result": res.data });
+      })
+      .catch(() => {
+        setStatus("Error");
+      });
   };
 
   const onEditClick = () => {
@@ -124,16 +101,19 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
   }
 
   const handleDelete = () => {
-    axios.delete(`http://localhost:8000/pipes/${pipeId}`, { params: { id: pipeId } }).then(() => setPipeIds(pipeIds.filter(pipe => pipe !== pipeId)))
+    axios.delete(`http://localhost:8000/pipes/${pipeId}`, { params: { id: pipeId } }).then(() => setPipeIds(pipeIds.filter((pipe:string) => pipe !== pipeId)))
 
     handleDeleteClose();
   }
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/pipes/${pipeId}`).then(res => {
-      // setStatus(res.data.status)
-      // setExecuted(res.data.executed.last_executed)
-      setExecuted(executed => ({ ...executed, "time": res.data.last_executed }))
+    axios.get(`http://localhost:8000/pipes/${pipeId}`).then((res: PipeResponse) => {
+      setExecuted((executed: any) => ({ ...executed, "time": res.data.last_executed }))
+      if (res.data.status == "Error") {
+        setStatus("Error")
+      } else if (res.data.last_executed) {
+        setStatus("Completed")
+      }
     })
   }, []);
 
@@ -180,6 +160,7 @@ const Pipe = forwardRef(({ pipeId, id, name, description, microservices, onCheck
           </S.Left>
           <div>
             <div style={{ marginRight: "15px" }}>
+              {status == "Completed" && <S.Execute onClick={executePipe} status={status + "rerun"}>{"Re-run"}</S.Execute>}
               <S.Execute disabled={status == "Running"} onClick={onPipeRun} status={status}>{handleStatus(status)}</S.Execute>
             </div>
 

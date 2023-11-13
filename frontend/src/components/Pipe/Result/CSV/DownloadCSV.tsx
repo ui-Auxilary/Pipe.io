@@ -3,25 +3,18 @@ import { useEffect, useState } from "react"
 import S from './Styles'
 import Button from 'react-bootstrap/Button';
 import fileImg from './file-svgrepo-com.svg'
+import { CSVDownloadProps, PipeResponse } from "types/PipeTypes"
 
 
 
-interface DownloadProps {
-  pipeId: string
-  output: string
-  name: string
-}
 
 
-export default function DownloadCSV(props: DownloadProps) {
-
-  // const outputFiles = JSON.parse(props)
+export default function DownloadCSV(props: CSVDownloadProps) {
 
   const [files, setFiles] = useState([])
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/pipes/${props.pipeId}`).then(res => {
-      console.log(res.data)
+    axios.get(`http://localhost:8000/pipes/${props.pipeId}`).then((res:any) => {
       for (const microservice of res.data.microservices) {
         if (microservice.name == props.name) {
           if (microservice.parameters.output_file_path.value != null) {
@@ -50,7 +43,7 @@ export default function DownloadCSV(props: DownloadProps) {
 
   return (
     <S.Container>
-      {files.map((name) => (
+      {files.map((name: string) => (
         <S.Body>
             <S.Img src={fileImg}/>
             <h6>{name}</h6>

@@ -2,80 +2,67 @@ import axios from "axios";
 import Form from "components/MultiStepForm/Form";
 import { useFormData } from "components/MultiStepForm/Form/FormProvider";
 import { useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap"
+import {  Modal } from "react-bootstrap";
+import { EditProps } from "types/EditTypes";
 
-import S from './styles'
 import { useAppData } from "helper/AppProvider";
 
-export default function Edit({ id, show, params, data, closeOverlay, type = "microservice" }) {
-    console.log("IN BETTER EDIT", show, params, data)
-    const { setMicroserviceData, microserviceData } = useFormData();
-    const [microservices, setMicroservices] = useState([]);
-    const { edit, setPipeIds } = useAppData();
+export default function Edit({ id, show, params, data, closeOverlay, type = "microservice" }: EditProps) {
+  const { setMicroserviceData, microserviceData } = useFormData();
+  const [microservices, setMicroservices] = useState<object[]>([]);
+  const { edit, setEdit, setPipeIds } = useAppData();
 
 
-    useEffect(() => {
-        console.log('New', edit)
-        setMicroservices(data)
-    }, [edit])
+  useEffect(() => {
+    setMicroservices((microserviceData.microservices as []));
+  }, [microserviceData]);
 
-    const findAndUpdate = (name: string, parameters) => {
+  const findAndUpdate = (parameters: any) => {
+    const updatedData: { [key: string]: any } = [...microserviceData.microservices as []];
 
-        const foundIndex = (microserviceData.microservices as []).findIndex(x => x.name == name);
-        // console.log('updating', foundIndex, edit, edit[name], name)
-        // console.log('Microdata', microserviceData)
-        const updatedData = [...microserviceData.microservices as []]
-        if (foundIndex >= 0) {
+    // Loop through edit to see what indexes need to be updated
+    Object.keys(edit).map(idx => {
+      let editIdx = parseInt(idx);
+      let updatedIdx = editIdx - 1;
+      if (updatedIdx >= 0 && updatedData[updatedIdx]) {
 
-            console.log('Updated', updatedData[foundIndex]["parameters"], name, parameters, edit[name])
-            console.log('OLD', parameters)
-            Object.keys(parameters).forEach(key => {
+        Object.keys(parameters).forEach(key => {
+          const newParams = edit[editIdx] && parameters[key] ? Object.assign(parameters[key], { value: edit[editIdx][key] }) : parameters[key] || edit[editIdx];
+          updatedData[updatedIdx]["parameters"][key] = newParams;
+        });
 
-                let newParams = edit[name] && parameters[key] ? Object.assign(parameters[key], { value: edit[name][key] }) : parameters[key] || edit[name]
-                console.log('NEW para', newParams)
-                updatedData[foundIndex]["parameters"][key] = newParams
-            })
+        updatedData[updatedIdx] = Object.assign(updatedData[updatedIdx], { output_type: data.output_type });
 
-            console.log('OUTPUT_TYPE', data);
+      }
+    })
 
-            updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { output_type: data.output_type })
+    setEdit({});
+    setMicroserviceData((prev: any) => ({ ...prev, microservices: updatedData }));
 
-        }
-        console.log('Updated Data', updatedData)
-        // updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: edit[name] })
-        setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
+  }
 
-        console.log('NEW', microserviceData)
+
+  const handleSave = () => {
+    switch (type) {
+      case "pipe":
+        axios.put(`http://localhost:8000/pipes/${id}`, edit[id]).then(() => {
+          setPipeIds((prev: any) => [...prev]);
+        }).catch();
+        break;
+      default:
+        findAndUpdate(data["parameters"]);
     }
+    closeOverlay();
+  }
 
-    useEffect(() => {
-        console.log('CHECK EDIt', edit)
-    }, [edit])
-    const handleSave = () => {
-        switch (type) {
-            case "pipe":
-                console.log('EDITING', edit, edit[id], id)
-                axios.put(`http://localhost:8000/pipes/${id}`, edit[id]).then((res) => {
-                    console.log(res)
-                    setPipeIds(prev => [...prev])
-                }).catch((err) => {
-                    console.log(err)
-                })
-                break;
-            default:
-                findAndUpdate(data["name"], data["parameters"])
-        }
-        closeOverlay();
-    }
-
-    return (
-        <Modal show={show} onHide={closeOverlay}>
-            <Modal.Header closeButton>
-                <Modal.Title>Edit</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form questions={params} step={0} edit={true} onHandleClose={handleSave} />
-            </Modal.Body>
-        </Modal>
-    )
+  return (
+    <Modal show={show} onHide={() => { setEdit({}); closeOverlay() }}>
+      <Modal.Header closeButton>
+        <Modal.Title>Edit</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form itemList={params} step={0} edit={true} onHandleClose={handleSave} />
+      </Modal.Body>
+    </Modal>
+  )
 }

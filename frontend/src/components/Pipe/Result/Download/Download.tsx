@@ -1,22 +1,14 @@
-import axios from "axios"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import S from './Styles'
 import Button from 'react-bootstrap/Button';
-import fileImg from './file-svgrepo-com.svg'
-
-
-
-interface DownloadProps {
-  pipeId: string
-  output: string
-}
+import fileImg from './file-svgrepo-com.svg';
+import { DownloadProps } from "types/PipeTypes"
 
 
 export default function Download(props: DownloadProps) {
 
-  const output = JSON.parse(JSON.parse(props.output))
 
-  const [download, setDownload] = useState("")
+  const output = JSON.parse(props.output)
 
 
   const handleDownload = (filePath: string) => {
@@ -26,7 +18,7 @@ export default function Download(props: DownloadProps) {
     link.href = downloadUrl;
 
     link.download = filePath;
-  
+
 
     link.click();
     link.remove();
@@ -36,11 +28,11 @@ export default function Download(props: DownloadProps) {
 
   return (
     <S.Container>
-      {Object.keys(output).map((name, path) => (
+      {Object.keys(output).map((name) => (
         <S.Body>
-            <S.Img src={fileImg}/>
-            <h6>{output[name]}</h6>
-            <Button onClick={()=> handleDownload(output[name])}>Download</Button>
+          <S.Img src={fileImg} />
+          <h6>{output[name]}</h6>
+          <Button onClick={() => handleDownload(output[name])}>Download</Button>
         </S.Body>
       ))}
     </S.Container>
