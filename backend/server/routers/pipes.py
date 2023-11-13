@@ -158,6 +158,16 @@ def edit_microservice_output_type(id: str, name: str, output_type: str):
 
 @router.delete("/pipes/{id}")
 def delete_pipe(id: str):
+    pipe_name = pipes_collection.find_one({"_id": ObjectId(id)})["name"]
+    if os.getcwd().endswith('parsing_modules'):
+        os.chdir('..')
+    if not os.getcwd().endswith('backend'):
+        os.chdir('backend')
+    if os.path.exists(f'parsing_modules/pipeline_{pipe_name}'):
+        shutil.rmtree(f'parsing_modules/pipeline_{pipe_name}')
+    if os.path.exists(f'parsing_modules/pipeline_{pipe_name}_data'):
+        shutil.rmtree(f'parsing_modules/pipeline_{pipe_name}_data')
+
     pipes_collection.find_one_and_delete(
         {"_id": ObjectId(id)})
 
