@@ -18,14 +18,14 @@ export default function MultiStepForm({ show, handleClose }: MultiFormProps) {
           label: 'Name',
           type: 'text',
           value: 'name',
-          validation: /^[a-zA-Z0-9_. ]{1,25}$/,
+          validation: /^.{1,25}$/,
           errorMessage: 'Name must not exceed 25 characters'
         },
         {
           label: 'Description',
           type: 'text',
           value: 'description',
-          validation: /^[a-zA-Z_ ]{1,250}$/,
+          validation: /^.{1,250}$/,
           errorMessage: 'Description must not exceed 250 characters'
         },
         {
