@@ -5,9 +5,9 @@ import { ChartProps } from 'types/VisualizationTypes';
 
 
 export default function ComposedChartComponent(props: ChartProps) {
-  const {stock, showClose, showOpen, showHigh, showLow, showVolume, showMovingAverage, showRSI, showFuture} = props.chartData;
+  const {stock, showClose, showOpen, showHigh, showLow, showVolume, showMovingAverage, showRSI, showFuture, showMFI} = props.chartData;
   const roundValue = (price: number) => {
-    return roundPrice(showVolume, showRSI, showMovingAverage, price, stock);
+    return roundPrice(showMFI, showVolume, showRSI, showMovingAverage, price, stock);
   }
 
   return (
@@ -18,9 +18,10 @@ export default function ComposedChartComponent(props: ChartProps) {
         {showHigh && <Bar dataKey="High" fill="#82ca9d"/>}
         {showLow && <Bar dataKey="Low" fill="#ffc658"/>}
         {showVolume && <Bar dataKey="Volume" fill="#ff0000"/>}
-        {showMovingAverage && <Line type="monotone" dataKey="moving_average" stroke="#0000ff" strokeWidth={2}/>}
+        {showMovingAverage && <Line type="monotone" dataKey="Moving Average" stroke="#0000ff" strokeWidth={2}/>}
         {showRSI && <Line type="monotone" dataKey="RSI" stroke="#000000" strokeWidth={2}/>}
         {showFuture && <Bar dataKey="Future" fill="#828282"/>}
+        {showMFI && <Line type="monotone" dataKey="MFI" stroke="#ff00ff" strokeWidth={2}/>}
         <CartesianGrid stroke="#ccc" />
         <XAxis dataKey="Date" scale="time" domain={['dataMin', 'dataMax']} type="number" tickFormatter={formatDate} padding={{ right: 60, left: 60 }} />
         <YAxis width={80}/>

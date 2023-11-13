@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { StockInterface } from "types/VisualizationTypes";
 
 // round to 2 decimal places
-export const roundPrice = (showVolume: boolean, showRSI: boolean, showMovingAverage: boolean, price: number, stock: any) => {
+export const roundPrice = (showMFI:boolean, showVolume: boolean, showRSI: boolean, showMovingAverage: boolean, price: number, stock: any) => {
 
   if (showVolume && stock.find((el: { Volume: number; }) => el.Volume == price)) {
     return price;
@@ -13,7 +13,13 @@ export const roundPrice = (showVolume: boolean, showRSI: boolean, showMovingAver
   }
 
   if (showMovingAverage && stock.find((el: { moving_average: number; }) => el.moving_average == price)) {
-    return price;
+    if (price > 303100) {
+      return price;
+    }
+  }
+
+  if (showMFI && stock.find((el: { MFI: number; }) => el.MFI == price)) {
+    return Math.round(price*100)/ 100 + '%';
   }
 
   const priceNew = Math.round(price * 100) / 100;
@@ -31,7 +37,7 @@ export const formatDate = (date: string) => {
 
 
 const isMovingAverage = (stock: StockInterface[]) => {
-  if (stock[0] && stock[stock.length -1].moving_average != undefined) {
+  if (stock[0] && stock[stock.length -1]["Moving Average"] != undefined) {
     return true;
   }
 }
@@ -78,4 +84,10 @@ const isFuture = (stock: StockInterface[]) => {
   }
 }
 
-export { isMovingAverage, isRSI, isOpen, isHigh, isLow, isVolume, isClose, isFuture };
+const isMFI = (stock: StockInterface[]) => {
+  if (stock[0] && stock[stock.length-1].MFI != undefined) {
+    return true;
+  }
+}
+
+export { isMovingAverage, isRSI, isOpen, isHigh, isLow, isVolume, isClose, isFuture, isMFI };

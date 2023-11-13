@@ -10,6 +10,7 @@ export interface ChartData {
   showMovingAverage: boolean;
   showRSI: boolean;
   showFuture: boolean;
+  showMFI: boolean;
 }
   
 export interface ChartProps {
@@ -23,7 +24,6 @@ export interface ChartComponentProps {
   params: any;
   data: any;
   children?: ReactNode;
-
 }
 
 export interface StockInterface {
@@ -33,7 +33,8 @@ export interface StockInterface {
   Low?: number;
   Close?: number;
   Volume?: number;
-  moving_average?: number;
+  "Moving Average"?: number;
   RSI?: number;
   Future?: number;
+  MFI?: number;
 }

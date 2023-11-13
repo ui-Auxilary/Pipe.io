@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import datetime
+
 def moving_average(input_file_path: str = 'stock_data.csv', output_file_path:str = 'moving_average.csv', window_size: int = 5, date_column:str = 'Date', value_column:str = 'Volume'):
 
     """get csv file path, output file path and window size
@@ -31,6 +32,6 @@ def moving_average(input_file_path: str = 'stock_data.csv', output_file_path:str
     if window_size > len(df):
         raise ValueError("Window size cannot be greater than the number of rows in the dataframe")
     df = df.sort_values(by=[date_column])
-    df['moving_average'] = df[value_column].rolling(window=window_size).mean()
+    df['Moving Average'] = df[value_column].rolling(window=window_size).mean()
     df.to_csv(output_file_path)
     return df.to_json()
