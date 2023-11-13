@@ -14,17 +14,12 @@ interface prop {
 
 
 export default function Table(props: prop) {
-
-  // const outputFiles = JSON.parse(props)
-
   const [data, setData] = useState("")
 
   useEffect(() => {
-    const obj = JSON.parse(JSON.parse(props.output))
-    console.log("JOSH", obj);
+    const obj = JSON.parse(props.output)
     setData(obj)
   }, [props])
-  {console.log("poois", data)}
   return (
     <S.Container>
       <table style={{border: "1px solid black", borderCollapse: "collapse"}}>
@@ -39,8 +34,6 @@ export default function Table(props: prop) {
               return (
               
                 <tr style={{border: "1px solid black", borderCollapse: "collapse"}}>
-                  {/* <td style={{border: "1px solid black"}}>{key}</td> */}
-                  {/* <td style={{border: "1px solid black", borderCollapse: "collapse"}}>{(new Date(key*1000)).toUTCString()}</td> */}
                   <td style={{border: "1px solid black", borderCollapse: "collapse"}}>{(value > 166814280000) ? (new Date(value)).toUTCString() : value}</td>
                 </tr>
               

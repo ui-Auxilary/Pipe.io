@@ -6,7 +6,7 @@ import File from "assets/upload_file.svg";
 import S from "./style";
 import axios from "axios";
 import { useAppData } from "helper/AppProvider";
-import { DropzoneProps } from "types/DropzoneTypes";
+import { DropzoneProps } from "types/dropzone";
 
 
 export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
@@ -26,7 +26,7 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
       }
 
       if (fileRejections?.length) {
-        setRejectedFiles((previousFiles: any) => [
+        setRejectedFiles((previousFiles) => [
           ...previousFiles,
           ...fileRejections,
         ]);
@@ -80,9 +80,9 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
     return () => {
       if (files) {
         if (filetype == "python") {
-          setAppFiles(prev => [...prev, ...files]);
+          setAppFiles([...files]);
         } else {
-          files?.map((file: File) => {
+          files?.map((file) => {
             const reader = new FileReader();
             reader.readAsText(file)
             reader.onload = () => {
@@ -96,7 +96,7 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
         }
       }
     }
-  }, [files])
+  }, [])
 
   return (
     <>

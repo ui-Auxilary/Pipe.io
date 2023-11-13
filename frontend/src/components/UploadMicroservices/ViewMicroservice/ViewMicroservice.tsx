@@ -17,7 +17,7 @@ export default function ViewMicroservice() {
     setMicroserviceData({ microservices: microserviceList })
   }, [microserviceList])
 
-  const reorder = (list:any[], startIndex:number, endIndex:number) => {
+  const reorder = (list: any[], startIndex: number, endIndex: number) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
@@ -25,7 +25,7 @@ export default function ViewMicroservice() {
     return result;
   };
 
-  function onDragEnd(result:any) {
+  function onDragEnd(result: any) {
     if (!result.destination ||
       result.destination.index === result.source.index) {
       return;
@@ -38,6 +38,7 @@ export default function ViewMicroservice() {
     );
 
     setMicroserviceList(orderedMicroservices);
+    setMicroserviceData({ microservices: orderedMicroservices as never[] });
     setMicroserviceData({ microservices: orderedMicroservices });
   }
 
@@ -83,7 +84,6 @@ export default function ViewMicroservice() {
               <span style={{ color: "#907F7F", fontWeight: 500 }}>Found {len} microservice(s)</span>
               <S.Scrollbar length={len}>
                 {microserviceList && microserviceList.map(({ code, doc, name, parameters, parent_file, output_type }, idx) => {
-                  console.log('hey loop', microserviceList)
                   return (
                     <Draggable draggableId={`id-${idx}`} index={idx}>
                       {provided => (
