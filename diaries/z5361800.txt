@@ -4,7 +4,7 @@ We formed our group this week. Had a group meeting to discuss which project we w
 Week 2:
 We decided that we would go with the microservices project P10 instead of the one we had originally chosen because the problems with the Twitter API being too expensive were not resolved. I organised a few meetings to discuss delegating tasks. Because the project we chose has a lot of different moving components and is very client-intensive with discussing requirements, we decided to split up team lead and scrum master and I became team lead instead.
 
-I compiled a list of all the questions we had and designed a basic flowchart so we could better understand the requirements for the project. Then, I attended a meeting with the client, took notes and followed up with the questions we had. Then we started the project planning and user story creation.
+I compiled a list of all the itemList we had and designed a basic flowchart so we could better understand the requirements for the project. Then, I attended a meeting with the client, took notes and followed up with the itemList we had. Then we started the project planning and user story creation.
 
 I created the document for the proposal and set out the basic skeleton for the first third of the report. Then, we set a soft deadline to fill in the proposal.
 

@@ -2,10 +2,10 @@ Week 1
 Group formed and named. Discord server created to log work easier. Briefly discussed topics in favour of P7 & P10. Due to complications
 with Twitter API costing $100 USD/mth and expenses with an LiWC dictionary, selected P10. Selected Team Lead, Scrum Master and created the Jira
 Site. Discussed meeting times, and delegations according to the project specification. Brainstormed different tools we'd need, and 
-created a list of potential questions for client.
+created a list of potential itemList for client.
 
 Week 2
-Drew a sketch of how we envisioned the program to look like on a whiteboard. Refined our list of questions based on the new specification. 
+Drew a sketch of how we envisioned the program to look like on a whiteboard. Refined our list of itemList based on the new specification. 
 Had a meeting with the client and confirmed several details, deciding to use React for the UI and move away from AutoML into real Machine Learning.
 Worked on a prototype for the Storyboard in Figma, and diagram for Software architecture. Documented this in the proposal document written in Latex.
 
