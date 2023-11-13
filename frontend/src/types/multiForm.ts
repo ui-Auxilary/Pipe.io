@@ -6,16 +6,16 @@ export interface MultiFormProps {
 export interface FormPageProps {
     itemList: ItemList[];
     step: number;
-    edit: boolean;
+    edit?: boolean;
     onHandleClose: () => void;
 }
 
 export interface Item {
-    label: string
+    label?: string
     type: string
-    value: string
-    name: number
-    validation?: string
+    value?: string
+    name?: number
+    validation?: RegExp
     errorMessage?: string
     elType?: string
     id?: string
