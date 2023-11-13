@@ -1,11 +1,12 @@
 import { Button } from 'react-bootstrap'
 import Switch from 'react-switch'
 import S from './styles'
-import { toggleDarkMode } from 'helper/signals'
 import Sun from 'assets/sun.svg'
 import Moon from 'assets/moon.svg'
+import { useAppData } from 'helper/AppProvider'
 
 export default function Header({ handleShow }: { handleShow: () => void }) {
+    const { darkMode, setDarkMode } = useAppData();
     return (
         <S.Header>
             <S.HeaderWrapper>
@@ -17,8 +18,8 @@ export default function Header({ handleShow }: { handleShow: () => void }) {
             </S.HeaderWrapper>
             <>
                 <Switch
-                    onChange={() => toggleDarkMode.value = !toggleDarkMode.value}
-                    checked={toggleDarkMode.value}
+                    onChange={() => setDarkMode(!darkMode)}
+                    checked={darkMode}
                     offColor='#FCEEA7'
                     onColor='#382c40'
                     offHandleColor="#EEC61F"

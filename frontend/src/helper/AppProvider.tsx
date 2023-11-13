@@ -12,6 +12,8 @@ export const AppProviderContext = createContext<AppProviderType>({
   setRefData: () => { },
   appFiles: [],
   setAppFiles: () => { },
+  darkMode: false,
+  setDarkMode: () => { },
 });
 
 
@@ -26,9 +28,10 @@ export default function AppProvider({ children }: ChildrenProps) {
   const [refData, setRefData] = useState({});
   const [pipeIds, setPipeIds] = useState<string[]>([]);
   const [appFiles, setAppFiles] = useState<(File | string)[]>([])
+  const [darkMode, setDarkMode] = useState(false);
 
   return (
-    <AppProviderContext.Provider value={{ user, setUser, pipeIds, setPipeIds, edit, setEdit, refData, setRefData, appFiles, setAppFiles }}>
+    <AppProviderContext.Provider value={{ user, setUser, pipeIds, setPipeIds, edit, setEdit, refData, setRefData, appFiles, setAppFiles, darkMode, setDarkMode }}>
       {children}
     </AppProviderContext.Provider>
   )
