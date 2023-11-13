@@ -13,11 +13,8 @@ import Content from './Content'
 import axios from 'axios'
 import { useAppData } from 'helper/AppProvider'
 import Result from './Result/Result'
-import ViewMicroserviceFromPipe from 'components/MicroserviceList/ViewMicroservice/ViewMicroserviceFromPipe';
+import ViewMicroserviceFromPipe from 'components/UploadMicroservices/ViewMicroservice/ViewMicroserviceFromPipe';
 import { Props, ExecuteProps, PipeResponse } from 'types/PipeTypes';
-
-
-
 
 
 const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props, ref: { current: any[] }) => {
@@ -61,7 +58,7 @@ const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props,
   const target = useRef(null);
 
   const handleOverlayShow = () => setShow(true);
-  const handleOverlayClose = () => { setShow(false); setAppFiles([]) }
+  const handleOverlayClose = (e) => { setShow(false); setAppFiles([]) }
   const handleViewOverlayShow = () => setShowView(true);
   const handleViewOverlayClose = () => { setShowView(false); setAppFiles([]) }
   const handleDeleteClose = () => setDel(false);
@@ -111,7 +108,7 @@ const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props,
 
   useEffect(() => {
     axios.get(`http://localhost:8000/pipes/${pipeId}`).then((res: PipeResponse) => {
-      setExecuted((executed: Object) => ({ ...executed, "time": res.data.last_executed }))
+      setExecuted((executed: any) => ({ ...executed, "time": res.data.last_executed }))
       if (res.data.status == "Error") {
         setStatus("Error")
       } else if (res.data.last_executed) {

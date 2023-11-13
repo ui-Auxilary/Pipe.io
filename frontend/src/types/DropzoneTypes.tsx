@@ -1,4 +1,4 @@
-
 export interface DropzoneProps {
-  filetype: "python" | "csv";
+  filetype: string;
+  upload?: boolean;
 }

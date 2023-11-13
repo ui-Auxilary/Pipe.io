@@ -3,22 +3,22 @@ import FormItem from "../FormItem"
 import { useFormData } from "./FormProvider"
 import S from './style'
 import { Button } from "react-bootstrap"
-import { Item, FormProps } from "types/MultistepFormTypes"
+import { Item, FormPageProps } from "types/MultistepFormTypes"
 
-export default function Form({ questions, step, edit = false, onHandleClose = () => { } }: FormProps) {
+
+export default function Form({ itemList, step, edit = false, onHandleClose = () => { } }: FormPageProps) {
+  const { currentStep, submitData, setStep } = useFormData();
   const formRef = useRef(null);
 
-  // Validation logic
-  const { currentStep, submitData, setStep } = useFormData();
-
+  // Check validity of form
   const onNext = () => {
-    if (formRef.current.reportValidity() && currentStep < questions.length) {
-      setStep((prevIndex: any) => prevIndex + 1);
+    if (formRef.current && (formRef.current as HTMLFormElement).reportValidity() && currentStep < itemList.length) {
+      setStep(prevIndex => prevIndex + 1)
     }
   }
 
   const onEdit = () => {
-    if (formRef.current.reportValidity()) {
+    if (formRef.current && (formRef.current as HTMLFormElement).reportValidity()) {
       onHandleClose();
     }
   }
@@ -26,11 +26,11 @@ export default function Form({ questions, step, edit = false, onHandleClose = ()
   return (
     <form ref={formRef}>
       {
-        questions && questions[step].items.map((item: Item) => (
+        itemList && itemList[step].items.map((item: Item) => (
           <FormItem key={item.label} item={item} />
         ))
       }
-      {!edit && (currentStep == questions.length ? (
+      {!edit && (currentStep == itemList.length ? (
         <Button style={{ marginTop: '50px', position: 'relative', right: '-90%' }} onClick={() => submitData(onHandleClose)} variant="secondary">Submit</Button>
       ) : (
         <Button style={{ marginTop: '50px', position: 'relative', right: '-90%' }} onClick={onNext}>Next</Button>

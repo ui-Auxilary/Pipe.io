@@ -3,22 +3,6 @@ import os
 import datetime
 import yfinance as yf
 
-# def import_csv(input_file_path: str = 'default.csv', output_file_path: str = 'stock_data.csv'):
-#     """Imports data from a csv as a pandas dataframe
-
-#     Args:
-#         input_file_path (str, optional): path for the input csv. Defaults to 'default.csv'.
-#         output_file_path (str, optional): path for the output csv. Defaults to 'stock_data.csv'.
-
-#     Returns:
-#         pd.DataFrame: Dataframe from the csv file
-#     """
-
-#     df = pd.read_csv(input_file_path)
-#     df.to_csv(output_file_path)
-#     return df
-
-
 def import_yahoo(ticker: str = 'msft',
                  output_file_path: str = 'stock_data.csv',
                  time_period: str = '1y'):

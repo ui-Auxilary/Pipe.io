@@ -33,13 +33,32 @@ const Button = styled.button`
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  gap: 2rem;
+  justify-content: space-around;
 `
+
+const UploadBlock = styled.div`
+  border-radius: 25px;
+  border: 2px solid #C2AAAA;
+  padding: 25px;
+  overflow: hidden;
+  min-width: 500px;
+  height: 600px;
+`
+
+const Label = styled.label`
+  font-size: 20px;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+`;
 
 export default {
   Button,
   Container,
   Header,
-  Wrapper
+  Label,
+  Wrapper,
+  UploadBlock
 }
 

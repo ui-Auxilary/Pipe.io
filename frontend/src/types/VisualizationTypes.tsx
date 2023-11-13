@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 export interface ChartData {
-  stock: any;
+  stock: StockInterface[];
   showClose: boolean;
   showOpen: boolean;
   showHigh: boolean;
@@ -17,7 +17,6 @@ export interface ChartProps {
 
 export interface ChartComponentProps {
   pipeId: string;
-  data: any;
   name: string;
   index: number;
   children?: ReactNode;

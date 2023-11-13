@@ -5,13 +5,17 @@ import { ChartProps } from 'types/VisualizationTypes';
 
 export default function BarChartComponent(props: ChartProps) {
   const {stock, showClose, showOpen, showHigh, showLow, showVolume, showMovingAverage, showRSI} = props.chartData;
+  const roundValue = (price: number) => {
+    return roundPrice(showVolume, showRSI, showMovingAverage, price, stock);
+  }
+
   return(
     <ResponsiveContainer width="95%" height={"90%"}>
       <BarChart data={stock}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="Date" domain={['dataMin', 'dataMax']} tickFormatter={formatDate} />
         <YAxis width={80}/>
-        <Tooltip labelFormatter={formatDate} formatter={roundPrice}/>
+        <Tooltip labelFormatter={formatDate} formatter={roundValue}/>
         <Legend />
         {showClose && <Bar dataKey="Close" fill="#02b2af"/>}
         {showOpen && <Bar dataKey="Open" fill="#8884d8"/>}

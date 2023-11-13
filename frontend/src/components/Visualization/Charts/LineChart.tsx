@@ -5,6 +5,9 @@ import { ChartProps } from 'types/VisualizationTypes';
 
 export default function LineChartComponent(props: ChartProps) {
   const {stock, showClose, showOpen, showHigh, showLow, showVolume, showMovingAverage, showRSI} = props.chartData;
+  const roundValue = (price: number) => {
+    return roundPrice(showVolume, showRSI, showMovingAverage, price, stock);
+  }
   return(
     <ResponsiveContainer width="95%" height={"90%"}>
       <LineChart data={stock}>
@@ -18,7 +21,7 @@ export default function LineChartComponent(props: ChartProps) {
         <CartesianGrid stroke="#ccc" />
         <XAxis dataKey="Date" scale="time" domain={['dataMin', 'dataMax']} type="number" tickFormatter={formatDate} />
         <YAxis width={80}/>
-        <Tooltip labelFormatter={formatDate} formatter={roundPrice}/>
+        <Tooltip labelFormatter={formatDate} formatter={roundValue}/>
         <Legend />
       </LineChart>
     </ResponsiveContainer>

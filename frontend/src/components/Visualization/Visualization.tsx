@@ -31,10 +31,9 @@ export default function ChartComponent(props: ChartComponentProps) {
   const chartOptions = [
     { value: 'line', label: 'Line' },
     { value: 'bar', label: 'Bar' },
-    { value: 'area', label: 'Area'},
-    { value: 'composed', label: 'Composed'}
+    { value: 'area', label: 'Area' },
+    { value: 'composed', label: 'Composed' }
   ];
-
 
   const [ticker, setTicker] = useState("");
   const [enableTicker, setEnableTicker] = useState(false);
@@ -50,7 +49,6 @@ export default function ChartComponent(props: ChartComponentProps) {
 
 
 
-
   useEffect(() => {
     setTicker("");
     setEnableTicker(false);
@@ -59,10 +57,10 @@ export default function ChartComponent(props: ChartComponentProps) {
     setEndDate("");
     setEnableEndDate(false);
 
-    axios.get(`http://localhost:8000/pipes/${pipeId}`).then((res:any) => {
+    axios.get(`http://localhost:8000/pipes/${pipeId}`).then((res: any) => {
       if (res.data.microservices[props.index].parameters.ticker != undefined) {
-        setTicker(res.data.microservices[props.index].parameters.ticker.value ? 
-          res.data.microservices[props.index].parameters.ticker.value : 
+        setTicker(res.data.microservices[props.index].parameters.ticker.value ?
+          res.data.microservices[props.index].parameters.ticker.value :
           res.data.microservices[props.index].parameters.ticker.default);
         setEnableTicker(true);
 
@@ -73,18 +71,21 @@ export default function ChartComponent(props: ChartComponentProps) {
       if (res.data.microservices[props.index].parameters.end_date != undefined) {
         setEnableEndDate(true);
       }
-      const output = JSON.parse(JSON.parse(res.data.output[props.name]));
+
+      const outputIdx = res.data.microservices.findIndex(x => x.name === props.name)
+      const output = JSON.parse(res.data.output[outputIdx]?.output) || {};
+
       setMicroserviceData(res.data.microservices[props.index].parameters);
 
       const stockObj = Object.keys(output.Close).map((key) => {
         if (output.Date === undefined) {
-          const temp = {Date: parseInt(key)}
+          const temp = { Date: parseInt(key) }
           for (const [key2, value] of Object.entries(output)) {
             temp[key2] = value[key];
           }
           return temp;
         } else if (typeof output.Date[key] === "string") {
-          const temp = {Date: new Date(output.Date[key]).getTime()}
+          const temp = { Date: new Date(output.Date[key]).getTime() }
           for (const [key2, value] of Object.entries(output)) {
             if (key2 != "Date") {
               temp[key2] = value[key];
@@ -92,7 +93,7 @@ export default function ChartComponent(props: ChartComponentProps) {
           }
           return temp;
         } else if (typeof output.Date[key] === "number") {
-          const temp = {Date: output.Date[key]}
+          const temp = { Date: output.Date[key] }
           for (const [key2, value] of Object.entries(output)) {
             if (key2 != "Date") {
               temp[key2] = value[key];
@@ -136,16 +137,16 @@ export default function ChartComponent(props: ChartComponentProps) {
 
   const handleSave = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    const updatedParams = {...microserviceData}
+    const updatedParams = { ...microserviceData }
 
-    updatedParams["ticker"] = {...updatedParams["ticker"], value: ticker};
-    
+    updatedParams["ticker"] = { ...updatedParams["ticker"], value: ticker };
+
     if (enableStartDate && enableEndDate) {
-      updatedParams["start_date"] = {...updatedParams["start_date"], value: startDate};
-      updatedParams["end_date"] = {...updatedParams["end_date"], value: endDate};
+      updatedParams["start_date"] = { ...updatedParams["start_date"], value: startDate };
+      updatedParams["end_date"] = { ...updatedParams["end_date"], value: endDate };
     }
 
-    axios.put(`http://localhost:8000/pipes/${pipeId}/microservices`, {"name":props.name , "parameters": updatedParams}).then(() => {
+    axios.put(`http://localhost:8000/pipes/${pipeId}/microservices`, { "name": props.name, "parameters": updatedParams }).then(() => {
       updateStock();
     });
   };
@@ -203,10 +204,10 @@ export default function ChartComponent(props: ChartComponentProps) {
         <Form.Group className="mb-3">
           <Form.Label>Chart Type</Form.Label>
           <Select
-              options={chartOptions}
-              value={chartType}
-              onChange={setChartType}
-            >
+            options={chartOptions}
+            value={chartType}
+            onChange={setChartType}
+          >
           </Select>
           <Form.Text className="text-muted">
             Select Chart Type
@@ -214,7 +215,7 @@ export default function ChartComponent(props: ChartComponentProps) {
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Stock Name</Form.Label>
-          <Form.Control type="text" value={ticker ? ticker : ""} onChange={handleStockChange} disabled={!enableTicker}/>
+          <Form.Control type="text" value={ticker ? ticker : ""} onChange={handleStockChange} disabled={!enableTicker} />
           <Form.Text className="text-muted">
             Choose which stock to visualize
           </Form.Text>
@@ -229,7 +230,7 @@ export default function ChartComponent(props: ChartComponentProps) {
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>End Date</Form.Label>
-          <Form.Control type="text" value={endDate ? endDate : ""} onChange={handleEndDateChange} disabled={!enableEndDate}/>
+          <Form.Control type="text" value={endDate ? endDate : ""} onChange={handleEndDateChange} disabled={!enableEndDate} />
           <Form.Text className="text-muted">
             Choose the end date
           </Form.Text>

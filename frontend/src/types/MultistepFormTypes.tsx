@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-export interface MultiStepFormProps {
+export interface MultiFormProps {
   show: boolean;
   handleClose: () => void;
 }
@@ -16,13 +16,25 @@ export interface FormItemInterface {
   elType?: string;
   id?: string;
 }
-  
+
 export interface FormItemProps {
   item: FormItemInterface;
 }
 
+export interface FormPageProps {
+  itemList: ItemList[];
+  step: number;
+  edit?: boolean;
+  onHandleClose: () => void;
+}
+
+
+export interface ItemList {
+  items: Item[];
+}
+
 export interface FormProviderProps {
-  children?: ReactNode
+  children?: React.ReactNode;
 }
 
 export interface Item {
@@ -50,11 +62,11 @@ export interface MicroserviceData {
 }
 
 export interface FormContextType {
-  currentStep: number,
-  setStep: React.Dispatch<React.SetStateAction<number>>
-  userData: Record<string, NonNullable<unknown>>
-  setUserData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>
-  microserviceData: Record<string, NonNullable<unknown> | []>
-  setMicroserviceData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>,
-  submitData(func?: NonNullable<unknown>): void
+  currentStep: number;
+  setStep: React.Dispatch<React.SetStateAction<number>>;
+  userData: Record<string, NonNullable<unknown>>;
+  setUserData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>;
+  microserviceData: Record<string, NonNullable<unknown> | []>;
+  setMicroserviceData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>;
+  submitData(func?: NonNullable<unknown>): void;
 }

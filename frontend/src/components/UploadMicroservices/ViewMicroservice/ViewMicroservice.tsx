@@ -8,8 +8,8 @@ import { useAppData } from 'helper/AppProvider';
 
 export default function ViewMicroservice() {
   const [loading, setLoading] = useState(true);
-  const [microserviceList, setMicroserviceList] = useState([]);
   const { microserviceData, setMicroserviceData, setStep } = useFormData()
+  const [microserviceList, setMicroserviceList] = useState(microserviceData?.["microservices"] ? microserviceData["microservices"] as [] : []);
   const { appFiles } = useAppData();
 
 
@@ -17,7 +17,7 @@ export default function ViewMicroservice() {
     setMicroserviceData({ microservices: microserviceList })
   }, [microserviceList])
 
-  const reorder = (list: any, startIndex: number, endIndex: number) => {
+  const reorder = (list:any[], startIndex:number, endIndex:number) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
@@ -25,7 +25,7 @@ export default function ViewMicroservice() {
     return result;
   };
 
-  function onDragEnd(result: any) {
+  function onDragEnd(result:any) {
     if (!result.destination ||
       result.destination.index === result.source.index) {
       return;
@@ -42,16 +42,17 @@ export default function ViewMicroservice() {
   }
 
   async function readFiles() {
-    appFiles?.map((file: any) => {
-      const reader = new FileReader();
-      reader.readAsBinaryString(file)
-      reader.onload = () => {
-        const base64data = reader.result;
-
-        if (base64data) {
-          axios.post('http://localhost:8000/upload', { 'filename': file.name, 'content': base64data }).then((res: any) => setMicroserviceList((prev: any) => [...prev.concat(JSON.parse(res.data)['microservices'] as never)]))
-        }
-      };
+    appFiles?.map(file => {
+      if (typeof file !== 'string') {
+        const reader = new FileReader();
+        reader.readAsBinaryString(file)
+        reader.onload = () => {
+          const base64data = reader.result;
+          if (base64data) {
+            axios.post('http://localhost:8000/upload', { 'filename': file.name, 'content': base64data }).then((res) => { console.log('LIST', microserviceList); setMicroserviceList(prev => [...prev.concat(JSON.parse(res.data)['microservices'] as [never])]) })
+          }
+        };
+      }
     })
   }
 
@@ -82,13 +83,14 @@ export default function ViewMicroservice() {
               <span style={{ color: "#907F7F", fontWeight: 500 }}>Found {len} microservice(s)</span>
               <S.Scrollbar length={len}>
                 {microserviceList && microserviceList.map(({ code, doc, name, parameters, parent_file, output_type }, idx) => {
+                  console.log('hey loop', microserviceList)
                   return (
                     <Draggable draggableId={`id-${idx}`} index={idx}>
                       {provided => (
                         <div ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps} >
-                          <Microservice code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file} from_pipe={false} output_type={output_type} idx={idx + 1} />
+                          <Microservice code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file} from_pipe={false} output_type={output_type} idx={idx + 1} parent_pipe_id={''} />
                         </div>
                       )}
                     </Draggable>

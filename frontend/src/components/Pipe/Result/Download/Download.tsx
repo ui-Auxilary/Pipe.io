@@ -7,7 +7,9 @@ import { DownloadProps } from "types/PipeTypes"
 
 export default function Download(props: DownloadProps) {
 
-  const output = JSON.parse(JSON.parse(props.output))
+
+  const output = JSON.parse(props.output)
+
 
   const handleDownload = (filePath: string) => {
     const link = document.createElement('a');

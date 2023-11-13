@@ -1,10 +1,15 @@
 import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area} from 'recharts';
-import {formatDate, roundPrice} from './chartHelper';
+import { formatDate, roundPrice } from './chartHelper';
 import { ChartProps } from 'types/VisualizationTypes';
 
 
 export default function AreaChartComponent(props: ChartProps) {
   const {stock, showClose, showOpen, showHigh, showLow, showVolume, showMovingAverage, showRSI} = props.chartData;
+
+  const roundValue = (price: number) => {
+    return roundPrice(showVolume, showRSI, showMovingAverage, price, stock);
+  }
+
   return(
     <ResponsiveContainer width="95%" height={"90%"}>
       <AreaChart data={stock}>
@@ -18,12 +23,14 @@ export default function AreaChartComponent(props: ChartProps) {
         <CartesianGrid stroke="#ccc" />
         <XAxis dataKey="Date" scale="time" domain={['dataMin', 'dataMax']} type="number" tickFormatter={formatDate} />
         <YAxis width={80}/>
-        <Tooltip labelFormatter={formatDate} formatter={roundPrice}/>
+        <Tooltip labelFormatter={formatDate} formatter={roundValue}/>
         <Legend />
       </AreaChart>
     </ResponsiveContainer>
   );
 }
+
+
 
 
 
