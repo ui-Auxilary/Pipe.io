@@ -1,10 +1,11 @@
-import AppProvider from "helper/AppProvider";
+import AppProvider, { useAppData } from "helper/AppProvider";
 import Home from "./pages/Home";
 import Login from "./pages/Login/";
 import Register from "./pages/Register";
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet } from "react-router-dom";
+import { lightTheme, darkTheme } from "config/theme";
+import { ThemeProvider } from "styled-components";
 import { Recovery, Reset } from "pages/Recovery";
-
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet} from "react-router-dom";
 
 export default function App() {
 
@@ -20,13 +21,14 @@ export default function App() {
     )
   );
 
+  const { darkMode } = useAppData();
 
   return (
-    <AppProvider>
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <div className="App">
         <RouterProvider router={router} />
       </div>
-    </AppProvider>
+    </ThemeProvider>
   );
 }
 

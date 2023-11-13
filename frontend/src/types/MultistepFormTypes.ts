@@ -10,8 +10,8 @@ export interface FormItemInterface {
   label: string;
   type: string;
   value: string;
-  name: number;
-  validation?: string;
+  name: number | undefined;
+  validation?: RegExp | undefined;
   errorMessage?: string;
   elType?: string;
   id?: string;
@@ -42,7 +42,9 @@ export interface Item {
   type: string;
   value: string;
   id: string;
-  validation?: string;
+  validation?: RegExp | undefined;
+  name: any;
+  errorMessage?: string;
 }
 
 

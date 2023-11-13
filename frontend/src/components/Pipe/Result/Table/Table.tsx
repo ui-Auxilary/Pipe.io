@@ -1,9 +1,8 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import S from './Styles'
+import S from './styles'
 import Button from 'react-bootstrap/Button';
 import fileImg from './file-svgrepo-com.svg'
-
 
 
 interface prop {
@@ -22,28 +21,28 @@ export default function Table(props: prop) {
   }, [props])
   return (
     <S.Container>
-      <table style={{border: "1px solid black", borderCollapse: "collapse"}}>
-        {Object.keys(data).map(poo => {
+      <S.Table>
+        {Object.keys(data).map(col => {
 
           return (
             <>
-            <th style={{whiteSpace: "nowrap", width: "10000px"}}>
-            {poo}
-            {Object.entries(data[poo]).map((item, idx) => {
-              const [key, value] = item;
-              return (
-              
-                <tr style={{border: "1px solid black", borderCollapse: "collapse"}}>
-                  <td style={{border: "1px solid black", borderCollapse: "collapse"}}>{(value > 166814280000) ? (new Date(value)).toUTCString() : value}</td>
-                </tr>
-              
-              );
-          })}
-          </th>
-          </>
+              <S.TableHead>
+                {col}
+                {Object.entries(data[col]).map((item, idx) => {
+                  const [key, value] = item;
+                  return (
+
+                    <S.TableRow>
+                      <S.TableData>{(value > 166814280000) ? (new Date(value)).toUTCString() : value}</S.TableData>
+                    </S.TableRow>
+
+                  );
+                })}
+              </S.TableHead>
+            </>
           );
-})}
-      </table>
+        })}
+      </S.Table>
     </S.Container>
   )
 }

@@ -72,7 +72,7 @@ export default function FormItem({ item }: { item: Item }) {
           <ValidatedInput
             value={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}
             item={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}
-            onChange={(e: { target: { value: any; }; }) => {setEdit({ [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e.target.value } }) }}
+            onChange={(e: { target: { value: any; }; }) => { setEdit({ [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e.target.value } }) }}
             customValidity={item.elType}
             isEdit={true}
           />
