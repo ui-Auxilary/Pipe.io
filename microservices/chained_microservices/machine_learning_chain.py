@@ -283,7 +283,7 @@ def _sentiment_value_to_analysed_value(sentiment_value, transform):
     return f'The sentiment of the stock is {sentiment} with a score of {sentiment_value:.2f} using the {transform} function for each news article.'
 
 def _load_model():
-    return tf.keras.models.load_model('../additional_required_modules/stock_predictor.h5')
+    return tf.keras.models.load_model('stock_predictor.h5')
 
 
 if __name__ == '__main__':
