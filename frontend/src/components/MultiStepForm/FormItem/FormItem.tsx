@@ -59,7 +59,7 @@ export default function FormItem({ item }: { item: Item }) {
             <S.Label>{displayLabel}</S.Label>
             <Switch
               onChange={(e) => {
-                setEdit({ ...edit, [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e } });
+                setEdit({ [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e }});
               }}
               checked={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || false}
             />
