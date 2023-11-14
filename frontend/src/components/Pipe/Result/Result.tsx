@@ -16,32 +16,33 @@ export default function Result({ pipeId }: { pipeId: string }) {
     useEffect(() => {
         axios.get(`http://localhost:8000/pipes/${pipeId}`).then(res => {
             setResult(res.data)
-            let output = Object.entries(res.data.output)[page - 1]
-            let outputType = res.data.microservices[page - 1].output_type
-            setPageContent({ ["name"]: output[0], ["output"]: output[1], ["output_type"]: outputType })
+
+            const output = Object.entries(res.data.output)[page - 1]
+            console.log('OUTPUT RES for Page', output, res.data, page - 1, result, output[1]?.name)
+            const outputType = res.data.microservices[page - 1].output_type
+            setPageContent({ ["name"]: output[1]?.name, ["output"]: output[1]?.output, ["output_type"]: outputType })
         })
 
     }, [page])
 
-    useEffect(() => {
-        if (result?.output) {
-            let output = Object.entries(result.output)[page - 1]
-            let outputType = result.microservices[page - 1].output_type
-            setPageContent({ ["name"]: output[0], ["output"]: output[1], ["output_type"]: outputType })
-        }
-        
-    }, [page])
 
+    useEffect(() => {
+        console.log('CONTENt', pageContent)
+    }, [pageContent])
+    useEffect(() => {
+        console.log('RES', result)
+    }, [result])
     return (
         <S.Container>
             <h5>{pageContent && <p>{pageContent["name"]} </p>}</h5>
             <S.Body>
                 <h6>Output:</h6>
-                {checkForStockData(result, pageContent) && <ChartComponent index={page-1} name={pageContent["name"]} pipeId={pipeId} data={pageContent.output}/>}
+                {checkForStockData(result, pageContent) && <ChartComponent index={page - 1} name={pageContent["name"]} pipeId={pipeId} data={pageContent.output} />}
                 {pageContent && checkForValue(result, pageContent) && pageContent["output"]}
                 {checkForPlot(result, pageContent) && <Download pipeId={pipeId} output={pageContent["output"]} />}
                 {checkForCSV(result, pageContent) && <DownloadCSV pipeId={pipeId} output={pageContent["output"]} name={pageContent["name"]} />}
             </S.Body>
+
             {result?.output &&
                 <PaginationControl
                     page={page}
@@ -53,7 +54,7 @@ export default function Result({ pipeId }: { pipeId: string }) {
                     ellipsis={1}
                 />
             }
-            
+
         </S.Container>
     )
 }

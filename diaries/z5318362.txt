@@ -10,4 +10,6 @@ week5, showed Demo A and Retrospective A, started doing sprint2
 
 week6, working on microservices and finished the calculation of moving average and RSI, also finished the backend of checking validation.
 
-week7, checking validation was conflict with microservices editing, tried to fix and finish the validation frontend
+week7, checking validation was conflict with microservices, change to directly checking validation in frontend without calling routers. Finished the microservices of MFI calculation. Talked about and concluded the works for sprint3.
+
+week8, finished all in sprint 2 and prepared for demo

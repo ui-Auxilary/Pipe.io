@@ -28,3 +28,8 @@ Added select-all and delete functionality for pipes, and togglable tooltip to ed
 Week 7
 Refactored frontend to accept and validate input parameters based on type parsed in from backend. Bug fixing to ensure this new format works in the backend pipeline_parser. Set up custom regex tests 
 to filter input and reduce errors which would break the pipeline.
+
+
+Week 8
+Assisted teammates with bug fixing via screenshare and pair programming. Did some bug fixes and refactors but not too much as I had finished my tickets. Helped prepare for the demo, and wrote
+a bit of installation documentation for the final report.
