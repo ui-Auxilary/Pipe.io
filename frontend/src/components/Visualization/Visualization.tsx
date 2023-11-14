@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { ReactNode, useEffect, useState } from "react";
-import { format, set } from "date-fns";
+import { useEffect, useState } from "react";
+import { format} from "date-fns";
 import Form from 'react-bootstrap/Form';
 import S from './style';
 import Select from 'react-select';
 import Button from 'react-bootstrap/Button';
-import { ChartComponentProps } from 'types/VisualizationTypes';
+import { ChartComponentProps, StockInterface } from 'types/VisualizationTypes';
 import { isClose, isHigh, isLow, isMovingAverage, isOpen, isRSI, isVolume, isFuture, isMFI } from './Charts/chartHelper';
 
 import LineChartComponent from './Charts/LineChart';
@@ -49,6 +49,7 @@ export default function ChartComponent(props: ChartComponentProps) {
   const [chartType, setChartType] = useState(chartOptions[0]);
   const [microserviceData, setMicroserviceData] = useState({});
 
+  const [showClose, setShowClose] = useState(true);
   const [showOpen, setShowOpen] = useState(false);
   const [showHigh, setShowHigh] = useState(false);
   const [showLow, setShowLow] = useState(false);
@@ -129,18 +130,16 @@ export default function ChartComponent(props: ChartComponentProps) {
           }
           return temp;
         } else if (typeof output.Date[key] === "number") {
-          const temp = { Date: output.Date[key] }
+          const temp: StockInterface = { Date: output.Date[key] }
           const entries =  Object.keys(Object.entries(output)[0][1]).length;
           for (const [key2, value] of Object.entries(output)) {
-            console.log(prepend, daysPrediction);
             if (!prepend && daysPrediction != 0 && key2 == "Close") {
               setShowFutureStock(true);
+              setShowClose(false);
               temp["Future"] = value[key];
-              // continue;
             } else if (daysPrediction != 0 && key2 == "Close" && prepend && index >= entries - daysPrediction) {
               setShowFutureStock(true);
               temp["Future"] = value[key];
-              // continue;
             } else if (key2 != "Date") {
               temp[key2] = value[key];
             }
@@ -202,15 +201,6 @@ export default function ChartComponent(props: ChartComponentProps) {
       setRefresh(!refresh);
     });
   }
-
-
-  const [showClose, setShowClose] = useState(true);
-  if (stock[0] && stock[0].Close == undefined) {
-    setShowClose(false);
-  }
-
-
-
 
   const chartData = {
     stock: stock,
