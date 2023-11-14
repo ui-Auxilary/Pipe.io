@@ -11,12 +11,13 @@ import { DropzoneProps } from "types/dropzone";
 
 export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
   const { appFiles, setAppFiles } = useAppData()
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<File[]>([...appFiles as []]);
   const [rejectedfiles, setRejectedFiles] = useState<FileRejection[]>([]);
 
   useEffect(() => {
-    setAppFiles([]);
-  }, [])
+    console.log('Filetype changed')
+  }, [filetype])
+
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -80,25 +81,31 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
     return () => {
       if (files) {
         if (filetype == "python") {
-          setAppFiles([...files]);
+          console.log('here', files, appFiles)
+          files.length > 0 && setAppFiles([...files]);
         }
+      } else {
+        setAppFiles([...files])
       }
     }
   }, [])
 
   useEffect(() => {
     return () => {
-      if (files && filetype == "csv") {
+      if (files.length > 0 && filetype == "csv") {
+        console.log('APP FILES', files, appFiles)
         files?.map((file) => {
-          const reader = new FileReader();
-          reader.readAsText(file)
-          reader.onload = () => {
-            const base64data = reader.result;
+          if (typeof file != 'string') {
+            const reader = new FileReader();
+            reader.readAsText(file)
+            reader.onload = () => {
+              const base64data = reader.result;
 
-            if (base64data) {
-              axios.post('http://localhost:8000/upload_csv', { 'filename': file.name, 'content': base64data })
-            }
-          };
+              if (base64data) {
+                axios.post('http://localhost:8000/upload_csv', { 'filename': file.name, 'content': base64data })
+              }
+            };
+          }
         })
       }
     }

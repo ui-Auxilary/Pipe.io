@@ -101,7 +101,7 @@ const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props,
   }
 
   const handleDelete = () => {
-    axios.delete(`http://localhost:8000/pipes/${pipeId}`, { params: { id: pipeId } }).then(() => setPipeIds(pipeIds.filter((pipe:string) => pipe !== pipeId)))
+    axios.delete(`http://localhost:8000/pipes/${pipeId}`, { params: { id: pipeId } }).then(() => setPipeIds(pipeIds.filter((pipe: string) => pipe !== pipeId)))
 
     handleDeleteClose();
   }
@@ -160,14 +160,14 @@ const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props,
           </S.Left>
           <div>
             <div style={{ marginRight: "15px" }}>
-              {status == "Completed" && <S.Execute onClick={executePipe} status={status + "rerun"}>{"Re-run"}</S.Execute>}
-              <S.Execute disabled={status == "Running"} onClick={onPipeRun} status={status}>{handleStatus(status)}</S.Execute>
+              {status == "Completed" && <S.Execute onClick={executePipe} $status={status + "rerun"}>{"Re-run"}</S.Execute>}
+              <S.Execute disabled={status == "Running"} onClick={onPipeRun} $status={status}>{handleStatus(status)}</S.Execute>
             </div>
 
           </div>
         </S.Top>
         <S.Bottom>
-          <S.Status status={status}>{status.toUpperCase()}</S.Status>
+          <S.Status $status={status}>{status.toUpperCase()}</S.Status>
           <S.Label>Last executed: {executed ? executed.time : "Never"}</S.Label>
         </S.Bottom>
       </S.Pipe >

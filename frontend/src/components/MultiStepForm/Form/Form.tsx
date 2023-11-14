@@ -26,8 +26,8 @@ export default function Form({ itemList, step, edit = false, onHandleClose = () 
   return (
     <form ref={formRef}>
       {
-        itemList && itemList[step].items.map((item: Item) => (
-          <FormItem key={item.label} item={item} />
+        itemList && itemList[step].items.map((item: Item, idx) => (
+          <FormItem key={idx} item={item} />
         ))
       }
       {!edit && (currentStep == itemList.length ? (

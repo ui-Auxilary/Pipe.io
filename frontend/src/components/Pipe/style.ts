@@ -53,12 +53,8 @@ const Button = styled.button`
     color: #FFF;
 `
 
-interface Props {
-    status: string
-}
-
-const Execute = styled.button<Props>`
-    background: ${({ status }) => handleColorType(status)};
+const Execute = styled.button<{ $status: string; }>`
+    background: ${(props) => handleColorType(props.$status)};
     width: 150px;
     height: 40px;
     padding: 5px 20px;
@@ -87,8 +83,8 @@ const Bottom = styled.div`
     bottom: 0;
     position: absolute;
 `
-const Status = styled.div<Props>`
-    background: ${({ status }) => handleColorType(status)};
+const Status = styled.div<{ $status: string; }>`
+    background: ${(props) => handleColorType(props.$status)};
     width: 130px;
     height: 30px;
     color: #FFF;

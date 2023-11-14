@@ -7,7 +7,7 @@ export interface MicroserviceProps {
   param: Record<string, any>
   parent_file: string
   from_pipe: boolean
-  parent_pipe_id: string
+  parent_pipe_id?: string
   output_type: string
   idx: number
 }

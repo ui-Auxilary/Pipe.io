@@ -36,7 +36,7 @@ const Wrapper = styled.div`
   flex-direction: column;
 `
 
-const Scrollbar = styled.div<{ length: number }>`
+const Scrollbar = styled.div<{ $length: number }>`
   height: fit-content;
 
   &::-webkit-scrollbar {

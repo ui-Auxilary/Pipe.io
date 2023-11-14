@@ -92,7 +92,7 @@ export default function ViewMicroservice() {
           {provided => (
             <S.Container ref={provided.innerRef} {...provided.droppableProps}>
               <span style={{ color: "#907F7F", fontWeight: 500 }}>Found {len} microservice(s)</span>
-              <S.Scrollbar length={len}>
+              <S.Scrollbar $length={len}>
                 {microserviceList && microserviceList.map(({ code, doc, name, parameters, parent_file, output_type }, idx) => {
                   console.log('hey loop', microserviceList)
                   return (
@@ -101,7 +101,7 @@ export default function ViewMicroservice() {
                         <div ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps} >
-                          <Microservice code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file} from_pipe={false} output_type={output_type} idx={idx + 1} />
+                          <Microservice key={idx} code={code} docstring={doc} name={name} param={parameters} parent_file={parent_file} from_pipe={false} output_type={output_type} idx={idx + 1} />
                         </div>
                       )}
                     </Draggable>

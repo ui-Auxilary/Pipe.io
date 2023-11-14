@@ -12,7 +12,7 @@ export default function UploadMicroservices() {
     useEffect(() => {
         // Load in microservices
         let pythonRegex = /^[^_].*.py$/;
-        axios.get(`http://localhost:8000/microservice/list`).then(res => {setMicroserviceList(res.data.filter((filename: string) => pythonRegex.test(filename))) })
+        axios.get(`http://localhost:8000/microservice/list`).then(res => { setMicroserviceList(res.data.filter((filename: string) => pythonRegex.test(filename))) })
         setMicroserviceData({})
     }, [])
 
@@ -25,8 +25,8 @@ export default function UploadMicroservices() {
             <div>
                 <S.Label>Add previously uploaded file(s)</S.Label>
                 <S.UploadBlock>
-                    {microserviceList && microserviceList.map(microserviceName =>
-                        <MicroserviceBlock name={microserviceName} />
+                    {microserviceList && microserviceList.map((microserviceName, idx) =>
+                        <MicroserviceBlock key={idx} name={microserviceName} />
                     )}
                 </S.UploadBlock>
             </div>

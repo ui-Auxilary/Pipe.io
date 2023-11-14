@@ -29,7 +29,7 @@ export default function FormItem({ item }: { item: Item }) {
             item={item}
             customValidity={item.validation}
             errorMessage={item.errorMessage}
-            value={userData[item.label.toLocaleLowerCase()]}
+            value={userData[item.label.toLocaleLowerCase()] || ''}
             onChange={(e: InputEvent) => setUserData({ ...userData, [item.label.toLocaleLowerCase()]: (e?.target as HTMLTextAreaElement).value })}
           />
         </>
