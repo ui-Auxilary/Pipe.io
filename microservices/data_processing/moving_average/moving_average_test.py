@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import os
-from moving_average import moving_average
+from microservices.data_processing.moving_average.moving_average import moving_average
 
 def test_moving_average_basic():
     sample_data = {
