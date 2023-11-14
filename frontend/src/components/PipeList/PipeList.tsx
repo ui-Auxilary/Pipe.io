@@ -4,19 +4,7 @@ import axios from 'axios';
 import S from './style'
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAppData } from "helper/AppProvider";
-export interface Microservice {
-    microserviceId: string
-    content: string
-    userId: string
-    pipeId: string
-}
-
-export interface Pipe {
-    name: string
-    description: string
-    userId: string
-    microservices: Microservice[]
-}
+import { PipeListResponse, PipeInterface, Checked } from "types/PipeListTypes";
 
 export default function PipeList() {
     const [pipes, setPipes] = useState([]);
@@ -25,14 +13,16 @@ export default function PipeList() {
     const [checked, setChecked] = useState(false);
     const [numChecked, setNumChecked] = useState(0);
     const checkboxRef = useRef([]);
-    
+
+
+
     const onHandleDelete = () => {
         let itemsChecked = numChecked
         Object.entries(refData).map(([pipeId, isChecked]) => {
             if (isChecked) {
                 itemsChecked > 0 ? itemsChecked -= 1 : null;
-                axios.delete(`http://localhost:8000/pipes/${pipeId}`, { params: { id: pipeId } }).then(() => {setPipeIds([...pipeIds])})
-                setPipes(pipes.filter(pipe => pipe.pipe_id != pipeId));
+                axios.delete(`http://localhost:8000/pipes/${pipeId}`, { params: { id: pipeId } }).then(() => { setPipeIds([...pipeIds]) })
+                setPipes(pipes.filter((pipe: PipeInterface) => pipe.pipe_id != pipeId));
             }
         })
         setNumChecked(0)
@@ -40,11 +30,11 @@ export default function PipeList() {
     }
 
     const DeselectAll = () => {
-        let updatedRefData = refData;
+        const updatedRefData = refData;
         for (let i = 0; i < checkboxRef.current.length; i++) {
             if (checkboxRef.current[i]) {
                 checkboxRef.current[i].checked = false;
-                Object.assign(updatedRefData, {[pipes[i]["pipe_id"]]: false })
+                Object.assign(updatedRefData, { [pipes[i]["pipe_id"]]: false })
             }
         }
         setRefData(updatedRefData)
@@ -52,23 +42,21 @@ export default function PipeList() {
     }
 
     const SelectAll = () => {
-        let updatedRefData = refData;
+        const updatedRefData = refData;
         let setCheck = 0;
         for (let i = 0; i < checkboxRef.current.length; i++) {
             if (checkboxRef.current[i]) {
                 checkboxRef.current[i].checked = true;
                 setCheck += 1
-                Object.assign(updatedRefData, {[pipes[i]["pipe_id"]]: true })  
+                Object.assign(updatedRefData, { [pipes[i]["pipe_id"]]: true })
             }
         }
-        console.log('Confirm', updatedRefData, setCheck, checkboxRef.current.length )
         setRefData(updatedRefData)
         setNumChecked(setCheck);
     }
 
     const pipeChecked = useCallback((pipeId: string, id: number) => {
-        checkboxRef.current[id].checked = !checkboxRef.current[id].checked;
-        setRefData(prev => ({...prev, [pipeId]: checkboxRef.current[id].checked}))
+        setRefData((prev: PipeInterface) => ({ ...prev, [pipeId]: checkboxRef.current[id].checked }))
     }, [])
 
     useEffect(() => {
@@ -76,20 +64,19 @@ export default function PipeList() {
             headers: {
                 "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
             }
-        }).then(res => {    
-            console.log("PIPES", res.data)
+        }).then((res: PipeListResponse) => {
             setPipes(res.data)
-        }).catch(err => console.log(err))
+        }).catch()
     }, [pipeIds])
 
     useEffect(() => {
-        let res = checkboxRef?.current?.filter(x => !!x).filter(x => x?.checked === true)
+        const res = checkboxRef?.current?.filter((x: any) => !!x).filter((x: Checked) => x?.checked === true)
         res.length ? setChecked(true) : setChecked(false)
         setNumChecked(res.length)
     }, [refData])
 
     return (
-        <S.Container>
+        <S.Container >
             {checked && (
                 <S.Row>
                     <S.Options>
@@ -101,9 +88,10 @@ export default function PipeList() {
                     </S.Options>
                 </S.Row>
             )}
-            {pipes.map(({ pipe_id, name, description, microservices }, index) => (
-                <Pipe key={pipe_id} pipeId={pipe_id} id={`00${index + 1} `} name={name} description={description} onCheck={pipeChecked} ref={checkboxRef} idx={index}/>
+            {pipes.map(({ pipe_id, name, description }, index) => (
+                <Pipe key={pipe_id} pipeId={pipe_id} id={`00${index + 1} `} name={name} description={description} onCheck={pipeChecked} ref={checkboxRef} idx={index} />
             ))}
         </S.Container>
+
     )
 }

@@ -1,48 +1,42 @@
 import axios from "axios";
 import Form from "components/MultiStepForm/Form";
-import { useFormData } from "components/MultiStepForm/Form/FormProvider";
 import { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap"
 
-import S from './styles'
 import { useAppData } from "helper/AppProvider";
+import { EditFromPipeProps } from "types/EditTypes";
 
-export default function EditFromPipe({ id, show, params, data, closeOverlay, type = "microservice", parent_pipe_id}) {
-    console.log("IN EDIT", show, params, data)
-    const [ microservice, setMicroservice ] = useState([]);
+export default function EditFromPipe({ id, show, params, data, closeOverlay, type = "microservice", parent_pipe_id, idx }: EditFromPipeProps){
+    const [microservice, setMicroservice] = useState([]);
     const { edit, setPipeIds } = useAppData();
 
-
     useEffect(() => {
-        console.log('New', edit)
         setMicroservice(data)
     }, [edit])
 
-    const findAndUpdate = (name: string) => {
+    const findAndUpdate = (name: string, parameters: { [x: string]: any; }) => {
+        const updatedData = { ...microservice }
 
-        console.log(microservice)
-        console.log('hig')
-        
+        Object.keys(parameters).forEach(key => {
+            if (edit?.[idx]?.[key]) {
+                const newParams = edit[idx] && parameters[key] ? Object.assign(parameters[key], { value: edit[idx][key] }) : parameters[key] || edit[idx]
+                updatedData["parameters"][key] = newParams
+            }
+        })
+        setMicroservice((prev: any) => ({ ...prev, microservices: updatedData }))
+
     }
 
     const handleSave = () => {
         switch (type) {
             case "pipe":
-                axios.put(`http://localhost:8000/pipes/${id}`, edit[id]).then((res) => {
-                    console.log(res)
-                    setPipeIds(prev => [...prev])
-                }).catch((err) => {
-                    console.log(err)
-                })
+                axios.put(`http://localhost:8000/pipes/${id}`, edit[id]).then(() => {
+                    setPipeIds((prev: any) => [...prev])
+                });
                 break;
             default:
-                findAndUpdate(data["name"])
-                axios.put(`http://localhost:8000/pipes/${parent_pipe_id}/microservices`, {"name":microservice.name , "parameters": edit[id]}).then((res) => {
-                    console.log("success", res)
-                    
-                }).catch((err) => {
-                    console.log(err)
-                });
+                findAndUpdate(data["name"], data["parameters"])
+                axios.put(`http://localhost:8000/pipes/${parent_pipe_id}/microservices`, { "name": microservice.name, "parameters": microservice["parameters"] });
         }
         closeOverlay();
     }
@@ -53,12 +47,8 @@ export default function EditFromPipe({ id, show, params, data, closeOverlay, typ
                 <Modal.Title>Edit</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form questions={params} step={0} />
+                <Form itemList={params} step={0} edit={true} onHandleClose={handleSave} />
             </Modal.Body>
-            <Modal.Footer>
-                <S.Button onClick={() => handleSave()}>Save</S.Button>
-            </Modal.Footer>
         </Modal>
-
     )
 }

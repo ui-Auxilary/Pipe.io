@@ -2,62 +2,67 @@ import axios from "axios";
 import Form from "components/MultiStepForm/Form";
 import { useFormData } from "components/MultiStepForm/Form/FormProvider";
 import { useEffect, useState } from "react";
-import { Modal } from "react-bootstrap"
+import {  Modal } from "react-bootstrap";
+import { EditProps } from "types/EditTypes";
 
-import S from './styles'
 import { useAppData } from "helper/AppProvider";
 
-export default function Edit({ id, show, params, data, closeOverlay, type = "microservice" }) {
-    console.log("IN EDIT", show, params, data)
-    const { setMicroserviceData, microserviceData } = useFormData();
-    const [ microservices, setMicroservices ] = useState([]);
-    const { edit, setPipeIds } = useAppData();
+export default function Edit({ id, show, params, data, closeOverlay, type = "microservice" }: EditProps) {
+  const { setMicroserviceData, microserviceData } = useFormData();
+  const [microservices, setMicroservices] = useState<object[]>([]);
+  const { edit, setEdit, setPipeIds } = useAppData();
 
 
-    useEffect(() => {
-        console.log('New', edit)
-        setMicroservices(data)
-    }, [edit])
+  useEffect(() => {
+    setMicroservices((microserviceData.microservices as []));
+  }, [microserviceData]);
 
-    const findAndUpdate = (name: string) => {
-        console.log(microserviceData.microservices)
-        console.log(params)
-        console.log('hig')
-        const foundIndex = (microserviceData.microservices as []).findIndex(x => x.name == name);
-        const updatedData = [...microserviceData.microservices as []]
-        updatedData[foundIndex] = Object.assign(updatedData[foundIndex], { parameters: edit[name] })
-        setMicroserviceData(prev => ({ ...prev, microservices: updatedData }))
+  const findAndUpdate = (parameters: any) => {
+    const updatedData: { [key: string]: any } = [...microserviceData.microservices as []];
+
+    // Loop through edit to see what indexes need to be updated
+    Object.keys(edit).map(idx => {
+      let editIdx = parseInt(idx);
+      let updatedIdx = editIdx - 1;
+      if (updatedIdx >= 0 && updatedData[updatedIdx]) {
+
+        Object.keys(parameters).forEach(key => {
+          const newParams = edit[editIdx] && parameters[key] ? Object.assign(parameters[key], { value: edit[editIdx][key] }) : parameters[key] || edit[editIdx];
+          updatedData[updatedIdx]["parameters"][key] = newParams;
+        });
+
+        updatedData[updatedIdx] = Object.assign(updatedData[updatedIdx], { output_type: data.output_type });
+
+      }
+    })
+
+    setEdit({});
+    setMicroserviceData((prev: any) => ({ ...prev, microservices: updatedData }));
+
+  }
+
+
+  const handleSave = () => {
+    switch (type) {
+      case "pipe":
+        axios.put(`http://localhost:8000/pipes/${id}`, edit[id]).then(() => {
+          setPipeIds((prev: any) => [...prev]);
+        }).catch();
+        break;
+      default:
+        findAndUpdate(data["parameters"]);
     }
+    closeOverlay();
+  }
 
-    const handleSave = () => {
-        switch (type) {
-            case "pipe":
-                axios.put(`http://localhost:8000/pipes/${id}`, edit[id]).then((res) => {
-                    console.log(res)
-                    setPipeIds(prev => [...prev])
-                }).catch((err) => {
-                    console.log(err)
-                })
-                break;
-            default:
-                /** update microserviceData with updated microservices w new params */
-                findAndUpdate(data["name"])
-        }
-        closeOverlay();
-    }
-
-    return (
-        <Modal show={show} onHide={closeOverlay}>
-            <Modal.Header closeButton>
-                <Modal.Title>Edit</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form questions={params} step={0} />
-            </Modal.Body>
-            <Modal.Footer>
-                <S.Button onClick={() => handleSave()}>Save</S.Button>
-            </Modal.Footer>
-        </Modal>
-
-    )
+  return (
+    <Modal show={show} onHide={() => { setEdit({}); closeOverlay() }}>
+      <Modal.Header closeButton>
+        <Modal.Title>Edit</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form itemList={params} step={0} edit={true} onHandleClose={handleSave} />
+      </Modal.Body>
+    </Modal>
+  )
 }

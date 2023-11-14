@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  background-color: #eee;
+  background-color: '#333';
   height: 100vh;
   width: 100%;
   display: flex;

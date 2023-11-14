@@ -1,7 +1,10 @@
 import os
+import shutil
 
 from typing import Annotated
 from fastapi import APIRouter, UploadFile, File, Header, HTTPException
+from fastapi.responses import FileResponse
+from pathlib import Path
 from pprint import pprint
 from server.models.pipes import Pipes
 from server.models.microservices import EditMicroservice
@@ -55,7 +58,21 @@ async def create_pipe(pipe: Pipes, Authorization: str = Header(...)):
     user_pipes.append(_id.inserted_id)
     users_collection.update_one(
         {"_id": userid}, {"$set": {"pipes": user_pipes}})
+    
+    # file copying code taken from https://pynative.com/python-copy-files-and-directories/
+    source_folder = "data/data_files/"
+    destination_folder = f"parsing_modules/pipeline_{pipe.name}_data/"
+    os.makedirs(os.path.dirname(destination_folder), exist_ok=True)
 
+    for file_name in os.listdir(source_folder):
+        # construct full file path
+        source = source_folder + file_name
+        destination = destination_folder + file_name
+        # copy only files
+        if os.path.isfile(source):
+            shutil.copy(source, destination)
+            os.remove(source)
+        
     return {"pipeId": _id.inserted_id.__str__()}
 
 
@@ -91,13 +108,15 @@ def execute_pipe(id: str):
 
     output_json = json.loads(pipe_output)
     if output_json["pipeline"]["success"] is False:
+        pipe["status"] = "Error"
+        pipes_collection.find_one_and_update(
+        {"_id": ObjectId(id)}, {"$set": dict(pipe)})
         raise HTTPException(
             status_code=400, detail=output_json["pipeline"]["error"])
 
-    print(output_json["pipeline"]["microservices"])
-    for microservice in output_json["pipeline"]["microservices"]:
-        pipe["output"][microservice["name"]] = json.dumps(
-            microservice["output"])
+    print('JSON', output_json["pipeline"]["microservices"])
+    
+    pipe["output"] = output_json["pipeline"]["microservices"]
 
     pipe["status"] = "Executed"
     pipe["last_executed"] = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -113,24 +132,42 @@ def edit_pipe(id: str, pipe: Pipes):
     new_pipe = dict(pipe)
     pipes_collection.find_one_and_update(
         {"_id": ObjectId(id)}, {"$set": {"name": new_pipe["name"], "description": new_pipe["description"]}})
-
+    
 
 @router.put("/pipes/{id}/microservices")
 def edit_microservice_parameters(id: str, microservice: EditMicroservice):
     pipe = pipes_collection.find_one({"_id": ObjectId(id)})
-    print(microservice)
     for m in pipe["microservices"]:
-        
         if m["name"] == microservice.name:
             m["parameters"] = microservice.parameters
             break
     pipes_collection.find_one_and_update(
         {"_id": ObjectId(id)}, {"$set": {"microservices": pipe["microservices"]}})
+    
 
+@router.put("/pipes/{id}/{name}")
+def edit_microservice_output_type(id: str, name: str, output_type: str):
+    pipe = pipes_collection.find_one({"_id": ObjectId(id)})
+    for m in pipe["microservices"]:
+        if m["name"] == name:
+            m["output_type"] = output_type
+            break
+    pipes_collection.find_one_and_update(
+        {"_id": ObjectId(id)}, {"$set": {"microservices": pipe["microservices"]}})
 
 
 @router.delete("/pipes/{id}")
 def delete_pipe(id: str):
+    pipe_name = pipes_collection.find_one({"_id": ObjectId(id)})["name"]
+    if os.getcwd().endswith('parsing_modules'):
+        os.chdir('..')
+    if not os.getcwd().endswith('backend'):
+        os.chdir('backend')
+    if os.path.exists(f'parsing_modules/pipeline_{pipe_name}'):
+        shutil.rmtree(f'parsing_modules/pipeline_{pipe_name}')
+    if os.path.exists(f'parsing_modules/pipeline_{pipe_name}_data'):
+        shutil.rmtree(f'parsing_modules/pipeline_{pipe_name}_data')
+
     pipes_collection.find_one_and_delete(
         {"_id": ObjectId(id)})
 
@@ -146,24 +183,23 @@ def get_pipe(id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# @router.get('/get_stock_data/{stock_name}')
-# async def get_stock_data(stock_name:str):
-#     # Fetch data for the selected stock here
-#     try:
-#         stock_data = yf.Ticker(stock_name)
-#         stock_data = stock_data.history()
-#     except:
-#         print("Stock name is wrong")
-#         return
-#     # Process and return the data
-#     if not isinstance(stock_data, pd.DataFrame):
-#         stock_data = pd.DataFrame(stock_data)
-#     stock_data['stock_name'] = stock_name
-#     stock_data = stock_data.to_dict(orient='records')
-#     stock_collection.insert_many(stock_data)
-# @router.get('/get_stock_data/{stock_name}')
-# async def get_stock_data(stock_name: str):
-#    for stock in stock_collection.find({"stock_name": stock_name}):
+@router.get("/pipes/{id}/download/{file}")
+async def download_microservice(id: str, file: str):
+    pipe = pipes_collection.find_one({"_id": ObjectId(id)})
+    pipe_name = pipe["name"]
+
+    file_path = Path(f"/backend/parsing_modules/pipeline_{pipe_name}/{file}")
+
+    print(os.getcwd())
+    print(file_path)
+
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    response = FileResponse(file_path)
+    response.headers["Content-Disposition"] = f'attachment; filename="{file}"'
+    return response
+
 
 
 @router.delete("/clear/pipes")
