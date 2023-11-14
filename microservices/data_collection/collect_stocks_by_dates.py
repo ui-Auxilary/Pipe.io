@@ -1,11 +1,9 @@
-import pandas as pd
-import os
 import datetime
 import yfinance as yf
 import json
 import plotly.graph_objects as go
 
-def import_yahoo_by_dates(ticker: str = 'msft',
+def import_yahoo_by_period(ticker: str = 'msft',
                  start_date: str = (datetime.datetime.now(
                  ) - datetime.timedelta(days=365)).strftime("%Y-%m-%d"),
                  end_date: str = datetime.datetime.now().strftime("%Y-%m-%d"),
@@ -21,7 +19,6 @@ def import_yahoo_by_dates(ticker: str = 'msft',
         pd.DataFrame: A dataframe containing the imported market data.
     """
     ticker = yf.Ticker(ticker)
-
     df = ticker.history(start=start_date, end=end_date, interval="1d")
 
     # Save the dataframe to our storage location

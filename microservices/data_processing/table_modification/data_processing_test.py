@@ -1,5 +1,8 @@
 import pytest
-from microservices.data_processing.table_modification.data_processing import drop_column, sort_column, merge_csv, plot_data
+from microservices.data_visualisation.plot_data_png import plot_data
+from drop_column import drop_column
+from sort_column import sort_column
+from merge_csv import merge_csv
 import pandas as pd
 from math import isclose
 
