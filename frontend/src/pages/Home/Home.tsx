@@ -1,16 +1,13 @@
 import PageTemplate from "components/PageTemplate/PageTemplate";
 import MultiStepForm from "components/MultiStepForm";
-
-import Button from "react-bootstrap/Button";
-
 import Sidebar from "../../components/Sidebar";
 import S from "./style";
-
 import { useEffect, useState } from "react";
 import PipeList from "components/PipeList/PipeList";
 import FormProvider from "components/MultiStepForm/Form/FormProvider";
 import { useAppData } from "helper/AppProvider";
 import getUser from "helper/functions";
+import Header from "components/Header";
 
 export default function Home() {
   const [show, setShow] = useState(false);
@@ -36,13 +33,7 @@ export default function Home() {
       <S.Wrapper>
         <Sidebar />
         <S.Container>
-          <S.Header>
-            <div style={{ display: "flex", gap: "25px" }}>
-              <h3>Pipeline</h3>
-              <Button onClick={handleShow}>+ Create pipeline</Button>
-            </div>
-            <span>Create a pipeline</span>
-          </S.Header>
+          <Header handleShow={handleShow} />
           <S.Body>
             <PipeList />
           </S.Body>

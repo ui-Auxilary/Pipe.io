@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-  background: #5a279b;
+  background: ${({ theme }) => theme.sidebar.backgroundColor};
   color: #fff;
   width: 10%;
   display: flex;
