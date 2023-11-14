@@ -1,7 +1,5 @@
 import pytest
-from collection import import_csv, import_yahoo
-
-
+from microservices.data_collection.collect_stocks_by_dates import import_csv, import_yahoo
 
 def test_import_csv_returns_df():
     df = import_csv("data/stock.csv")

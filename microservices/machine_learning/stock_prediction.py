@@ -11,7 +11,7 @@ DAYS_TO_TAKE_FROM_EACH_PREDICTION = 10
 WINDOW_SIZE = 100
 
 def _load_model():
-    return tf.keras.models.load_model('../additional_required_modules/stock_predictor.h5')
+    return tf.keras.models.load_model('stock_predictor.h5')
 
 def time_prediction_future_stock_values(stock_input_file_path: str = 'stock_data.csv', sentiment_input_file_path: str = 'sentiment_data.csv', number_of_days_to_predict: int = EXTRAPOLATE_DAYS, days_from_each_prediction: int = DAYS_TO_TAKE_FROM_EACH_PREDICTION, prepend_stock_data: bool = False, output_file_path: str = 'stock_predictions.csv'):
     
