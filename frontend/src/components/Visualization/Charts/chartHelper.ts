@@ -12,7 +12,7 @@ export const roundPrice = (showMFI:boolean, showVolume: boolean, showRSI: boolea
     return Math.round(price*100)/ 100 + '%';
   }
 
-  if (showMovingAverage && stock.find((el: { moving_average: number; }) => el.moving_average == price)) {
+  if (showMovingAverage && stock.find((el: { "Moving Average": number; }) => el["Moving Average"] == price)) {
     if (price > 303100) {
       return price;
     }
