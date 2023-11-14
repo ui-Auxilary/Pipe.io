@@ -60,9 +60,13 @@ export default function ChartComponent(props: ChartComponentProps) {
 
   
   let daysPrediction = 0;
+  let prepend = false;
   for (const param in params) {
     if (params[param][0] == "number_of_days_to_predict") {
       daysPrediction = params[param][1]["value"];
+    }
+    if (params[param][0] == "prepend_stock_data") {
+      prepend = params[param][1]["value"];
     }
   }
 
@@ -128,12 +132,16 @@ export default function ChartComponent(props: ChartComponentProps) {
           const temp = { Date: output.Date[key] }
           const entries =  Object.keys(Object.entries(output)[0][1]).length;
           for (const [key2, value] of Object.entries(output)) {
-            if (daysPrediction != 0 && key2 == "Close" && index >= entries - daysPrediction) {
+            console.log(prepend, daysPrediction);
+            if (!prepend && daysPrediction != 0 && key2 == "Close") {
               setShowFutureStock(true);
               temp["Future"] = value[key];
-              continue;
-            }
-            if (key2 != "Date") {
+              // continue;
+            } else if (daysPrediction != 0 && key2 == "Close" && prepend && index >= entries - daysPrediction) {
+              setShowFutureStock(true);
+              temp["Future"] = value[key];
+              // continue;
+            } else if (key2 != "Date") {
               temp[key2] = value[key];
             }
           }
