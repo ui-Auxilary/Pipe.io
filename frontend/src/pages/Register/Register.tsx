@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Form, Button, Card } from "react-bootstrap";
-import { useHistory } from 'react-router-dom';
 import Logo from "assets/logo.svg";
 import axios from "axios";
 import React from "react";
@@ -55,6 +54,9 @@ export default function Register() {
     event.preventDefault();
     if (!validateEmail(values.email)) {
       setErrorMsg({ message: "Invalid email address" });
+      setValid(false);
+    } else if (values.username === '' || values.password === '' || values.password2 === '') {
+      setErrorMsg({ message: "Please fill in all fields" });
       setValid(false);
     } else if (values.password !== values.password2) {
       setErrorMsg({ message: "Passwords do not match" });
