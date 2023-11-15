@@ -40,12 +40,13 @@ export default function Recovery() {
   // Handle form submission
   const handleSubmit = (event: Event) => {
     event.preventDefault();
-    setIsSubmit(true);
     // Check if email is valid
-    if (!validateEmail(values.email)) {
+    if (!validateEmail(values.email) || values.email === '') {
       seterrorMsg({ message: 'Please enter a valid email address.' })
       setValid(false)
       return;
+    } else {
+      setIsSubmit(true);
     }
     requestResetLink();
   }

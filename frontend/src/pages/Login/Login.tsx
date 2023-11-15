@@ -56,7 +56,11 @@ export default function Login() {
   // Handle form submission
   const handleSubmit = (event: Event) => {
     event.preventDefault();
-    if (!validateEmail(values.email)) {
+
+    if (values.email === '' || values.password === '') {
+      seterrorMsg({ ...errorMsg, message: 'Please fill in all fields' })
+      setValid(false)
+    } else if (!validateEmail(values.email)) {
       seterrorMsg({ ...errorMsg, message: 'Invalid email address' })
       setValid(false)
     } else { 
