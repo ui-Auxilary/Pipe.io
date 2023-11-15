@@ -41,7 +41,7 @@ const UploadBlock = styled.div`
   border-radius: 25px;
   border: 2px solid #C2AAAA;
   padding: 25px;
-  overflow: hidden;
+  overflow: auto;
   min-width: 500px;
   height: 600px;
 `
