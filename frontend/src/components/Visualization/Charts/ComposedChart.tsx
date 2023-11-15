@@ -1,4 +1,4 @@
-import { Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Bar, ResponsiveContainer, Area, ComposedChart} from 'recharts';
+import { Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Bar, ResponsiveContainer,  ComposedChart} from 'recharts';
 import {formatDate, roundPrice} from './chartHelper';
 import { ChartProps } from 'types/VisualizationTypes';
 

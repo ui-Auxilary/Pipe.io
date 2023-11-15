@@ -52,13 +52,14 @@ export default function FormItem({ item }: { item: Item }) {
         <ViewMicroservice />
       );
     case 'edit_param':
+      const displayLabel = item.label.replace(/_/g, ' ').replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
       if (item.elType === 'bool') {
         return (
           <>
-            <S.Label>{item.label}</S.Label>
+            <S.Label>{displayLabel}</S.Label>
             <Switch
               onChange={(e) => {
-                setEdit({ ...edit, [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e } });
+                setEdit({ [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e }});
               }}
               checked={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || false}
             />
@@ -68,7 +69,7 @@ export default function FormItem({ item }: { item: Item }) {
 
       return (
         <>
-          <S.Label>{item.label}</S.Label>
+          <S.Label>{displayLabel}</S.Label>
           <ValidatedInput
             value={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}
             item={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}

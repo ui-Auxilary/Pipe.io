@@ -59,6 +59,9 @@ export default function Microservice({ code, name, docstring, param, parent_file
     newData["microservices"].filter((e:any) => e.name == name)[0]["output_type"] = e.value;
     setMicroserviceData(newData);
   }
+  
+  // Remove '_' and capitalize first letter of each word in name
+  const displayName = name.replace(/_/g, ' ').replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
 
 
   const data = {
@@ -77,7 +80,7 @@ export default function Microservice({ code, name, docstring, param, parent_file
         <S.Left>
           <div>
             <S.Label>
-              <h5 style={{ flex: 1 }}>{name}</h5>
+              <h5 style={{ flex: 1 }}>{displayName}</h5>
               <span style={{ color: "#B6A4A4" }}>#{idx}</span>
             </S.Label>
             <S.Tag>
