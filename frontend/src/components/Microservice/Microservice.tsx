@@ -28,10 +28,10 @@ export default function Microservice({ code, name, docstring, param, parent_file
 
   const tagOptions = [
     { value: 'value', label: 'Value' },
+    { value: 'table', label: 'Table'},
     { value: 'graph', label: 'Stock Graph'},
     { value: 'csv', label: 'CSV'},
-    { value: 'plot', label: 'Plot File'},
-    { value: 'table', label: 'Table'}
+    { value: 'plot', label: 'Plot File'}
   ];
 
   const microserviceList = [
