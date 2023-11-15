@@ -41,13 +41,13 @@ def time_prediction_future_stock_values(stock_input_file_path: str = 'stock_data
 
     last_window = np.array(stock_df.Close)[-WINDOW_SIZE:]
     complete_predictions = np.array([])
-    while len(complete_predictions) < EXTRAPOLATE_DAYS:
+    while len(complete_predictions) < number_of_days_to_predict:
         prediction = model.predict(np.array([np.append(last_window, sentiment_value)]))
         complete_predictions = np.concatenate((complete_predictions, prediction[0]))
-        last_window = np.concatenate((last_window[DAYS_TO_TAKE_FROM_EACH_PREDICTION:], prediction[0]))
+        last_window = np.concatenate((last_window[days_from_each_prediction:], prediction[0]))
     
     model_completed_predictions = np.array(list(stock_df.Close) + list(complete_predictions))
-    return_predictions = model_completed_predictions if prepend_stock_data else model_completed_predictions[-EXTRAPOLATE_DAYS:]
+    return_predictions = model_completed_predictions if prepend_stock_data else model_completed_predictions[-number_of_days_to_predict:]
     
     df = pd.DataFrame(return_predictions)
 
