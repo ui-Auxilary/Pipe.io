@@ -29,7 +29,14 @@ Week 7
 Refactored frontend to accept and validate input parameters based on type parsed in from backend. Bug fixing to ensure this new format works in the backend pipeline_parser. Set up custom regex tests 
 to filter input and reduce errors which would break the pipeline.
 
-
 Week 8
 Assisted teammates with bug fixing via screenshare and pair programming. Did some bug fixes and refactors but not too much as I had finished my tickets. Helped prepare for the demo, and wrote
 a bit of installation documentation for the final report.
+
+Week 9
+Worked on t he dark mode feature, and incorporating client feedback into making previously uploaded microservices reuseable. Also implemented a drag and drop feature so that the microservice execution
+order could be specified.
+
+Week 10
+Prepared for final demo and bug fixing to ensure program is robust enough to showcase. Worked on the final report, writing up on the system architecture and the licensing for all the libraries that we used. Also wrote
+sections on the challenges that we faced.
