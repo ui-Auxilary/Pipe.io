@@ -24,7 +24,7 @@ export function useAppData() {
 
 export default function AppProvider({ children }: ChildrenProps) {
   const [user, setUser] = useState("");
-  const [edit, setEdit] = useState<any>({});
+  const [edit, setEdit] = useState<object>({});
   const [refData, setRefData] = useState({});
   const [pipeIds, setPipeIds] = useState<string[]>([]);
   const [appFiles, setAppFiles] = useState<(File | string)[]>([])

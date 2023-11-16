@@ -12,7 +12,7 @@ export interface ChartData {
   showFuture: boolean;
   showMFI: boolean;
 }
-  
+
 export interface ChartProps {
   chartData: ChartData;
 }
@@ -21,8 +21,8 @@ export interface ChartComponentProps {
   pipeId: string;
   name: string;
   index: number;
-  params: any;
-  data: any;
+  params: object;
+  data: object;
   children?: ReactNode;
 }
 

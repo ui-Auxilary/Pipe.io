@@ -2,7 +2,7 @@ import axios from "axios";
 import Form from "components/MultiStepForm/Form";
 import { useFormData } from "components/MultiStepForm/Form/FormProvider";
 import { useEffect, useState } from "react";
-import {  Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { EditProps } from "types/EditTypes";
 
 import { useAppData } from "helper/AppProvider";
@@ -22,8 +22,8 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
 
     // Loop through edit to see what indexes need to be updated
     Object.keys(edit).map(idx => {
-      let editIdx = parseInt(idx);
-      let updatedIdx = editIdx - 1;
+      const editIdx = parseInt(idx);
+      const updatedIdx = editIdx - 1;
       if (updatedIdx >= 0 && updatedData[updatedIdx]) {
 
         Object.keys(parameters).forEach(key => {

@@ -1,4 +1,3 @@
-import { useState } from "react"
 import S from './Styles'
 import Button from 'react-bootstrap/Button';
 import fileImg from './file-svgrepo-com.svg';

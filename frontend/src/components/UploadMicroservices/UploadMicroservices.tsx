@@ -11,7 +11,7 @@ export default function UploadMicroservices() {
 
     useEffect(() => {
         // Load in microservices
-        let pythonRegex = /^[^_].*.py$/;
+        const pythonRegex = /^[^_].*.py$/;
         axios.get(`http://localhost:8000/microservice/list`).then(res => {setMicroserviceList(res.data.filter((filename: string) => pythonRegex.test(filename))) })
         setMicroserviceData({})
     }, [])

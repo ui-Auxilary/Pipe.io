@@ -1,8 +1,5 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
 import S from './styles'
-import Button from 'react-bootstrap/Button';
-import fileImg from './file-svgrepo-com.svg'
 
 
 interface prop {
@@ -28,7 +25,7 @@ export default function Table(props: prop) {
             <>
               <S.TableHead>
                 {col}
-                {Object.entries(data[col]).map((item, idx) => {
+                {Object.entries(data[col]).map((item) => {
                   const [key, value] = item;
                   return (
 

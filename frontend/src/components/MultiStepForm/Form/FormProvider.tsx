@@ -1,9 +1,7 @@
 import axios from "axios";
-import React, { ReactNode } from "react";
 import { createContext, useContext, useState } from "react"
 
 import { useAppData } from "helper/AppProvider";
-import getUser from "helper/functions";
 import { UserData, MicroserviceData, FormContextType } from "types/MultistepFormTypes";
 import { FormProviderProps } from "types/MultistepFormTypes";
 
@@ -37,7 +35,7 @@ export default function FormProvider({ children }: FormProviderProps) {
       headers: {
         "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
       }
-    }).then((res:any) => setPipeIds((prevIds: any) => [...prevIds, res?.data?.pipeId]))
+    }).then((res: any) => setPipeIds((prevIds: any) => [...prevIds, res?.data?.pipeId]))
     handleClose()
     setUserData({})
     setEdit({})

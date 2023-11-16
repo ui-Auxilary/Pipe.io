@@ -13,7 +13,7 @@ export interface MicroserviceInterface {
 // }
 
 export interface PipeListResponse {
-  data: any; 
+  data: object;
 }
 
 export interface PipeInterface {

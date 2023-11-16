@@ -21,9 +21,9 @@ export interface ChildrenProps {
 }
 
 export interface ValidationProps {
-  value?: any
+  value?: string
   item?: Item
-  customValidity?: any
+  customValidity?: RegExp
   errorMessage?: string
   isEdit?: boolean
   [el: string]: any

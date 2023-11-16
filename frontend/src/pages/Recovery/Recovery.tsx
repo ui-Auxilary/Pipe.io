@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Form, Button, Card } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import Logo from "assets/logo.svg";
 import Sent from "./Secondary/Sent";
 import s from "./Style";
@@ -52,40 +52,40 @@ export default function Recovery() {
 
   return (
     <>
-    {!isSubmit && 
-    <s.Container>
-      <s.Logo src={Logo}></s.Logo>
-      <s.CardContainer className="register-card">
-        <s.CardHeader><h5>Forgot Password</h5></s.CardHeader>
-        <s.CardBody>
-          <Form className="register-form" onSubmit={handleSubmit}>
-            {!valid ? <s.ErrorContainer>{errorMsg.message}</s.ErrorContainer> : null}
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                name="email"
-                value={values.email}
-                onChange={handleEmailInput}
-              />
-              <Form.Text className="text-muted"> We'll send a reset link to your email.</Form.Text>
-            </Form.Group>
-            <s.ButtonContainer>
-              <Button variant="primary" type="submit">
-                Submit
-              </Button>
-            </s.ButtonContainer>
-            <s.ButtonContainer>
-              <Button variant="secondary" onClick={() => window.location.href="/login"}>
-                Back to Login
-              </Button>
-            </s.ButtonContainer>
-          </Form>
-        </s.CardBody> 
-      </s.CardContainer>
-    </s.Container>}
-    {isSubmit && <Sent email={values.email}/>}
+      {!isSubmit &&
+        <s.Container>
+          <s.Logo src={Logo}></s.Logo>
+          <s.CardContainer className="register-card">
+            <s.CardHeader><h5>Forgot Password</h5></s.CardHeader>
+            <s.CardBody>
+              <Form className="register-form" onSubmit={handleSubmit}>
+                {!valid ? <s.ErrorContainer>{errorMsg.message}</s.ErrorContainer> : null}
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    name="email"
+                    value={values.email}
+                    onChange={handleEmailInput}
+                  />
+                  <Form.Text className="text-muted"> We'll send a reset link to your email.</Form.Text>
+                </Form.Group>
+                <s.ButtonContainer>
+                  <Button variant="primary" type="submit">
+                    Submit
+                  </Button>
+                </s.ButtonContainer>
+                <s.ButtonContainer>
+                  <Button variant="secondary" onClick={() => window.location.href = "/login"}>
+                    Back to Login
+                  </Button>
+                </s.ButtonContainer>
+              </Form>
+            </s.CardBody>
+          </s.CardContainer>
+        </s.Container>}
+      {isSubmit && <Sent email={values.email} />}
     </>
   );
 }

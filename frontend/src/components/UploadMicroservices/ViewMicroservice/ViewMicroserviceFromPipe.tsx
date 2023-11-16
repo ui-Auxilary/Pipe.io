@@ -8,7 +8,7 @@ export default function ViewMicroserviceFromPipe({ pipeId }: ViewMicroserviceFro
   const [microservices, setMicroservices] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/pipes/${pipeId}`).then((res: any) => {
+    axios.get(`http://localhost:8000/pipes/${pipeId}`).then((res) => {
       setMicroservices(res.data.microservices)
     })
 
