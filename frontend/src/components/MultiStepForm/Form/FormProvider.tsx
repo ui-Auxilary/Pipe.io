@@ -30,18 +30,19 @@ export default function FormProvider({ children }: FormProviderProps) {
   const [userData, setUserData] = useState<UserData>({})
   const [microserviceData, setMicroserviceData] = useState<MicroserviceData>({});
 
-  const { user, setPipeIds, pipeIds, setEdit } = useAppData()
+  const { user, setPipeIds, pipeIds, setEdit, setAppFiles } = useAppData()
 
   const submitData = (handleClose: any) => {
     axios.post('http://localhost:8000/pipes/create', Object.assign({ user_id: user, microservices: microserviceData.microservices }, userData), {
       headers: {
         "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
       }
-    }).then((res:any) => setPipeIds((prevIds: any) => [...prevIds, res?.data?.pipeId]))
+    }).then((res: any) => setPipeIds((prevIds: any) => [...prevIds, res?.data?.pipeId]))
     handleClose()
     setUserData({})
     setEdit({})
     setMicroserviceData({})
+    setAppFiles([])
   }
 
   return (

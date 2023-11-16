@@ -49,7 +49,7 @@ export default function ViewMicroservice() {
   }
 
   async function readFiles() {
-    console.log('READUBG', appFiles)
+    console.log('READUBG', appFiles, microserviceList)
     appFiles?.map(file => {
       if (typeof file !== 'string') {
         const reader = new FileReader();
