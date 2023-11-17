@@ -50,8 +50,18 @@ const ScrollableDiv = styled.div`
   }
 `;
 
+const Erase = styled.button`
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+  color: #fff;
+  font-weight: 600;
+  background: #404040;
+`;
 export default {
   Container,
+  Erase,
   Wrapper,
   FileIcon,
   FileBox,

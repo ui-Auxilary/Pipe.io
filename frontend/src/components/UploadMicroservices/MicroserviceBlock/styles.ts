@@ -13,8 +13,8 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
 `
-const Add = styled.button`
-  background: #A88F8F;
+const Add = styled.button<{ $added: boolean }>`
+  background: ${props => props.$added ? '#0d6efd' : '#A88F8F'};
   width: 80px;
   height: 35px;
   padding: 2px;

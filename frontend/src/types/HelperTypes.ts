@@ -10,8 +10,10 @@ export interface AppProviderType {
   setEdit: React.Dispatch<React.SetStateAction<any>>
   refData: Record<string, NonNullable<unknown>>,
   setRefData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>,
-  appFiles: (File | string)[],
-  setAppFiles: React.Dispatch<React.SetStateAction<(File | string)[]>>
+  appFiles: (File)[],
+  setAppFiles: React.Dispatch<React.SetStateAction<(File)[]>>,
+  prevFiles: (string)[],
+  setPrevFiles: React.Dispatch<React.SetStateAction<(string)[]>>
   darkMode: boolean,
   setDarkMode: React.Dispatch<React.SetStateAction<boolean>>
 }
