@@ -24,6 +24,11 @@ export default function Home() {
   useEffect(() => {
     getUser().then(({ user }) => {
       setUser(JSON.parse(user).id)
+    }).catch((error) => {
+      if (error.response.status === 401) {
+        sessionStorage.removeItem("token");
+        window.location.href = "/login";
+      }
     })
 
   }, [])
