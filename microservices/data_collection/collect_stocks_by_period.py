@@ -2,7 +2,7 @@ import pandas as pd
 import yfinance as yf
 import plotly.graph_objects as go
 
-def import_yahoo(ticker: str = 'msft',
+def import_yahoo_by_date(ticker: str = 'msft',
                  output_file_path: str = 'stock_data.csv',
                  time_period: str = '1y'):
     """Imports market data from Yahoo using the yfinance Ticker API.

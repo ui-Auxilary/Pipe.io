@@ -54,6 +54,7 @@ async def create_pipe(pipe: Pipes, Authorization: str = Header(...)):
 
     _id = pipes_collection.insert_one(dict(pipe))
 
+    # Add pipe to user
     user_pipes = user["pipes"]
     user_pipes.append(_id.inserted_id)
     users_collection.update_one(
@@ -82,6 +83,7 @@ def execute_pipe(id: str):
 
     condensed_microservices = []
 
+    # Create a condensed version of the microservices
     for microservice in pipe["microservices"]:
         condensed_microservices.append(
             {
@@ -96,7 +98,6 @@ def execute_pipe(id: str):
         "microservices": condensed_microservices
     }
 
-    # Test object
     json_object = json.dumps(return_dict, indent=4)
     with open("pipeline.json", "w") as outfile:
         outfile.write(json_object)
@@ -106,6 +107,7 @@ def execute_pipe(id: str):
     print(f'Output is ----------------------\n{pprint(pipe_output)}')
     pprint(pipe_output)
 
+    # Check if the pipeline was successful
     output_json = json.loads(pipe_output)
     if output_json["pipeline"]["success"] is False:
         pipe["status"] = "Error"
@@ -115,7 +117,6 @@ def execute_pipe(id: str):
             status_code=400, detail=output_json["pipeline"]["error"])
 
     print('JSON', output_json["pipeline"]["microservices"])
-    
     pipe["output"] = output_json["pipeline"]["microservices"]
 
     pipe["status"] = "Executed"
@@ -183,6 +184,7 @@ def get_pipe(id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.get("/pipes/{id}/download/{file}")
 async def download_microservice(id: str, file: str):
     pipe = pipes_collection.find_one({"_id": ObjectId(id)})
@@ -190,16 +192,12 @@ async def download_microservice(id: str, file: str):
 
     file_path = Path(f"/backend/parsing_modules/pipeline_{pipe_name}/{file}")
 
-    print(os.getcwd())
-    print(file_path)
-
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="File not found")
     
     response = FileResponse(file_path)
     response.headers["Content-Disposition"] = f'attachment; filename="{file}"'
     return response
-
 
 
 @router.delete("/clear/pipes")

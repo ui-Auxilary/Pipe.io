@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 import os
 
 # DEFAULT CONSTANTS
-EXTRAPOLATE_DAYS = 200
+EXTRAPOLATE_DAYS = 20
 DAYS_TO_TAKE_FROM_EACH_PREDICTION = 10
 
 # MODEL CONSTANTS
@@ -47,7 +47,7 @@ def gather_news_title_data_for_stock(stock: str = 'msft', output_file_path: str 
     # display the news data as a json for users to see
     return news_df.to_json()
 
-def import_yahoo(ticker: str = 'msft',
+def import_yahoo_by_period(ticker: str = 'msft',
                  output_file_path: str = 'stock_data.csv',
                  time_period: str = '1y'):
     """Imports market data from Yahoo using the yfinance Ticker API.
