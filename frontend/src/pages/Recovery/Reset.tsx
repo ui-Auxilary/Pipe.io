@@ -45,12 +45,14 @@ export default function Reset() {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
+    console.log(values);
   };
   
   const requestReset = async () => {
     const data = new URLSearchParams();
     data.append('password', values.password);
     data.append('reset_token', token as string);
+    console.log(data);
     axios.put(`http://localhost:8000/users/reset_password`, data, {
       headers: {
         'Content-type': 'application/x-www-form-urlencoded',
@@ -87,6 +89,7 @@ export default function Reset() {
               <Form.Label>New Password</Form.Label>
               <Form.Control
                 type="password"
+                name="password"
                 placeholder="Enter new password"
                 onChange={handleInputChange}
                 required
@@ -96,6 +99,7 @@ export default function Reset() {
               <Form.Label>Confirm New Password</Form.Label>
               <Form.Control
                 type="password"
+                name="password2"
                 placeholder="Confirm new password"
                 onChange={handleInputChange}
                 required

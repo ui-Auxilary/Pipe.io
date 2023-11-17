@@ -56,6 +56,9 @@ export default function Register() {
     if (!validateEmail(values.email)) {
       setErrorMsg({ message: "Invalid email address" });
       setValid(false);
+    } else if (values.username === '' || values.password === '' || values.password2 === '') {
+      setErrorMsg({ message: "Please fill in all fields" });
+      setValid(false);
     } else if (values.password !== values.password2) {
       setErrorMsg({ message: "Passwords do not match" });
       setValid(false);
