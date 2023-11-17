@@ -24,3 +24,6 @@ Worked on completing the pipeline system, including modifying microservices to w
 
 Week 9 
 Created and styled the tables ouput type. Created a rerun button for pipes. Added persistence for pipes that have already run or that returned an error. Modified status type for MongoDB upload.
+
+Week 10
+Preparing for presentation and writing report

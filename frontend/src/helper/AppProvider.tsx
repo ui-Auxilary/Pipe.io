@@ -12,6 +12,8 @@ export const AppProviderContext = createContext<AppProviderType>({
   setRefData: () => { },
   appFiles: [],
   setAppFiles: () => { },
+  prevFiles: [],
+  setPrevFiles: () => { },
   darkMode: false,
   setDarkMode: () => { },
 });
@@ -27,7 +29,8 @@ export default function AppProvider({ children }: ChildrenProps) {
   const [edit, setEdit] = useState<Record<number, object>>({});
   const [refData, setRefData] = useState({});
   const [pipeIds, setPipeIds] = useState<string[]>([]);
-  const [appFiles, setAppFiles] = useState<(File | string)[]>([])
+  const [appFiles, setAppFiles] = useState<(File)[]>([]);
+  const [prevFiles, setPrevFiles] = useState<(string)[]>([]);
   const storedDarkMode = localStorage.getItem("darkMode");
   const [darkMode, setDarkMode] = useState(JSON.parse(storedDarkMode || 'false') || false);
 
@@ -36,7 +39,7 @@ export default function AppProvider({ children }: ChildrenProps) {
   }, [darkMode])
 
   return (
-    <AppProviderContext.Provider value={{ user, setUser, pipeIds, setPipeIds, edit, setEdit, refData, setRefData, appFiles, setAppFiles, darkMode, setDarkMode }}>
+    <AppProviderContext.Provider value={{ user, setUser, pipeIds, setPipeIds, edit, setEdit, refData, setRefData, appFiles, setAppFiles, prevFiles, setPrevFiles, darkMode, setDarkMode }}>
       {children}
     </AppProviderContext.Provider>
   )

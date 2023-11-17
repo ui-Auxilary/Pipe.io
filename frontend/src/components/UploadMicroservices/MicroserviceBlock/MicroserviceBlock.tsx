@@ -2,17 +2,18 @@ import axios from 'axios';
 import S from './styles'
 import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
 import { useAppData } from 'helper/AppProvider';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-export default function MicroserviceBlock({ name }: { name: string }) {
+export default function MicroserviceBlock({ name, isAdded }: { name: string, isAdded: boolean }) {
     const { microserviceData, setMicroserviceData } = useFormData();
-    const { setAppFiles } = useAppData();
+    const { setPrevFiles } = useAppData();
+    const [added, setAdded] = useState(isAdded);
 
-    const addMicroservice = (e: React.FormEvent) => {
-        e.preventDefault();
+    const addMicroservice = () => {
+        setAdded(true);
         const microserviceList: object[] = (microserviceData["microservices"] as []) || []
         axios.post(`http://localhost:8000/microservice/add/${name}`).then(res => {
-            setAppFiles(prev => [...prev, name]);
+            setPrevFiles(prev => [...prev, name]);
             setMicroserviceData({ "microservices": [...microserviceList.concat(...JSON.parse(res.data)["microservices"])] })
         })
     };
@@ -20,6 +21,6 @@ export default function MicroserviceBlock({ name }: { name: string }) {
     return (
         <S.Container>
             {name}
-            <S.Add onClick={addMicroservice}>+ Add</S.Add>
+            <S.Add $added={isAdded} onClick={(e) => { e.preventDefault(); addMicroservice() }} disabled={isAdded}>{isAdded ? ("Added") : ("+ Add")}</S.Add>
         </S.Container>);
 }

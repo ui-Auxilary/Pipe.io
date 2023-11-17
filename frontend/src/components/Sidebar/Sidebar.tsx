@@ -2,14 +2,16 @@ import S from "./style";
 import { Button } from "react-bootstrap";
 import Process from 'assets/process.svg'
 import Logo from "assets/logo.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import getUser from "helper/functions";
 
 export default function Sidebar() {
   const [user, setUser] = useState('')
-  getUser().then(({ user }) => {
-    setUser(JSON.parse(user).username)
-  })
+  useEffect(() => {
+    getUser().then(({ user }) => {
+      setUser(JSON.parse(user).username)
+    })
+  }, [])
 
   return (
     <S.Container>
@@ -34,13 +36,13 @@ function handleLogOut() {
       "Content-type": "application/x-www-form-urlencoded",
       "Authorization": "Bearer " + sessionStorage.getItem("token"),
     },
-    }).then((res: Response) => {
-        if (res.status === 200) {
-          window.location.href = "/login";
-          sessionStorage.removeItem("token");
-        }
-      }).catch(() => {
-        window.location.href = "/login";
-    });
+  }).then((res: Response) => {
+    if (res.status === 200) {
+      window.location.href = "/login";
+      sessionStorage.removeItem("token");
+    }
+  }).catch(() => {
+    window.location.href = "/login";
+  });
 
 }

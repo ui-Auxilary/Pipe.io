@@ -7,16 +7,23 @@ import S from "./style";
 import axios from "axios";
 import { useAppData } from "helper/AppProvider";
 import { DropzoneProps } from "types/dropzone";
+import { useFormData } from "components/MultiStepForm/Form/FormProvider";
 
 
 export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
-  const { appFiles, setAppFiles } = useAppData()
-  const [files, setFiles] = useState<File[]>([]);
+  const { prevFiles, setPrevFiles, appFiles, setAppFiles } = useAppData()
+  const { setMicroserviceData } = useFormData();
+  const [files, setFiles] = useState<File[]>(appFiles.length > 0 ? [...appFiles.filter(x => typeof x != 'string') as File[]] : []);
+  const [mapFiles, setMapFiles] = useState<(File | string)[]>([]);
   const [rejectedfiles, setRejectedFiles] = useState<FileRejection[]>([]);
 
   useEffect(() => {
-    setAppFiles([]);
-  }, [])
+    if (upload) {
+      setMapFiles([...appFiles, ...prevFiles] || [...files])
+    } else {
+      setMapFiles([...files.filter(file => (/^.*.csv$/).test(file.name))])
+    }
+  }, [files, prevFiles])
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -48,7 +55,6 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
     onDrop,
   });
 
-  const mapFiles = upload ? appFiles : files;
   const fileDisplay = mapFiles?.map((file) => {
     return (<S.FileBox key={window.crypto.randomUUID()}>
       <S.FileIcon
@@ -80,16 +86,15 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
     return () => {
       if (files) {
         if (filetype == "python") {
-          setAppFiles([...files]);
         }
       }
     }
-  }, [])
+  }, [files])
 
   useEffect(() => {
     return () => {
       if (files && filetype == "csv") {
-        files?.map((file) => {
+        files.filter(file => (/^.*.csv$/).test(file.name))?.map((file) => {
           const reader = new FileReader();
           reader.readAsText(file)
           reader.onload = () => {
@@ -100,6 +105,7 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
             }
           };
         })
+        setAppFiles([])
       }
     }
   }, [files])
@@ -128,6 +134,7 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
         </S.Wrapper>
       </S.Container>
       <aside style={{ width: "500px" }}>
+        {mapFiles.length > 0 && <S.Erase onClick={(e) => { e.preventDefault(); setAppFiles([]); setPrevFiles([]); setMicroserviceData({}); setFiles([]) }}>Clear All</S.Erase>}
         {fileDisplay.length > 0 ? (
           <S.ScrollableDiv style={{ maxHeight: upload ? '320px' : '120px' }}>
             {fileDisplay}
