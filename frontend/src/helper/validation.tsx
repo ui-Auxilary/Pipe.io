@@ -31,6 +31,7 @@ export default function ValidatedInput({ item, customValidity, errorMessage, isE
     return false;
   }
 
+  console.log('EDITING', item, edit)
   useEffect(() => {
     if (customValidity !== undefined && ref.current !== null) {
       if (!ref.current.value) {

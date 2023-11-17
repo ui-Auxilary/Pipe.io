@@ -8,7 +8,7 @@ import { EditFromPipeProps } from "types/EditTypes";
 
 export default function EditFromPipe({ id, show, params, data, closeOverlay, type = "microservice", parent_pipe_id, idx }: EditFromPipeProps) {
   const [microservice, setMicroservice] = useState([]);
-  const { edit, setPipeIds } = useAppData();
+  const { edit, setEdit, setPipeIds } = useAppData();
 
   useEffect(() => {
     setMicroservice(data)
@@ -23,6 +23,8 @@ export default function EditFromPipe({ id, show, params, data, closeOverlay, typ
         updatedData["parameters"][key] = newParams;
       }
     })
+    setEdit({});
+
     setMicroservice((prev: any) => ({ ...prev, microservices: updatedData }));
 
   }
