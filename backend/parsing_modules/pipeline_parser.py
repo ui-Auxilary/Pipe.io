@@ -26,6 +26,7 @@ def execute_pipeline(pipeline_json):
     print(f"Directory is {os.getcwd()}")
     print(f'is has {os.listdir()}')
 
+    # remove the directory for the pipeline if it exists
     if os.path.exists(f'pipeline_{pipeline_json["pipeline"]}'):
         shutil.rmtree(f'pipeline_{pipeline_json["pipeline"]}')
 
@@ -62,7 +63,7 @@ def execute_pipeline(pipeline_json):
             os.chdir(MICROSERVICES_DIRECTORY)
             python_file = microservice['file']
             
-            # we do not want any file extensions on imported files
+            # remove the .py extension to import the module
             python_file = python_file.replace('.py', '')
             imported_module = importlib.import_module(python_file)
             os.chdir('..')
@@ -72,8 +73,8 @@ def execute_pipeline(pipeline_json):
             microservice_name = microservice['name']
             microservice_parameters = dict(microservice['parameters'])
 
-            # parameters are in the form of variable: value, convert them into a list of variable=eval(value)
-
+            
+            # Attempt to parse the parameters with ast.literal_eval otherwise leave it as a string
             for key, value_dict in microservice_parameters.items():
                 try:
                     value = value_dict['value'] if 'value' in value_dict else value_dict['default']
@@ -86,7 +87,7 @@ def execute_pipeline(pipeline_json):
 
             microservice_function = getattr(imported_module, microservice_name)
 
-
+            # execute the microservice with the parameters
             microservice_output = microservice_function(
                 **microservice_parameters)
             pipeline_output['pipeline']['microservices'].append({

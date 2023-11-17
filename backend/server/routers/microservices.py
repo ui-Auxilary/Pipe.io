@@ -14,7 +14,6 @@ from bson import ObjectId, json_util
 
 router = APIRouter()
 
-# pipes_list GET
 
 
 @router.get("/microservice/list")
@@ -39,24 +38,20 @@ async def add_microservice(name):
 @router.put("/microservice/{id}")
 async def edit_microservice(id: str, microservice: EditMicroservice):
     new_microservice = dict(microservice)
-    #print(new_microservice["parameters"])
     if new_microservice["parameters"] is None:
         raise HTTPException(status_code=400, detail= "microservice is NoneType")
     else:
         for parameter in new_microservice["parameters"]:
-            #print(parameter)
-            print(new_microservice["parameters"][parameter])
-            
+            # Attempt to parse the value with ast.literal_eval otherwise leave it as a string
             try:
-                # Attempt to parse the value with ast.literal_eval
                 new_microservice["parameters"][parameter]["default"] = ast.literal_eval(new_microservice["parameters"][parameter]["default"])
-                
             except (ValueError, SyntaxError):
                 pass
+            # Raise an error if the value is not of the correct type
             if new_microservice["parameters"][parameter]["default"].__class__.__name__ != new_microservice["parameters"][parameter]["type"]:
                 raise HTTPException(status_code=404, detail=f"The parameter {new_microservice['parameters'][parameter]['default']} should be of type {new_microservice['parameters'][parameter]['type']}")
-            
-    #print("Test",new_microservice["parameters"])
+        
+        # Update the microservice in the database
         microservices_collection.find_one_and_update(
             {"_id": ObjectId(id)}, {"$set": {"parameters": new_microservice["parameters"]}})
 
@@ -94,6 +89,5 @@ async def upload_CSV(file: FileContent):
     filepath = f"data/data_files/{file.filename}"
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
-    # Need to test with empty/invalid files error handling
     with open(filepath, 'w+') as f:
         f.write(file.content)
