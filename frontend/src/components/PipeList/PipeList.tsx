@@ -71,7 +71,7 @@ export default function PipeList() {
     }, [pipeIds])
 
     useEffect(() => {
-        const res = checkboxRef?.current?.filter((x: any) => !!x).filter((x: Checked) => x?.checked === true)
+        const res = checkboxRef?.current?.filter((x) => !!x).filter((x: Checked) => x?.checked === true)
         res.length ? setChecked(true) : setChecked(false)
         setNumChecked(res.length)
     }, [refData])

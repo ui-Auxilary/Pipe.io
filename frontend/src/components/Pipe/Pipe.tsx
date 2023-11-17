@@ -17,7 +17,7 @@ import ViewMicroserviceFromPipe from 'components/UploadMicroservices/ViewMicrose
 import { Props, ExecuteProps, PipeResponse } from 'types/PipeTypes';
 
 
-const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props, ref: { current: any[] }) => {
+const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props, ref: { current: unknown[] }) => {
     const [show, setShow] = useState(false);
     const [showView, setShowView] = useState(false);
     const [del, setDel] = useState(false);
@@ -77,7 +77,7 @@ const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props,
     const executePipe = () => {
         setStatus("Running");
         axios.post('http://localhost:8000/pipes/execute/', null, { params: { id: pipeId } })
-            .then((res: any) => {
+            .then((res) => {
                 setStatus("Completed");
                 setExecuted({ "time": format(Date.now(), 'yyyy-MM-dd HH:mm:ss'), "result": res.data });
             })
@@ -109,7 +109,7 @@ const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props,
 
     useEffect(() => {
         axios.get(`http://localhost:8000/pipes/${pipeId}`).then((res: PipeResponse) => {
-            setExecuted((executed: any) => ({ ...executed, "time": res.data.last_executed }))
+            setExecuted((executed) => ({ ...executed, "time": res.data.last_executed }))
             if (res.data.status == "Error") {
                 setStatus("Error")
             } else if (res.data.last_executed) {

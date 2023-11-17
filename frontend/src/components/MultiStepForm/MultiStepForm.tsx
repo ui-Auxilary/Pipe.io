@@ -11,8 +11,7 @@ import { MultiFormProps } from "types/MultistepFormTypes";
 import { useAppData } from "helper/AppProvider";
 
 export default function MultiStepForm({ show, handleClose }: MultiFormProps) {
-  const { setMicroserviceData } = useFormData();
-  const { setAppFiles, setPrevFiles, setEdit } = useAppData();
+  const { setAppFiles, setPrevFiles } = useAppData();
   const itemList = [
     {
       section: 1,

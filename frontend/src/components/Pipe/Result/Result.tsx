@@ -6,6 +6,7 @@ import ChartComponent from "components/Visualization/Visualization";
 import Download from "./Download/Download";
 import DownloadCSV from "./CSV/DownloadCSV";
 import Table from "./Table/Table";
+import { ResultInterface, PageContentInterface } from "types/ResultTypes";
 
 
 
@@ -57,35 +58,35 @@ export default function Result({ pipeId }: { pipeId: string }) {
 }
 
 
-function checkForStockData(result: any, pageContent: any) {
+function checkForStockData(result: ResultInterface, pageContent: PageContentInterface) {
     if (result.output && pageContent.output_type == "graph") {
         return true;
     }
     return false;
 }
 
-function checkForPlot(result: any, pageContent: any) {
+function checkForPlot(result: ResultInterface, pageContent: PageContentInterface) {
     if (result.output && pageContent.output_type == "plot") {
         return true;
     }
     return false;
 }
 
-function checkForValue(result: any, pageContent: any) {
+function checkForValue(result: ResultInterface, pageContent: PageContentInterface) {
     if (result.output && pageContent.output_type == "value") {
         return true;
     }
     return false;
 }
 
-function checkForCSV(result: any, pageContent: any) {
+function checkForCSV(result: ResultInterface, pageContent: PageContentInterface) {
     if (result.output && pageContent.output_type == "csv") {
         return true;
     }
     return false;
 }
 
-function checkForTable(result: any, pageContent: any) {
+function checkForTable(result: ResultInterface, pageContent: PageContentInterface) {
     if (result.output && pageContent.output_type == "table") {
         return true;
     }

@@ -2,23 +2,23 @@ import { format } from "date-fns";
 import { StockInterface } from "types/VisualizationTypes";
 
 // round to 2 decimal places
-export const roundPrice = (showMFI:boolean, showVolume: boolean, showRSI: boolean, showMovingAverage: boolean, price: number, stock: any) => {
+export const roundPrice = (showMFI:boolean, showVolume: boolean, showRSI: boolean, showMovingAverage: boolean, price: number, stock: StockInterface[]) => {
 
-  if (showVolume && stock.find((el: { Volume: number; }) => el.Volume == price)) {
+  if (showVolume && stock.find((el) => el.Volume == price)) {
     return price;
   }
 
-  if (showRSI && stock.find((el: { RSI: number; }) => el.RSI == price)) {
+  if (showRSI && stock.find((el) => el.RSI == price)) {
     return Math.round(price*100)/ 100 + '%';
   }
 
-  if (showMovingAverage && stock.find((el: { "Moving Average": number; }) => el["Moving Average"] == price)) {
+  if (showMovingAverage && stock.find((el) => el["Moving Average"] == price)) {
     if (price > 303100) {
       return price;
     }
   }
 
-  if (showMFI && stock.find((el: { MFI: number; }) => el.MFI == price)) {
+  if (showMFI && stock.find((el) => el.MFI == price)) {
     return Math.round(price*100)/ 100 + '%';
   }
 
@@ -37,56 +37,96 @@ export const formatDate = (date: string) => {
 
 
 const isMovingAverage = (stock: StockInterface[]) => {
-  if (stock[0] && stock[stock.length -1]["Moving Average"] != undefined) {
-    return true;
+  if (stock[0]) {
+    for (let i = 0; i < stock.length; i++) {
+      if (stock[i]["Moving Average"] != undefined) {
+        return true;
+      }
+    }
   }
+  return false;
 }
 
 const isRSI = (stock: StockInterface[]) => {
-  if (stock[0] && stock[stock.length -1].RSI != undefined) {
-    return true;
+  if (stock[0]) {
+    for (let i = 0; i < stock.length; i++) {
+      if (stock[i].RSI != undefined) {
+        return true;
+      }
+    }
   }
+  return false;
 }
 
 const isOpen = (stock: StockInterface[]) => {
-  if (stock[0] && stock[0].Open != undefined) {
-    return true;
+  if (stock[0]) {
+    for (let i = 0; i < stock.length; i++) {
+      if (stock[i].Open != undefined) {
+        return true;
+      }
+    }
   }
+  return false;
 }
 
 const isHigh = (stock: StockInterface[]) => {
-  if (stock[0] && stock[0].High != undefined) {
-    return true;
+  if (stock[0]) {
+    for (let i = 0; i < stock.length; i++) {
+      if (stock[i].High != undefined) {
+        return true;
+      }
+    }
   }
+  return false;
 }
 
 const isLow = (stock: StockInterface[]) => {
-  if (stock[0] && stock[0].Low != undefined) {
-    return true;
+  if (stock[0]) {
+    for (let i = 0; i < stock.length; i++) {
+      if (stock[i].Low != undefined) {
+        return true;
+      }
+    }
   }
 }
 
 const isVolume = (stock: StockInterface[]) => {
-  if (stock[0] && stock[0].Volume != undefined) {
-    return true;
+  if (stock[0]) {
+    for (let i = 0; i < stock.length; i++) {
+      if (stock[i].Volume != undefined) {
+        return true;
+      }
+    }
   }
 }
 
 const isClose = (stock: StockInterface[]) => {
-  if (stock[0] && stock[0].Close != undefined) {
-    return true;
+  if (stock[0]) {
+    for (let i = 0; i < stock.length; i++) {
+      if (stock[i].Close != undefined) {
+        return true;
+      }
+    }
   }
 }
 
 const isFuture = (stock: StockInterface[]) => {
-  if (stock[0] && stock[stock.length -1].Future != undefined) {
-    return true;
+  if (stock[0]) {
+    for (let i = 0; i < stock.length; i++) {
+      if (stock[i].Future != undefined) {
+        return true;
+      }
+    }
   }
 }
 
 const isMFI = (stock: StockInterface[]) => {
-  if (stock[0] && stock[stock.length-1].MFI != undefined) {
-    return true;
+  if (stock[0]) {
+    for (let i = 0; i < stock.length; i++) {
+      if (stock[i].MFI != undefined) {
+        return true;
+      }
+    }
   }
 }
 

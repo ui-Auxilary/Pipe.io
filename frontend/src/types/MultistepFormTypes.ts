@@ -45,6 +45,7 @@ export interface Item {
   validation?: RegExp | undefined;
   name: string | undefined;
   errorMessage?: string;
+  elType?: string;
 }
 
 
