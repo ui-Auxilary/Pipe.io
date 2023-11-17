@@ -12,7 +12,6 @@ import LineChartComponent from './Charts/LineChart';
 import BarChartComponent from './Charts/BarChart';
 import AreaChartComponent from './Charts/AreaChart';
 import ComposedChartComponent from './Charts/ComposedChart';
-import { is } from 'date-fns/locale';
 
 
 export default function ChartComponent(props: ChartComponentProps) {
@@ -72,16 +71,16 @@ export default function ChartComponent(props: ChartComponentProps) {
     }
   }
 
-  // useEffect(() => {
-  //   setShowOpen(false);
-  //   setShowHigh(false);
-  //   setShowLow(false);
-  //   setShowVolume(false);
-  //   setShowMovingAverage(false);
-  //   setShowRSI(false);
-  //   setShowFutureStock(false);
-  //   setShowMFI(false);
-  // }, [props.name])
+  useEffect(() => {
+    setShowOpen(false);
+    setShowHigh(false);
+    setShowLow(false);
+    setShowVolume(false);
+    setShowMovingAverage(false);
+    setShowRSI(false);
+    setShowFutureStock(false);
+    setShowMFI(false);
+  }, [props.name])
 
 
 
@@ -215,8 +214,6 @@ export default function ChartComponent(props: ChartComponentProps) {
     showFuture: showFutureStock,
     showMFI: showMFI,
   }
-
-  console.log(stock);
 
 
   return (
