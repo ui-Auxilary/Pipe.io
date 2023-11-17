@@ -14,7 +14,7 @@ export default function EditFromPipe({ id, show, params, data, closeOverlay, typ
     setMicroservice(data)
   }, [edit])
 
-  const findAndUpdate = (name: string, parameters: { [x: string]: any; }) => {
+  const findAndUpdate = (parameters: { [x: string]: any; }) => {
     const updatedData = { ...microservice };
 
     Object.keys(parameters).forEach(key => {
@@ -37,7 +37,7 @@ export default function EditFromPipe({ id, show, params, data, closeOverlay, typ
         });
         break;
       default:
-        findAndUpdate(data["name"], data["parameters"])
+        findAndUpdate(data["parameters"])
         axios.put(`http://localhost:8000/pipes/${parent_pipe_id}/microservices`, { "name": microservice.name, "parameters": microservice["parameters"] });
     }
     closeOverlay();
