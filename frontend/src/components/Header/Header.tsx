@@ -18,7 +18,7 @@ export default function Header({ handleShow }: { handleShow: () => void }) {
             </S.HeaderWrapper>
             <>
                 <Switch
-                    onChange={() => setDarkMode(!darkMode)}
+                    onChange={() => { setDarkMode(!darkMode) }}
                     checked={darkMode}
                     offColor='#FCEEA7'
                     onColor='#382c40'

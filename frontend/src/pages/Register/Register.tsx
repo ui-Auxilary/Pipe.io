@@ -38,16 +38,17 @@ export default function Register() {
     data.append("password", values.password);
 
     axios.post(`http://localhost:8000/users/create`, data, {
-        headers: {
-          "Content-type": "application/x-www-form-urlencoded",
-        },
-      }).then((response: RegisterResponse) => {
-        sessionStorage.setItem("token", response.data.token);
-        window.location.href = "/";
-      }).catch((error: ErrorResponse) => {
-        setValid(false);
-        setErrorMsg({ message: error.response.data.detail });
-      });
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded",
+      },
+    }).then((response: RegisterResponse) => {
+      sessionStorage.setItem("token", response.data.token);
+      sessionStorage.setItem("darkMode", "false");
+      window.location.href = "/";
+    }).catch((error: ErrorResponse) => {
+      setValid(false);
+      setErrorMsg({ message: error.response.data.detail });
+    });
   }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -63,7 +64,7 @@ export default function Register() {
       setValid(false);
     } else {
       requestRegister();
-   }
+    }
   };
 
   return (

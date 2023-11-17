@@ -1,4 +1,4 @@
-import AppProvider, { useAppData } from "helper/AppProvider";
+import { useAppData } from "helper/AppProvider";
 import Home from "./pages/Home";
 import Login from "./pages/Login/";
 import Register from "./pages/Register";

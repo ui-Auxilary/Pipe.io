@@ -58,7 +58,7 @@ const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props,
   const target = useRef(null);
 
   const handleOverlayShow = () => setShow(true);
-  const handleOverlayClose = (e) => { setShow(false); setAppFiles([]) }
+  const handleOverlayClose = () => { setShow(false); setAppFiles([]) }
   const handleViewOverlayShow = () => setShowView(true);
   const handleViewOverlayClose = () => { setShowView(false); setAppFiles([]) }
   const handleDeleteClose = () => setDel(false);
@@ -101,7 +101,7 @@ const Pipe = forwardRef(({ pipeId, id, name, description, onCheck, idx }: Props,
   }
 
   const handleDelete = () => {
-    axios.delete(`http://localhost:8000/pipes/${pipeId}`, { params: { id: pipeId } }).then(() => setPipeIds(pipeIds.filter((pipe:string) => pipe !== pipeId)))
+    axios.delete(`http://localhost:8000/pipes/${pipeId}`, { params: { id: pipeId } }).then(() => setPipeIds(pipeIds.filter((pipe: string) => pipe !== pipeId)))
 
     handleDeleteClose();
   }

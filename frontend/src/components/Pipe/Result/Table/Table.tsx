@@ -1,34 +1,24 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
 import S from './styles'
-import Button from 'react-bootstrap/Button';
-import fileImg from './file-svgrepo-com.svg'
+import { TableProps } from "types/TableTypes"
 
-
-interface prop {
-  pipeId: string
-  output: string
-  name: string
-}
-
-
-export default function Table(props: prop) {
-  const [data, setData] = useState("")
+export default function Table({ output }: TableProps) {
+  const [data, setData] = useState<Record<string, object>>({})
 
   useEffect(() => {
-    const obj = JSON.parse(props.output)
+    const obj = JSON.parse(output)
     setData(obj)
-  }, [props])
+  }, [output])
   return (
     <S.Container>
       <S.Table>
         {Object.keys(data).map(col => {
-
+          console.log('TABLE DATA', data)
           return (
             <>
               <S.TableHead>
                 {col}
-                {Object.entries(data[col]).map((item, idx) => {
+                {Object.entries(data[col]).map((item) => {
                   const [key, value] = item;
                   return (
 

@@ -1,19 +1,17 @@
 import { useEffect, useRef } from "react"
 import S from 'components/MultiStepForm/FormItem/style'
-import { useAppData } from "./AppProvider"
 import { ValidationProps } from "types/HelperTypes"
 
 
 export default function ValidatedInput({ item, customValidity, errorMessage, isEdit, ...downProps }: ValidationProps) {
   const ref = useRef(null);
-  const { edit } = useAppData();
   const stringTest = /^[a-zA-Z0-9_., -]*$/
   const numTest = /^[0-9 ]{1,}$/
   const objTest = /^(?!\s*:\s*)(?:\{[^}]*\})$/
   const listTest = /^(?!\s*:\s*)(?:\[[^}]*\])$/
   const boolTest = /^([Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee])$/
 
-  const matchType = (value: any, type: string): boolean => {
+  const matchType = (value: string, type: string): boolean => {
     if (!type || !value) {
       return true;
     }
@@ -51,7 +49,7 @@ export default function ValidatedInput({ item, customValidity, errorMessage, isE
       }
     }
 
-  }, [customValidity, item])
+  }, [customValidity, item, isEdit, errorMessage])
   return <S.Input
 
     ref={ref}

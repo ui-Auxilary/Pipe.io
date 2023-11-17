@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import { AppProviderType, ChildrenProps } from "types/HelperTypes"
 
 export const AppProviderContext = createContext<AppProviderType>({
@@ -26,12 +26,17 @@ export function useAppData() {
 
 export default function AppProvider({ children }: ChildrenProps) {
   const [user, setUser] = useState("");
-  const [edit, setEdit] = useState<any>({});
+  const [edit, setEdit] = useState<Record<number, object>>({});
   const [refData, setRefData] = useState({});
   const [pipeIds, setPipeIds] = useState<string[]>([]);
   const [appFiles, setAppFiles] = useState<(File)[]>([]);
   const [prevFiles, setPrevFiles] = useState<(string)[]>([]);
-  const [darkMode, setDarkMode] = useState(false);
+  const storedDarkMode = localStorage.getItem("darkMode");
+  const [darkMode, setDarkMode] = useState(JSON.parse(storedDarkMode || 'false') || false);
+
+  useEffect(() => {
+    localStorage.setItem("darkMode", darkMode)
+  }, [darkMode])
 
   return (
     <AppProviderContext.Provider value={{ user, setUser, pipeIds, setPipeIds, edit, setEdit, refData, setRefData, appFiles, setAppFiles, prevFiles, setPrevFiles, darkMode, setDarkMode }}>

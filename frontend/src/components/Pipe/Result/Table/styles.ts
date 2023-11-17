@@ -42,6 +42,7 @@ const TableRow = styled.tr`
 const TableData = styled.td`
     border: 1px solid rgb(190, 190, 190);
     padding: 10px;
+    width: 33%;
 `;
 
 export default {

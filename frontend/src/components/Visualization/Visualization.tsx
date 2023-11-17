@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { useEffect, useState } from "react";
-import { format} from "date-fns";
+import React, { useEffect, useState } from "react";
+import { format } from "date-fns";
 import Form from 'react-bootstrap/Form';
 import S from './style';
 import Select from 'react-select';
@@ -59,7 +59,7 @@ export default function ChartComponent(props: ChartComponentProps) {
   const [showFutureStock, setShowFutureStock] = useState(false);
   const [showMFI, setShowMFI] = useState(false);
 
-  
+
   let daysPrediction = 0;
   let prepend = false;
   for (const param in params) {
@@ -111,7 +111,7 @@ export default function ChartComponent(props: ChartComponentProps) {
       const output = JSON.parse(res.data.output[outputIdx]?.output) || {};
 
       setMicroserviceData(res.data.microservices[props.index].parameters);
-    
+
       let index = 0;
       const stockObj = Object.keys(output.Close).map((key) => {
         index++;
@@ -158,7 +158,7 @@ export default function ChartComponent(props: ChartComponentProps) {
       }
 
       if (stockObj[stockObj.length - 1] && stockObj[stockObj.length - 1].Date != undefined) {
-        let endDate = new Date(stockObj[stockObj.length - 1].Date);
+        const endDate = new Date(stockObj[stockObj.length - 1].Date);
         // add extra day to endDate
         endDate.setDate(endDate.getDate() + 1);
         if (format(endDate, "yyyy-MM-dd") != "1970-01-02") {
@@ -168,21 +168,21 @@ export default function ChartComponent(props: ChartComponentProps) {
     })
   }, [refresh, props.name])
 
-  const handleStockChange = (e: any) => {
-    setTicker(e.target.value);
+  const handleStockChange = (e: InputEvent) => {
+    setTicker((e?.target as HTMLInputElement).value);
   }
 
-  const handleStartDateChange = (e: any) => {
-    setStartDate(e.target.value);
+  const handleStartDateChange = (e: InputEvent) => {
+    setStartDate((e?.target as HTMLInputElement).value);
   }
 
-  const handleEndDateChange = (e: any) => {
-    setEndDate(e.target.value);
+  const handleEndDateChange = (e: InputEvent) => {
+    setEndDate((e?.target as HTMLInputElement).value);
   }
 
   const handleSave = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    const updatedParams = { ...microserviceData }
+    const updatedParams: Record<string, object> = { ...microserviceData }
 
     updatedParams["ticker"] = { ...updatedParams["ticker"], value: ticker };
 
@@ -197,7 +197,7 @@ export default function ChartComponent(props: ChartComponentProps) {
   };
 
   const updateStock = () => {
-    axios.post(`http://localhost:8000/pipes/execute`, null,  { params: { id: pipeId } }).then(() => {
+    axios.post(`http://localhost:8000/pipes/execute`, null, { params: { id: pipeId } }).then(() => {
       setRefresh(!refresh);
     });
   }
@@ -218,10 +218,10 @@ export default function ChartComponent(props: ChartComponentProps) {
   return (
     <S.Container>
       <S.GraphContainer>
-        { chartType.value == 'bar' && <BarChartComponent chartData={chartData}/>}
-        { chartType.value == 'line' && <LineChartComponent chartData={chartData}/>}
-        { chartType.value == 'area' && <AreaChartComponent chartData={chartData}/>}
-        { chartType.value == 'composed' && <ComposedChartComponent chartData={chartData}/>}
+        {chartType.value == 'bar' && <BarChartComponent chartData={chartData} />}
+        {chartType.value == 'line' && <LineChartComponent chartData={chartData} />}
+        {chartType.value == 'area' && <AreaChartComponent chartData={chartData} />}
+        {chartType.value == 'composed' && <ComposedChartComponent chartData={chartData} />}
         <S.ButtonGroup>
           {isClose(stock) && <Button onClick={() => setShowClose(!showClose)} variant={showClose ? "primary" : "secondary"}>Close</Button>}
           {isOpen(stock) && <Button onClick={() => setShowOpen(!showOpen)} variant={showOpen ? "primary" : "secondary"}>Open</Button>}
@@ -257,7 +257,7 @@ export default function ChartComponent(props: ChartComponentProps) {
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Start Date</Form.Label>
-          <Form.Control type="text" value={startDate ? startDate : ""} onChange={handleStartDateChange} onClick={() => setShowStartCalendar(!showStartCalendar)} disabled={!enableStartDate}/>
+          <Form.Control type="text" value={startDate ? startDate : ""} onChange={handleStartDateChange} onClick={() => setShowStartCalendar(!showStartCalendar)} disabled={!enableStartDate} />
 
           <Form.Text className="text-muted">
             Choose the start date
@@ -270,7 +270,7 @@ export default function ChartComponent(props: ChartComponentProps) {
             Choose the end date
           </Form.Text>
         </Form.Group>
-        <Button disabled={!ticker || !startDate || !endDate} type="submit" className="btn btn-primary" onClick={(e:any) => handleSave(e)}>Update</Button>
+        <Button disabled={!ticker || !startDate || !endDate} type="submit" className="btn btn-primary" onClick={(e: React.SyntheticEvent) => handleSave(e)}>Update</Button>
       </Form>
     </S.Container>
   );
