@@ -22,7 +22,7 @@ export default function Table({ output }: TableProps) {
                   const [key, value] = item;
                   return (
 
-                    <S.TableRow>
+                    <S.TableRow key={key}>
                       <S.TableData>{(value > 166814280000) ? (new Date(value)).toUTCString() : value}</S.TableData>
                     </S.TableRow>
 

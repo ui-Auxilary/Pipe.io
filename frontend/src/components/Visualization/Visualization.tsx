@@ -92,7 +92,7 @@ export default function ChartComponent(props: ChartComponentProps) {
     setEndDate("");
     setEnableEndDate(false);
 
-    axios.get(`http://localhost:8000/pipes/${pipeId}`).then((res: any) => {
+    axios.get(`http://localhost:8000/pipes/${pipeId}`).then((res) => {
       if (res.data.microservices[props.index].parameters.ticker != undefined) {
         setTicker(res.data.microservices[props.index].parameters.ticker.value ?
           res.data.microservices[props.index].parameters.ticker.value :
@@ -214,6 +214,7 @@ export default function ChartComponent(props: ChartComponentProps) {
     showFuture: showFutureStock,
     showMFI: showMFI,
   }
+
 
   return (
     <S.Container>

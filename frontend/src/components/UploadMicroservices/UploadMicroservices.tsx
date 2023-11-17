@@ -5,17 +5,17 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useFormData } from 'components/MultiStepForm/Form/FormProvider'
 import { useAppData } from 'helper/AppProvider'
+import { MicroserviceProps } from 'types/MicroserviceTypes'
 
 export default function UploadMicroservices() {
-    const [added, setAdded] = useState<string[]>([])
     const [microserviceList, setMicroserviceList] = useState([])
-    const [prevList, setPrevMicroservices] = useState<any[]>([])
-    const { setMicroserviceData, microserviceData } = useFormData();
+    const [prevList, setPrevMicroservices] = useState<MicroserviceProps[]>([])
+    const { setMicroserviceData } = useFormData();
     const { prevFiles } = useAppData();
 
     useEffect(() => {
         // Load in microservices
-        let pythonRegex = /^[^_].*.py$/;
+        const pythonRegex = /^[^_].*.py$/;
         axios.get(`http://localhost:8000/microservice/list`).then(res => { setMicroserviceList(res.data.filter((filename: string) => pythonRegex.test(filename))) })
         setMicroserviceData({})
         setPrevMicroservices([])

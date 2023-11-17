@@ -20,6 +20,7 @@ export default function FormItem({ item }: { item: Item }) {
     }
   }, [])
 
+  // Dynamically render different form items based on itemList
   switch (item.type) {
     case 'text':
       return (
@@ -51,7 +52,7 @@ export default function FormItem({ item }: { item: Item }) {
       return (
         <ViewMicroservice />
       );
-    case 'edit_param':
+    case 'edit_param': {
       const displayLabel = item.label.replace(/_/g, ' ').replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
       if (item.elType === 'bool') {
         return (
@@ -59,7 +60,7 @@ export default function FormItem({ item }: { item: Item }) {
             <S.Label>{displayLabel}</S.Label>
             <Switch
               onChange={(e) => {
-                setEdit({ [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e }});
+                setEdit({ [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e } });
               }}
               checked={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || false}
             />
@@ -67,18 +68,20 @@ export default function FormItem({ item }: { item: Item }) {
         );
       }
 
+      // Wrap input with validation wrapper
       return (
         <>
           <S.Label>{displayLabel}</S.Label>
           <ValidatedInput
             value={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}
             item={edit[item.name] ? edit[item.name][item.label.toLocaleLowerCase()] : item.value || ''}
-            onChange={(e: { target: { value: any; }; }) => { setEdit({ [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e.target.value } }) }}
+            onChange={(e: { target: { value: string; }; }) => { setEdit({ [item.name]: { ...edit[item.name], [item.label.toLocaleLowerCase()]: e.target.value } }) }}
             customValidity={item.elType}
             isEdit={true}
           />
         </>
       );
+    }
   }
 
   return (

@@ -14,7 +14,7 @@ export default function DownloadCSV(props: CSVDownloadProps) {
   const [files, setFiles] = useState([])
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/pipes/${props.pipeId}`).then((res: any) => {
+    axios.get(`http://localhost:8000/pipes/${props.pipeId}`).then((res) => {
       for (const microservice of res.data.microservices) {
         if (microservice.name == props.name) {
           if (microservice.parameters.output_file_path.value != null) {

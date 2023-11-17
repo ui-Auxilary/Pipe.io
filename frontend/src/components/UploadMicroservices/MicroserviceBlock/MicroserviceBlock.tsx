@@ -2,12 +2,12 @@ import axios from 'axios';
 import S from './styles'
 import { useFormData } from 'components/MultiStepForm/Form/FormProvider';
 import { useAppData } from 'helper/AppProvider';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function MicroserviceBlock({ name, isAdded }: { name: string, isAdded: boolean }) {
     const { microserviceData, setMicroserviceData } = useFormData();
     const { setPrevFiles } = useAppData();
-    const [added, setAdded] = useState(isAdded);
+    const [, setAdded] = useState(isAdded);
 
     const addMicroservice = () => {
         setAdded(true);

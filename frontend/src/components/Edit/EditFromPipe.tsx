@@ -14,9 +14,10 @@ export default function EditFromPipe({ id, show, params, data, closeOverlay, typ
     setMicroservice(data)
   }, [edit])
 
-  const findAndUpdate = (parameters: { [x: string]: any; }) => {
+  const findAndUpdate = (parameters: { [x: string] }) => {
     const updatedData = { ...microservice };
 
+    // If parameter has been modified, edit microserviceData
     Object.keys(parameters).forEach(key => {
       if (edit?.[idx]?.[key] !== undefined) {
         const newParams = edit[idx] && parameters[key] ? Object.assign(parameters[key], { value: edit[idx][key] }) : parameters[key] || edit[idx];
@@ -25,7 +26,7 @@ export default function EditFromPipe({ id, show, params, data, closeOverlay, typ
     })
     setEdit({});
 
-    setMicroservice((prev: any) => ({ ...prev, microservices: updatedData }));
+    setMicroservice((prev) => ({ ...prev, microservices: updatedData }));
 
   }
 
@@ -33,7 +34,7 @@ export default function EditFromPipe({ id, show, params, data, closeOverlay, typ
     switch (type) {
       case "pipe":
         axios.put(`http://localhost:8000/pipes/${id}`, edit[id]).then(() => {
-          setPipeIds((prev: any) => [...prev])
+          setPipeIds((prev) => [...prev])
         });
         break;
       default:

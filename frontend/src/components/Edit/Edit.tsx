@@ -9,7 +9,7 @@ import { useAppData } from "helper/AppProvider";
 
 export default function Edit({ id, show, params, data, closeOverlay, type = "microservice" }: EditProps) {
   const { setMicroserviceData, microserviceData } = useFormData();
-  const [microservices, setMicroservices] = useState<object[]>([]);
+  const [, setMicroservices] = useState<object[]>([]);
   const { edit, setEdit, setPipeIds } = useAppData();
 
 
@@ -17,8 +17,8 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
     setMicroservices((microserviceData.microservices as []));
   }, [microserviceData]);
 
-  const findAndUpdate = (parameters: any) => {
-    const updatedData: { [key: string]: any } = [...microserviceData.microservices as []];
+  const findAndUpdate = (parameters) => {
+    const updatedData: { [key: string] } = [...microserviceData.microservices as []];
 
     // Loop through edit to see what indexes need to be updated
     Object.keys(edit).map(idx => {
@@ -26,6 +26,7 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
       const updatedIdx = editIdx - 1;
       if (updatedIdx >= 0 && updatedData[updatedIdx]) {
 
+        // If data has been modified, update each parameter
         Object.keys(parameters).forEach(key => {
           const newParams = edit[editIdx] && parameters[key] ? Object.assign(parameters[key], { value: edit[editIdx][key] }) : parameters[key] || edit[editIdx];
           updatedData[updatedIdx]["parameters"][key] = newParams;
@@ -37,7 +38,7 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
     })
 
     setEdit({});
-    setMicroserviceData((prev: any) => ({ ...prev, microservices: updatedData }));
+    setMicroserviceData((prev) => ({ ...prev, microservices: updatedData }));
 
   }
 
@@ -46,7 +47,7 @@ export default function Edit({ id, show, params, data, closeOverlay, type = "mic
     switch (type) {
       case "pipe":
         axios.put(`http://localhost:8000/pipes/${id}`, edit[id]).then(() => {
-          setPipeIds((prev: any) => [...prev]);
+          setPipeIds((prev) => [...prev]);
         }).catch();
         break;
       default:

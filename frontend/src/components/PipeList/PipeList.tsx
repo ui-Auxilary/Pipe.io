@@ -15,7 +15,7 @@ export default function PipeList() {
     const checkboxRef = useRef([]);
 
 
-
+    // Logic for Pipe select all and delete checkboxes
     const onHandleDelete = () => {
         let itemsChecked = numChecked
         Object.entries(refData).map(([pipeId, isChecked]) => {
@@ -56,6 +56,7 @@ export default function PipeList() {
     }
 
     const pipeChecked = useCallback((pipeId: string, id: number) => {
+        // If a pipe checkbox has been selected, assign it a ref
         setRefData((prev: PipeInterface) => ({ ...prev, [pipeId]: checkboxRef.current[id].checked }))
     }, [])
 
@@ -70,7 +71,7 @@ export default function PipeList() {
     }, [pipeIds])
 
     useEffect(() => {
-        const res = checkboxRef?.current?.filter((x: any) => !!x).filter((x: Checked) => x?.checked === true)
+        const res = checkboxRef?.current?.filter((x) => !!x).filter((x: Checked) => x?.checked === true)
         res.length ? setChecked(true) : setChecked(false)
         setNumChecked(res.length)
     }, [refData])

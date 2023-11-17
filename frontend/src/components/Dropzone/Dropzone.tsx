@@ -18,6 +18,7 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
   const [rejectedfiles, setRejectedFiles] = useState<FileRejection[]>([]);
 
   useEffect(() => {
+    // If microservice is being uploaded, store previously uploaded files as well
     if (upload) {
       setMapFiles([...appFiles, ...prevFiles] || [...files])
     } else {
@@ -27,6 +28,8 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
+      // If file is valid, add it to app files
+      // If not flag it as rejected
       if (acceptedFiles?.length) {
         setFiles((previousFiles) => [...previousFiles, ...acceptedFiles]);
         setAppFiles(prev => [...prev, ...acceptedFiles]);
@@ -44,6 +47,7 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
 
   let acceptedMime = {}
 
+  // Set mimetype to restrict files to .csv or .py
   acceptedMime = (filetype === "python") ? {
     "text/x-python": [".py"]
   } : {
@@ -55,6 +59,7 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
     onDrop,
   });
 
+  // Map out uploaded files
   const fileDisplay = mapFiles?.map((file) => {
     return (<S.FileBox key={window.crypto.randomUUID()}>
       <S.FileIcon
@@ -84,10 +89,10 @@ export default function Dropzone({ filetype, upload = false }: DropzoneProps) {
 
   useEffect(() => {
     return () => {
-      if (files) {
-        if (filetype == "python") {
-        }
-      }
+      // if (files) {
+      //   if (filetype == "python") {
+      //   }
+      // }
     }
   }, [files])
 

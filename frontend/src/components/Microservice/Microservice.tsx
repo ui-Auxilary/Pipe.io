@@ -22,16 +22,17 @@ export default function Microservice({ code, name, docstring, param, parent_file
   const handleCodeClose = () => { setCode(false) };
   const handleCodeShow = (e: React.SyntheticEvent<EventTarget>) => { e.preventDefault(); setCode(true) };
 
+  // Dynamically set each input to be rendered on our multi-step form
   const items = param && Object.keys(param).map((el) => (
     { label: el, type: "edit_param", name: idx, value: param[el]["value"] ? param[el]["value"] : param[el]["default"] || '', elType: param[el] ? param[el]["type"] : '' }
   ))
 
   const tagOptions = [
     { value: 'value', label: 'Value' },
-    { value: 'table', label: 'Table'},
-    { value: 'graph', label: 'Stock Graph'},
-    { value: 'csv', label: 'CSV'},
-    { value: 'plot', label: 'Plot File'}
+    { value: 'table', label: 'Table' },
+    { value: 'graph', label: 'Stock Graph' },
+    { value: 'csv', label: 'CSV' },
+    { value: 'plot', label: 'Plot File' }
   ];
 
   const microserviceList = [
@@ -49,17 +50,17 @@ export default function Microservice({ code, name, docstring, param, parent_file
     }
   }, [])
 
-  const handleTagChange = (e: any) => {
+  const handleTagChange = (e) => {
     setSelectedTags(e);
     data["output_type"] = e;
     if (parent_pipe_id != undefined) {
       axios.put(`http://localhost:8000/pipes/${parent_pipe_id}/${name}?output_type=${e.value}`)
     }
     const newData = { ...microserviceData };
-    newData["microservices"].filter((e:any) => e.name == name)[0]["output_type"] = e.value;
+    newData["microservices"].filter((e) => e.name == name)[0]["output_type"] = e.value;
     setMicroserviceData(newData);
   }
-  
+
   // Remove '_' and capitalize first letter of each word in name
   const displayName = name.replace(/_/g, ' ').replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
 
