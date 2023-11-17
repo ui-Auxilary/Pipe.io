@@ -43,6 +43,7 @@ export default function Register() {
       },
     }).then((response: RegisterResponse) => {
       sessionStorage.setItem("token", response.data.token);
+      sessionStorage.setItem("darkMode", "false");
       window.location.href = "/";
     }).catch((error: ErrorResponse) => {
       setValid(false);
