@@ -28,3 +28,6 @@ Bug fixes for moving average and RSI and some last minute changes before the dem
 
 Week 9
 Worked on account recovery and refactored front-end code. Did some typing for typescript files.
+
+Week 10
+Worked on linting and doing the report as well as bug fixing.
