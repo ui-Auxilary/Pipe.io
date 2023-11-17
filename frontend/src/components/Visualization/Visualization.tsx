@@ -1,11 +1,6 @@
 import axios from 'axios';
-<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
-=======
-import { useEffect, useState } from "react";
-import { format} from "date-fns";
->>>>>>> 5712cc0a1ec73c6770070c7452a0339562fcf4ef
 import Form from 'react-bootstrap/Form';
 import S from './style';
 import Select from 'react-select';

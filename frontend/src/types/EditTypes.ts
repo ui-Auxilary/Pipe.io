@@ -1,8 +1,9 @@
+import { ItemList } from "./MultistepFormTypes";
 
 export interface EditProps {
   id: string;
   show: boolean;
-  params: object;
+  params: ItemList;
   data: object;
   closeOverlay: () => void;
   type?: string;

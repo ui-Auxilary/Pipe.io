@@ -6,8 +6,8 @@ export interface AppProviderType {
   setUser: React.Dispatch<React.SetStateAction<string>>
   pipeIds: string[]
   setPipeIds: React.Dispatch<React.SetStateAction<string[]>>
-  edit: Record<number, any>,
-  setEdit: React.Dispatch<React.SetStateAction<any>>
+  edit: Record<number, unknown>,
+  setEdit: React.Dispatch<React.SetStateAction<unknown>>
   refData: Record<string, NonNullable<unknown>>,
   setRefData: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>,
   appFiles: (File | string)[],
@@ -26,7 +26,7 @@ export interface ValidationProps {
   customValidity?: RegExp
   errorMessage?: string
   isEdit?: boolean
-  [el: string]: any
+  [el: string]: unknown
 }
 
 interface Item {

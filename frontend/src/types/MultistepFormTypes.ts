@@ -22,7 +22,7 @@ export interface FormItemProps {
 }
 
 export interface FormPageProps {
-  itemList: ItemList[];
+  itemList: ItemList;
   step: number;
   edit?: boolean;
   onHandleClose: () => void;
@@ -43,17 +43,17 @@ export interface Item {
   value: string;
   id: string;
   validation?: RegExp | undefined;
-  name: any;
+  name: string | undefined;
   errorMessage?: string;
 }
 
 
-export interface FormProps {
-  questions: any;
-  step: number;
-  edit?: boolean;
-  onHandleClose?: () => void;
-}
+// export interface FormProps {
+//   questions: any;
+//   step: number;
+//   edit?: boolean;
+//   onHandleClose?: () => void;
+// }
 
 export interface UserData {
   [index: string]: NonNullable<unknown>;

@@ -15,6 +15,9 @@ export default function Login() {
     password2: '',
   });
 
+  if (sessionStorage.getItem('token')) {
+    window.location.href = '/';
+  }
 
   const [errorMsg, seterrorMsg] = useState({
     message: '',
@@ -35,7 +38,7 @@ export default function Login() {
   }
 
 
-  const requestRegister = async () => {
+  const requestLogin = async () => {
     const data = new URLSearchParams();
     data.append('email', values.email);
     data.append('password', values.password);
@@ -64,7 +67,7 @@ export default function Login() {
       seterrorMsg({ ...errorMsg, message: 'Invalid email address' })
       setValid(false)
     } else { 
-      requestRegister();
+      requestLogin();
     }
   }
 

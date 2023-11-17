@@ -11,7 +11,7 @@ export default function ValidatedInput({ item, customValidity, errorMessage, isE
   const listTest = /^(?!\s*:\s*)(?:\[[^}]*\])$/
   const boolTest = /^([Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee])$/
 
-  const matchType = (value: any, type: string): boolean => {
+  const matchType = (value: string, type: string): boolean => {
     if (!type || !value) {
       return true;
     }
@@ -49,7 +49,7 @@ export default function ValidatedInput({ item, customValidity, errorMessage, isE
       }
     }
 
-  }, [customValidity, item])
+  }, [customValidity, item, isEdit, errorMessage])
   return <S.Input
 
     ref={ref}
