@@ -58,9 +58,11 @@ async def create_user(email: str = Form(...), username: str = Form(...), passwor
         raise HTTPException(status_code=400, detail="Username already in use")
     if len(password) < 6:
         raise HTTPException(status_code=400, detail="Password is too short")
-
+    
     hashed_password = hashlib.sha256(password.encode()).hexdigest()
     default_img_url = "localhost:8000/static/default.png"
+
+    # Create user and add to database
     user = Users(email=email, username=username, password=hashed_password,
                  profile_img_url=default_img_url, pipes=[], tokens=[], reset_tokens=[])
     users_collection.insert_one(dict(user))
@@ -158,6 +160,7 @@ async def get_user(Authorization: str = Header(...)):
         userid = ObjectId(decoded["user_id"])
         user = users_collection.find_one({"_id": userid})
 
+        # Return user information containing necessary fields
         ret_user = {
             "id": decoded["user_id"].__str__(),
             "email": user["email"],
@@ -254,6 +257,7 @@ async def verify_reset_token(reset_token: str = Query(...)):
         `{}`: Empty dictionary if successful
     """
 
+    # Check if reset token is valid
     try:
         payload = jwt.decode(reset_token, os.getenv("JWT_SECRET"), algorithms=["HS256"])
         user = users_collection.find_one({"_id": ObjectId(payload["user_id"])})
@@ -264,6 +268,7 @@ async def verify_reset_token(reset_token: str = Query(...)):
     if (reset_token not in reset_tokens):
         raise HTTPException(status_code=400, detail="Invalid reset token")
 
+    # Check if reset token has expired and remove it if it has
     for token in reset_tokens:
         if token == reset_token:
             expiry = payload["session"]

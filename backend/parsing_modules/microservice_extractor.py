@@ -30,12 +30,14 @@ def extract_microservice(python_file=None) -> str:
             if callable(getattr(imported_module, service)) and not service.startswith("_"):
                 microservice_names.append(service)
 
+    # get the information for each microservice
     for microservice in microservice_names:
         microservice_function = getattr(imported_module, microservice)
         microservice_signature = inspect.signature(microservice_function)
         microservice_code = inspect.getsource(microservice_function)
 
         params = {}
+        # get the parameters and their default values and types for each microservice
         for param in microservice_signature.parameters.values():
             param_info = {'default': param.default if param.default != param.empty else None,
                           'type': param.annotation.__name__ if param.annotation != param.empty else None}
