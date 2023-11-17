@@ -8,13 +8,13 @@ import { EditFromPipeProps } from "types/EditTypes";
 
 export default function EditFromPipe({ id, show, params, data, closeOverlay, type = "microservice", parent_pipe_id, idx }: EditFromPipeProps) {
   const [microservice, setMicroservice] = useState([]);
-  const { edit, setPipeIds } = useAppData();
+  const { edit, setEdit, setPipeIds } = useAppData();
 
   useEffect(() => {
     setMicroservice(data)
   }, [edit])
 
-  const findAndUpdate = (name: string, parameters: { [x: string]: any; }) => {
+  const findAndUpdate = (parameters: { [x: string]: any; }) => {
     const updatedData = { ...microservice };
 
     Object.keys(parameters).forEach(key => {
@@ -23,6 +23,8 @@ export default function EditFromPipe({ id, show, params, data, closeOverlay, typ
         updatedData["parameters"][key] = newParams;
       }
     })
+    setEdit({});
+
     setMicroservice((prev: any) => ({ ...prev, microservices: updatedData }));
 
   }
@@ -35,7 +37,7 @@ export default function EditFromPipe({ id, show, params, data, closeOverlay, typ
         });
         break;
       default:
-        findAndUpdate(data["name"], data["parameters"])
+        findAndUpdate(data["parameters"])
         axios.put(`http://localhost:8000/pipes/${parent_pipe_id}/microservices`, { "name": microservice.name, "parameters": microservice["parameters"] });
     }
     closeOverlay();
