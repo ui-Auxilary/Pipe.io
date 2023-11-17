@@ -8,8 +8,11 @@ import "./MultiStepForm.css"
 import { useFormData } from "components/MultiStepForm/Form/FormProvider";
 import { ModalFooter } from "react-bootstrap";
 import { MultiFormProps } from "types/MultistepFormTypes";
+import { useAppData } from "helper/AppProvider";
 
 export default function MultiStepForm({ show, handleClose }: MultiFormProps) {
+  const { setMicroserviceData } = useFormData();
+  const { setAppFiles, setPrevFiles, setEdit } = useAppData();
   const itemList = [
     {
       section: 1,
@@ -58,6 +61,8 @@ export default function MultiStepForm({ show, handleClose }: MultiFormProps) {
 
   const onHandleClose = () => {
     handleClose()
+    setAppFiles([]);
+    setPrevFiles([]);
     setTimeout(() => setStep(1), 500)
   }
 

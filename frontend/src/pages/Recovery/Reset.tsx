@@ -22,8 +22,8 @@ export default function Reset() {
       window.location.href = '/';
     }
     axios.get(`http://localhost:8000/users/verify_reset_token?reset_token=${token}`)
-    .then(() => (setIsValidToken(true)))
-    .catch(() => (setIsValidToken(false)));
+      .then(() => (setIsValidToken(true)))
+      .catch(() => (setIsValidToken(false)));
   }, []);
 
 
@@ -45,14 +45,13 @@ export default function Reset() {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
-    console.log(values);
   };
-  
+
   const requestReset = async () => {
     const data = new URLSearchParams();
     data.append('password', values.password);
     data.append('reset_token', token as string);
-    console.log(data);
+
     axios.put(`http://localhost:8000/users/reset_password`, data, {
       headers: {
         'Content-type': 'application/x-www-form-urlencoded',
@@ -78,45 +77,45 @@ export default function Reset() {
 
   return (
     <>
-    {isValidToken && !isSubmit && <s.Container>
-      <s.Logo src={Logo}></s.Logo>
-      <s.CardContainer className="register-card">
-        <Card.Header><h5>Reset Password</h5></Card.Header>
-        <Card.Body>
-          <Form className="register-form" onSubmit={handleSubmit}>
-            {!valid ? <s.ErrorContainer>{errorMsg.message}</s.ErrorContainer> : null}
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>New Password</Form.Label>
-              <Form.Control
-                type="password"
-                name="password"
-                placeholder="Enter new password"
-                onChange={handleInputChange}
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Confirm New Password</Form.Label>
-              <Form.Control
-                type="password"
-                name="password2"
-                placeholder="Confirm new password"
-                onChange={handleInputChange}
-                required
-              />
-            </Form.Group>
-            <s.ButtonContainer>
-              <Button variant="primary" type="submit" className="register-button">
-                Reset Password
-              </Button>
-            </s.ButtonContainer>
-          </Form>
-        </Card.Body>
-      </s.CardContainer>
-    </s.Container>}
+      {isValidToken && !isSubmit && <s.Container>
+        <s.Logo src={Logo}></s.Logo>
+        <s.CardContainer className="register-card">
+          <Card.Header><h5>Reset Password</h5></Card.Header>
+          <Card.Body>
+            <Form className="register-form" onSubmit={handleSubmit}>
+              {!valid ? <s.ErrorContainer>{errorMsg.message}</s.ErrorContainer> : null}
+              <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Label>New Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  name="password"
+                  placeholder="Enter new password"
+                  onChange={handleInputChange}
+                  required
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Label>Confirm New Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  name="password2"
+                  placeholder="Confirm new password"
+                  onChange={handleInputChange}
+                  required
+                />
+              </Form.Group>
+              <s.ButtonContainer>
+                <Button variant="primary" type="submit" className="register-button">
+                  Reset Password
+                </Button>
+              </s.ButtonContainer>
+            </Form>
+          </Card.Body>
+        </s.CardContainer>
+      </s.Container>}
 
-    {!isValidToken && <Invalid />}
-    {isSubmit && <Success />}
+      {!isValidToken && <Invalid />}
+      {isSubmit && <Success />}
 
     </>
   );

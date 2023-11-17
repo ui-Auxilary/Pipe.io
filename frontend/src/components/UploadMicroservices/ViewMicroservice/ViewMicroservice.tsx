@@ -14,7 +14,6 @@ export default function ViewMicroservice() {
 
 
   useEffect(() => {
-    console.log('PEEK', microserviceData, microserviceList)
     setMicroserviceData({ microservices: microserviceList })
     setLoading(false);
   }, [microserviceList])
@@ -22,7 +21,6 @@ export default function ViewMicroservice() {
 
 
   useEffect(() => {
-    console.log('AHA')
   }, [microserviceData])
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -49,7 +47,6 @@ export default function ViewMicroservice() {
   }
 
   async function readFiles() {
-    console.log('READUBG', appFiles)
     appFiles?.map(file => {
       if (typeof file !== 'string') {
         const reader = new FileReader();
@@ -58,7 +55,7 @@ export default function ViewMicroservice() {
           const base64data = reader.result;
 
           if (base64data) {
-            axios.post('http://localhost:8000/upload', { 'filename': file.name, 'content': base64data }).then((res) => { console.log('LIST', microserviceList); setMicroserviceList(prev => [...prev.concat(JSON.parse(res.data)['microservices'] as [never])]) })
+            axios.post('http://localhost:8000/upload', { 'filename': file.name, 'content': base64data }).then((res) => { setMicroserviceList(prev => [...prev.concat(JSON.parse(res.data)['microservices'] as [never])]) })
           }
         };
       }
@@ -66,16 +63,8 @@ export default function ViewMicroservice() {
   }
 
   useEffect(() => {
-    console.log('INIT', appFiles)
     readFiles();
-  }, [appFiles])
-
-  // useEffect(() => {
-  //     console.log('PEEK', microserviceData)
-  //     setMicroserviceData({ microservices: microserviceList })
-  //     setLoading(false);
-  // }, [microserviceList])
-
+  }, [])
 
   const len = microserviceList ? microserviceList.length : 0
   return loading ? null : (
@@ -94,7 +83,7 @@ export default function ViewMicroservice() {
               <span style={{ color: "#907F7F", fontWeight: 500 }}>Found {len} microservice(s)</span>
               <S.Scrollbar length={len}>
                 {microserviceList && microserviceList.map(({ code, doc, name, parameters, parent_file, output_type }, idx) => {
-                  console.log('hey loop', microserviceList)
+
                   return (
                     <Draggable draggableId={`id-${idx}`} index={idx}>
                       {provided => (
