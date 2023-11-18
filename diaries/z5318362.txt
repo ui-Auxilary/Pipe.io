@@ -12,4 +12,8 @@ week6, working on microservices and finished the calculation of moving average a
 
 week7, checking validation was conflict with microservices, change to directly checking validation in frontend without calling routers. Finished the microservices of MFI calculation. Talked about and concluded the works for sprint3.
 
-week8, finished all in sprint 2 and prepared for demo
+week8, finished all in sprint 2 and finished the second demo
+
+week9, started the third sprint and start the group report, practiced for the last demo presentation
+
+week10, finished the mfi microservices and the part of rsi, mfi in group report. finished the last presentation.
